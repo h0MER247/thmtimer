@@ -1,6 +1,11 @@
 <resources>
 
     <string name="app_name">THMTimer</string>
+    
+    <!-- LoginActivity -->
+    <string name="logoDescription">company_logo</string>
+    <string name="user">Benutzerkennung</string>
+    <string name="password">Passwort</string>
     <string name="login">Anmelden</string>
 
 </resources>
