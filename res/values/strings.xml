@@ -7,5 +7,14 @@
     <string name="user">Benutzerkennung</string>
     <string name="password">Passwort</string>
     <string name="login">Anmelden</string>
-
+    
+    <!-- TeacherModuleListActivity -->
+    <string name="tab1">Rolle: Dozent</string>
+    <string name="tab2">Rolle: Student</string>
+    <string name="stop">Stop</string>
+    <string name="start">Start</string>
+    <string name="add">Modul hinzufügen</string>
+    <string name="timeInvested">Investierte Zeit: </string>
+	<string name="studentCount">Anzahl Studenten: </string>
+	
 </resources>
