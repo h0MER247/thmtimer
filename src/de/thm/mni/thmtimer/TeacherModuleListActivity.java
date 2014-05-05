@@ -2,6 +2,7 @@ package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
 
+import de.thm.mni.thmtimer.model.ModuleData;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;

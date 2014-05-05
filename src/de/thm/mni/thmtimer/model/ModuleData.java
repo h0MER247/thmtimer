@@ -1,7 +1,7 @@
-package de.thm.mni.thmtimer;
+package de.thm.mni.thmtimer.model;
 
 // -----------------------------------------------------------------------------------
-// Sebastian: Das hier ist erstmal vorläufig damit ich irgendwas anzeigen lassen kann.
+// Sebastian: Das hier ist erstmal vorlï¿½ufig damit ich irgendwas anzeigen lassen kann.
 //            Es wird im Endeffekt sowieso ganz anders gemacht ^^
 // -----------------------------------------------------------------------------------
 public class ModuleData {	
@@ -12,7 +12,7 @@ public class ModuleData {
 	private String  m_teacher;        // Dozent
 	private String  m_semester;       // Semester
 	private String  m_timeInvested;   // Gesamte investierte Zeit in dieses Modul
-	private boolean m_timeLogRunning; // Zeiterfassung läuft (Ja / Nein)
+	private boolean m_timeLogRunning; // Zeiterfassung lï¿½uft (Ja / Nein)
 	
 	
 	

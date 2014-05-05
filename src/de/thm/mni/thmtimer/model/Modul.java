@@ -1,4 +1,4 @@
-package de.thm.mni.thmtimer;
+package de.thm.mni.thmtimer.model;
 
 public class Modul {
 	
