@@ -16,5 +16,6 @@
     <string name="add">Modul hinzufügen</string>
     <string name="timeInvested">Investierte Zeit: </string>
 	<string name="studentCount">Anzahl Studenten: </string>
+	<string name="action_add">Hinzufügen</string>
 	
 </resources>
