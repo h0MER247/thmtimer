@@ -21,6 +21,7 @@ public class RoleSwitchFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.roleswitchfragment, container, false);
 		
+		
 
 		return view;
 	}
