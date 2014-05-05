@@ -21,7 +21,7 @@ public class LoginActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(LoginActivity.this,
-						TeacherModuleListActivity.class);
+						ModuleListActivity.class);
 				startActivity(intent);
 			}
 			
