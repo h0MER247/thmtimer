@@ -82,7 +82,7 @@ public class StudentFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.studentfragment, container, false);
 
-		ListView listView = (ListView)view.findViewById(R.id.lstStudentModules);
+		ListView listView = (ListView)view.findViewById(R.id.studentModules);
 
 		listView.setAdapter(new StudentModuleListAdapter(savedInstanceState));
 

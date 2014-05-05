@@ -69,7 +69,7 @@ public class TeacherFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.teacherfragment, container, false);
 
-		ListView listView = (ListView)view.findViewById(R.id.lstTeacherModules);
+		ListView listView = (ListView)view.findViewById(R.id.teacherModules);
 
 		listView.setAdapter(new TeacherModuleListAdapter(savedInstanceState));
 		
