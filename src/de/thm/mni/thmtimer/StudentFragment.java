@@ -8,6 +8,9 @@ import de.thm.mni.thmtimer.model.Module;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,7 +25,7 @@ public class StudentFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		setHasOptionsMenu(true);
 		if(data == null) {
 			data = new ArrayList<Module>();
 			data.add(new Module(0, "Objektorientierte Programmierung", 46, "Prof. Dr. Letschert", "Sommersemester 2014", "14h", false));
@@ -74,6 +77,23 @@ public class StudentFragment extends Fragment {
 			subtext.setText(module.getTeacher());
 
 			return convertView;
+		}
+	}
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.studentfragment, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.action_add:
+			//Intent intent = new Intent(this, TARGET.class);
+			//startActivityForResult(intent, 1);
+			return true;
+		default:
+			return false;
 		}
 	}
 
