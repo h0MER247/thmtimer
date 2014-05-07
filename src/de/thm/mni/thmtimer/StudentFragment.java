@@ -1,10 +1,11 @@
 package de.thm.mni.thmtimer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.model.Module;
+import de.thm.mni.thmtimer.util.StaticModuleData;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,20 +28,7 @@ public class StudentFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		if(data == null) {
-			data = new ArrayList<Module>();
-			data.add(new Module(0, "Objektorientierte Programmierung", 46, "Prof. Dr. Letschert", "Sommersemester 2014", "14h", false));
-			data.add(new Module(2, "Lineare Algebra", 42, "Prof. Dr. Just", "Sommersemester 2014", "16h", false));
-			data.add(new Module(3, "Compilerbau", 23, "Prof. Dr. Geisse", "Sommersemester 2014", "23h", true));
-			data.add(new Module(0, "Objektorientierte Programmierung", 46, "Prof. Dr. Letschert", "Sommersemester 2014", "14h", false));
-			data.add(new Module(2, "Lineare Algebra", 42, "Prof. Dr. Just", "Sommersemester 2014", "16h", false));
-			data.add(new Module(3, "Compilerbau", 23, "Prof. Dr. Geisse", "Sommersemester 2014", "23h", true));
-			data.add(new Module(0, "Objektorientierte Programmierung", 46, "Prof. Dr. Letschert", "Sommersemester 2014", "14h", false));
-			data.add(new Module(2, "Lineare Algebra", 42, "Prof. Dr. Just", "Sommersemester 2014", "16h", false));
-			data.add(new Module(3, "Compilerbau", 23, "Prof. Dr. Geisse", "Sommersemester 2014", "23h", true));
-			data.add(new Module(0, "Objektorientierte Programmierung", 46, "Prof. Dr. Letschert", "Sommersemester 2014", "14h", false));
-			data.add(new Module(2, "Lineare Algebra", 42, "Prof. Dr. Just", "Sommersemester 2014", "16h", false));
-			data.add(new Module(3, "Compilerbau", 23, "Prof. Dr. Geisse", "Sommersemester 2014", "23h", true));
-
+			data = StaticModuleData.data;
 		}
 		if(adapter==null) {
 			adapter = new StudentModuleListAdapter(savedInstanceState);
@@ -89,8 +77,8 @@ public class StudentFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.action_add:
-			//Intent intent = new Intent(this, TARGET.class);
-			//startActivityForResult(intent, 1);
+			Intent intent = new Intent(getActivity(), EnterModuleActivity.class);
+			startActivityForResult(intent, 1);
 			return true;
 		default:
 			return false;

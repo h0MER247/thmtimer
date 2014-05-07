@@ -5,8 +5,10 @@ package de.thm.mni.thmtimer.model;
 //            Es wird im Endeffekt sowieso ganz anders gemacht ^^
 // -----------------------------------------------------------------------------------
 public class Module {	
+	
+	
 
-	private int     m_id;             // ModulID
+	private long    m_id;             // ModulID
 	private String  m_name;           // Name
 	private int     m_studentCount;   // Anzahl Studenten in diesem Modul
 	private String  m_teacher;        // Dozent
@@ -29,7 +31,7 @@ public class Module {
 	
 	
 	
-	public int getID() {
+	public long getID() {
 		
 		return m_id;
 	}
@@ -62,5 +64,10 @@ public class Module {
 	public boolean getTimeLogRunning() {
 		
 		return m_timeLogRunning;
+	}
+	
+	@Override
+	public String toString() {
+		return m_name;
 	}
 }

@@ -1,9 +1,12 @@
 package de.thm.mni.thmtimer;
 
+import de.thm.mni.thmtimer.util.MyPageTransformer;
+import de.thm.mni.thmtimer.util.TabFactory;
 import de.thm.mni.thmtimer.util.TabPagerAdapter;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
@@ -21,7 +24,24 @@ public class ModuleListActivity extends FragmentActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		if(tabAdapter == null) {
-			tabAdapter = new TabPagerAdapter(getSupportFragmentManager());
+			tabAdapter = new TabPagerAdapter(getSupportFragmentManager(),
+					new TabFactory() {
+						
+						@Override
+						public Fragment firstTab() {
+							return new StudentFragment();
+						}
+						
+						@Override
+						public Fragment secondTab() {
+							return new TeacherFragment();
+						}
+
+						@Override
+						public int getNumberOfTabs() {
+							return 2;
+						}
+					});
 		}
 
 		if(tab == null) {
@@ -32,27 +52,22 @@ public class ModuleListActivity extends FragmentActivity {
 						@Override
 						public void onPageSelected(int position) {
 							actionBar = getActionBar();
-							actionBar.setSelectedNavigationItem(position);  
-							tab.getChildAt(position).setAlpha(1);
+							actionBar.setSelectedNavigationItem(position);
 						}
 
 						@Override
 						public void onPageScrollStateChanged(int position) {
-							// TODO Auto-generated method stub
 
 						}
 
 						@Override
 						public void onPageScrolled(int position, float positionOffset,
 								int positionOffsetPixels) {
-							// TODO Auto-generated method stub
-							tab.getChildAt(0).setAlpha(1-positionOffset);
-							if(positionOffset!=0) {
-								tab.getChildAt(1).setAlpha(positionOffset);
-							}
+							
 						}
 					});
 			tab.setAdapter(tabAdapter);
+			tab.setPageTransformer(true, new MyPageTransformer());
 		}
 
 		if(actionBar == null) {

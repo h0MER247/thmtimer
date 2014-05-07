@@ -1,10 +1,10 @@
 package de.thm.mni.thmtimer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.model.Module;
+import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,10 +24,7 @@ public class TeacherFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		if(data == null) {
-			data = new ArrayList<Module>();
-			data.add(new Module(0, "Grundlagen der Informatik", 123, "Prof. Dr. Kneisel", "Sommersemester 2014", "15h 4m",  true));
-			data.add(new Module(0, "Internetbasierte Systeme",  123, "Prof. Dr. Kneisel", "Sommersemester 2014", "16h 23m", false));
-
+			data = StaticModuleData.data;
 		}
 		if(adapter==null) {
 			adapter = new TeacherModuleListAdapter(savedInstanceState);

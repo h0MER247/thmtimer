@@ -1,26 +1,34 @@
 <resources>
 
     <string name="app_name">THMTimer</string>
-    
+
     <!-- LoginActivity -->
     <string name="logoDescription">company_logo</string>
     <string name="user">Benutzerkennung</string>
     <string name="password">Passwort</string>
     <string name="login">Anmelden</string>
-    
+
     <!-- ModuleListActivity -->
     <string name="tab1">Student</string>
     <string name="tab2">Dozent</string>
     <string name="my_modules">Meine Module</string>
-    
-	<!-- TeacherFragment -->
-	<string name="students">Studenten</string>
-	
-	<!-- StudentFragment -->
-	<string name="action_add">Neu</string>
-	
-	<!-- ModulDetailFragment -->
-	<string name="modul_details">Modul Detailansicht</string>
-	<string name="enter">beitreten</string>
-	
+
+    <!-- TeacherFragment -->
+    <string name="students">Studenten</string>
+
+    <!-- StudentFragment -->
+    <string name="action_add">Neu</string>
+
+    <!-- ModulDetailFragment -->
+    <string name="modul_details">Modul Detailansicht</string>
+    <string name="enter">Beitreten</string>
+
+    <!-- ModuleSearchFragment -->
+    <string name="no_data">Keine Module!</string>
+
+    <!-- EnterModuleActivity -->
+    <string name="enter_module">Modul beitreten</string>
+    <string name="action_search">Modulsuche</string>
+    <string name="search_hint">Modul suchen...</string>
+
 </resources>
