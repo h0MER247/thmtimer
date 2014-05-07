@@ -8,14 +8,15 @@
     <string name="password">Passwort</string>
     <string name="login">Anmelden</string>
     
-    <!-- TeacherModuleListActivity -->
-    <string name="tab1">Rolle: Dozent</string>
-    <string name="tab2">Rolle: Student</string>
-    <string name="stop">Stop</string>
-    <string name="start">Start</string>
-    <string name="add">Modul hinzufügen</string>
-    <string name="timeInvested">Investierte Zeit: </string>
-	<string name="studentCount">Anzahl Studenten: </string>
-	<string name="action_add">Hinzufügen</string>
+    <!-- ModuleListActivity -->
+    <string name="tab1">Student</string>
+    <string name="tab2">Dozent</string>
+    <string name="my_modules">Meine Module</string>
+    
+	<!-- TeacherFragment -->
+	<string name="students">Studenten</string>
+	
+	<!-- StudentFragment -->
+	<string name="action_add">Neu</string>
 	
 </resources>

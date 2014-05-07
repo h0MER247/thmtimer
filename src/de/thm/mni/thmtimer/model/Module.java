@@ -4,7 +4,7 @@ package de.thm.mni.thmtimer.model;
 // Sebastian: Das hier ist erstmal vorl�ufig damit ich irgendwas anzeigen lassen kann.
 //            Es wird im Endeffekt sowieso ganz anders gemacht ^^
 // -----------------------------------------------------------------------------------
-public class ModuleData {	
+public class Module {	
 
 	private int     m_id;             // ModulID
 	private String  m_name;           // Name
@@ -16,7 +16,7 @@ public class ModuleData {
 	
 	
 	
-	public ModuleData(int id, String name, int studentCount, String teacher, String semester, String timeInvested, boolean timeLogRunning) {
+	public Module(int id, String name, int studentCount, String teacher, String semester, String timeInvested, boolean timeLogRunning) {
 		
 		m_id = id;
 		m_name = name;
