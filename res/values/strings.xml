@@ -19,4 +19,8 @@
 	<!-- StudentFragment -->
 	<string name="action_add">Neu</string>
 	
+	<!-- ModulDetailFragment -->
+	<string name="modul_details">Modul Detailansicht</string>
+	<string name="enter">beitreten</string>
+	
 </resources>
