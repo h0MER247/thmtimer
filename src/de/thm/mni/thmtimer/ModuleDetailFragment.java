@@ -57,11 +57,11 @@ OnClickListener {
 	@Override
 	public void onClick(View arg0) {
 		enterModul();
-		dialog.dismiss();		
+		//dialog.dismiss();		
 	}
 
 	private void enterModul() {
-		// send Information to the Server
+		// send Information to Server
 
 	}
 
