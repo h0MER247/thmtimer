@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -21,7 +22,11 @@ import android.widget.TextView;
 
 public class StudentFragment extends Fragment {
 	private ListAdapter adapter;
-	private List<Module> data;
+	protected List<Module> data;
+	
+	protected static final int REQUEST_NEW = 1;
+	protected static final int REQUEST_TIMETRACKING = 2;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,7 +83,7 @@ public class StudentFragment extends Fragment {
 		switch(item.getItemId()) {
 		case R.id.action_add:
 			Intent intent = new Intent(getActivity(), EnterModuleActivity.class);
-			startActivityForResult(intent, 1);
+			startActivityForResult(intent, REQUEST_NEW);
 			return true;
 		default:
 			return false;
@@ -91,8 +96,19 @@ public class StudentFragment extends Fragment {
 		View view = inflater.inflate(R.layout.studentfragment, container, false);
 
 		ListView listView = (ListView)view.findViewById(R.id.studentModules);
-
 		listView.setAdapter(new StudentModuleListAdapter(savedInstanceState));
+		
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				Intent intent = new Intent(getActivity(), TimeTrackingActivity.class);
+				intent.putExtra("module_id", (int) ((Module) adapter.getItem(position)).getID());
+				startActivityForResult(intent, REQUEST_TIMETRACKING);
+			}
+			
+		});
 
 		return view;
 	}

@@ -1,20 +1,23 @@
 package de.thm.mni.thmtimer.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 // -----------------------------------------------------------------------------------
-// Sebastian: Das hier ist erstmal vorl�ufig damit ich irgendwas anzeigen lassen kann.
+// Sebastian: Das hier ist erstmal vorlaeufig damit ich irgendwas anzeigen lassen kann.
 //            Es wird im Endeffekt sowieso ganz anders gemacht ^^
 // -----------------------------------------------------------------------------------
 public class Module {	
-	
-	
 
+	private static final long serialVersionUID = -556636604371414680L;
 	private long    m_id;             // ModulID
 	private String  m_name;           // Name
 	private int     m_studentCount;   // Anzahl Studenten in diesem Modul
 	private String  m_teacher;        // Dozent
 	private String  m_semester;       // Semester
 	private String  m_timeInvested;   // Gesamte investierte Zeit in dieses Modul
-	private boolean m_timeLogRunning; // Zeiterfassung l�uft (Ja / Nein)
+	private boolean m_timeLogRunning; // Zeiterfassung laeuft (Ja / Nein)
+	private List<TimeTracking> timeTracking = new LinkedList<>();
 	
 	
 	
@@ -29,6 +32,14 @@ public class Module {
 		m_timeLogRunning = timeLogRunning;
 	}
 	
+	
+	public List<TimeTracking> getTimeTracking(){
+		return this.timeTracking;
+	}
+	
+	public void addTimeTracking(TimeTracking time){
+		this.timeTracking.add(time);
+	}
 	
 	
 	public long getID() {
