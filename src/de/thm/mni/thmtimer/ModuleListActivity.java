@@ -24,24 +24,23 @@ public class ModuleListActivity extends FragmentActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		if (tabAdapter == null) {
-			tabAdapter = new TabPagerAdapter(getSupportFragmentManager(),
-					new TabFactory() {
+			tabAdapter = new TabPagerAdapter(getSupportFragmentManager(), new TabFactory() {
 
-						@Override
-						public Fragment firstTab() {
-							return new StudentFragment();
-						}
+				@Override
+				public Fragment firstTab() {
+					return new StudentFragment();
+				}
 
-						@Override
-						public Fragment secondTab() {
-							return new TeacherFragment();
-						}
+				@Override
+				public Fragment secondTab() {
+					return new TeacherFragment();
+				}
 
-						@Override
-						public int getNumberOfTabs() {
-							return 2;
-						}
-					});
+				@Override
+				public int getNumberOfTabs() {
+					return 2;
+				}
+			});
 		}
 
 		if (tab == null) {
@@ -60,8 +59,7 @@ public class ModuleListActivity extends FragmentActivity {
 				}
 
 				@Override
-				public void onPageScrolled(int position, float positionOffset,
-						int positionOffsetPixels) {
+				public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
 				}
 			});
@@ -77,31 +75,24 @@ public class ModuleListActivity extends FragmentActivity {
 			ActionBar.TabListener tabListener = new ActionBar.TabListener() {
 
 				@Override
-				public void onTabReselected(android.app.ActionBar.Tab tab,
-						FragmentTransaction ft) {
+				public void onTabReselected(android.app.ActionBar.Tab tab, FragmentTransaction ft) {
 
 				}
 
 				@Override
-				public void onTabSelected(ActionBar.Tab actionTab,
-						FragmentTransaction ft) {
+				public void onTabSelected(ActionBar.Tab actionTab, FragmentTransaction ft) {
 					tab.setCurrentItem(actionTab.getPosition());
 				}
 
 				@Override
-				public void onTabUnselected(android.app.ActionBar.Tab tab,
-						FragmentTransaction ft) {
+				public void onTabUnselected(android.app.ActionBar.Tab tab, FragmentTransaction ft) {
 
 				}
 			};
 
 			// Add tabs to actionbar
-			actionBar.addTab(actionBar.newTab()
-					.setText(getString(R.string.tab1))
-					.setTabListener(tabListener));
-			actionBar.addTab(actionBar.newTab()
-					.setText(getString(R.string.tab2))
-					.setTabListener(tabListener));
+			actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab1)).setTabListener(tabListener));
+			actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab2)).setTabListener(tabListener));
 		}
 
 	}

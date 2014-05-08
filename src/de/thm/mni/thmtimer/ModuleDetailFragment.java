@@ -12,14 +12,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ModuleDetailFragment extends DialogFragment implements
-OnClickListener {
+public class ModuleDetailFragment extends DialogFragment implements OnClickListener {
 
 	private static Dialog dialog;
 	private TextView moduleName, moduleNumber, creditPoints, teacher, content;
 	private Button btnEnter;
 
-	@Override	
+	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		dialog = super.onCreateDialog(savedInstanceState);
 		dialog.setTitle(R.string.modul_details);
@@ -27,8 +26,7 @@ OnClickListener {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.moduldetailfragment, container, false);
 
@@ -37,7 +35,7 @@ OnClickListener {
 		moduleNumber = (TextView) view.findViewById(R.id.number);
 		creditPoints = (TextView) view.findViewById(R.id.cp);
 		teacher = (TextView) view.findViewById(R.id.teacher);
-		content = (TextView) view.findViewById(R.id.content);		
+		content = (TextView) view.findViewById(R.id.content);
 		btnEnter = (Button) view.findViewById(R.id.enter);
 		btnEnter.setOnClickListener(this);
 
@@ -51,13 +49,12 @@ OnClickListener {
 		content.setText("Inhalt");
 
 		return view;
-	}	
-
+	}
 
 	@Override
 	public void onClick(View arg0) {
 		enterModul();
-		dialog.dismiss();		
+		dialog.dismiss();
 	}
 
 	private void enterModul() {

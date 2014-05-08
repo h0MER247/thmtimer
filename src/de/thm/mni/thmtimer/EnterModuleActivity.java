@@ -23,26 +23,23 @@ public class EnterModuleActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if(fragmentManager==null) {
+		if (fragmentManager == null) {
 			fragmentManager = getSupportFragmentManager();
 		}
-		if(savedInstanceState != null){
+		if (savedInstanceState != null) {
 			isSearch = savedInstanceState.getBoolean("isSearch");
-			moduleSearch = (ModuleSearchFragment) fragmentManager.getFragment(
-					savedInstanceState, "moduleSearch");
-			moduleDetail = fragmentManager.getFragment(
-					savedInstanceState, "moduleDetail");
+			moduleSearch = (ModuleSearchFragment) fragmentManager.getFragment(savedInstanceState, "moduleSearch");
+			moduleDetail = fragmentManager.getFragment(savedInstanceState, "moduleDetail");
 		}
 
 		setContentView(R.layout.entermoduleactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		if(moduleSearch==null) {
+		if (moduleSearch == null) {
 			moduleSearch = new ModuleSearchFragment();
 		}
 
 		pager = (ViewPager) findViewById(R.id.entermodulepager);
-		pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),
-				new TabFactory() {
+		pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), new TabFactory() {
 
 			@Override
 			public Fragment firstTab() {
@@ -56,10 +53,9 @@ public class EnterModuleActivity extends FragmentActivity {
 
 			@Override
 			public int getNumberOfTabs() {
-				if(moduleDetail==null) {
+				if (moduleDetail == null) {
 					return 1;
-				}
-				else {
+				} else {
 					return 2;
 				}
 			}
@@ -89,7 +85,7 @@ public class EnterModuleActivity extends FragmentActivity {
 		super.onSaveInstanceState(outState);
 		outState.putBoolean("isSearch", isSearch);
 		fragmentManager.putFragment(outState, "moduleSearch", moduleSearch);
-		if(moduleDetail!=null) {
+		if (moduleDetail != null) {
 			fragmentManager.putFragment(outState, "moduleDetail", moduleDetail);
 		}
 	}
@@ -111,10 +107,9 @@ public class EnterModuleActivity extends FragmentActivity {
 	}
 
 	private void onBack() {
-		if(isSearch) {
+		if (isSearch) {
 			finish();
-		}
-		else {
+		} else {
 			openSearch();
 		}
 	}
