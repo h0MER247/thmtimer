@@ -21,30 +21,28 @@ import android.widget.SearchView.OnQueryTextListener;
 import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 
-
 public class ModuleSearchFragment extends Fragment {
 
 	private ModuleListAdapter adapter;
 	private List<Module> data;
 
-	private SearchView search;	
+	private SearchView search;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 
-		if(data == null) {
+		if (data == null) {
 			data = StaticModuleData.data;
 		}
-		if(adapter==null) {
+		if (adapter == null) {
 			adapter = new ModuleListAdapter(savedInstanceState);
 		}
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.modulesearchfragment, container, false);
 
 		search = (SearchView) view.findViewById(R.id.searchfragment);
@@ -70,10 +68,9 @@ public class ModuleSearchFragment extends Fragment {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> aView, View view, int pos,
-					long id) {
+			public void onItemClick(AdapterView<?> aView, View view, int pos, long id) {
 				Activity a = getActivity();
-				if(a instanceof EnterModuleActivity) {
+				if (a instanceof EnterModuleActivity) {
 					EnterModuleActivity ea = (EnterModuleActivity) a;
 					ea.closeSearch(data.get((int) id).getID());
 				}
@@ -83,37 +80,36 @@ public class ModuleSearchFragment extends Fragment {
 		return view;
 	}
 
-
 	private class ModuleListAdapter extends ArrayAdapter<Module> {
 
 		private Bundle bundle;
 		private List<Module> origData;
 
 		public ModuleListAdapter(Bundle bundle) {
-			super(getActivity(), R.layout.modulelistitem, data); 
+			super(getActivity(), R.layout.modulelistitem, data);
 			this.bundle = bundle;
-			
+
 			origData = new ArrayList<Module>(data);
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if(convertView == null) {
+			if (convertView == null) {
 				convertView = getLayoutInflater(bundle).inflate(R.layout.modulelistitem, parent, false);
 			}
 			final Module module = getItem(position);
 
-			TextView name     = (TextView) convertView.findViewById(R.id.moduleName);
+			TextView name = (TextView) convertView.findViewById(R.id.moduleName);
 			name.setText(module.getName());
-			TextView subtext     = (TextView) convertView.findViewById(R.id.subtext);
+			TextView subtext = (TextView) convertView.findViewById(R.id.subtext);
 			subtext.setText(module.getTeacher());
 
 			return convertView;
 		}
 
 		@Override
-		public Filter getFilter(){
-			return new Filter(){
+		public Filter getFilter() {
+			return new Filter() {
 
 				@Override
 				protected FilterResults performFiltering(CharSequence constraint) {
@@ -122,15 +118,15 @@ public class ModuleSearchFragment extends Fragment {
 
 					if (constraint != null && constraint.toString().length() > 0) {
 						List<Module> founded = new ArrayList<Module>();
-						for(Module item: origData){
-							if(item.toString().toLowerCase().contains(constraint)){
+						for (Module item : origData) {
+							if (item.toString().toLowerCase().contains(constraint)) {
 								founded.add(item);
 							}
 						}
 
 						result.values = founded;
 						result.count = founded.size();
-					}else {
+					} else {
 						result.values = origData;
 						result.count = origData.size();
 					}
@@ -149,6 +145,7 @@ public class ModuleSearchFragment extends Fragment {
 			};
 		}
 	}
+
 	@Override
 	public void onResume() {
 		super.onResume();

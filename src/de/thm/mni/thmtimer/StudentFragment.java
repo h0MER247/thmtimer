@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -23,14 +24,17 @@ public class StudentFragment extends Fragment {
 	private ListAdapter adapter;
 	private List<Module> data;
 
+	protected static final int REQUEST_NEW = 1;
+	protected static final int REQUEST_TIMETRACKING = 2;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		if(data == null) {
+		if (data == null) {
 			data = StaticModuleData.data;
 		}
-		if(adapter==null) {
+		if (adapter == null) {
 			adapter = new StudentModuleListAdapter(savedInstanceState);
 		}
 
@@ -41,32 +45,32 @@ public class StudentFragment extends Fragment {
 		private Bundle bundle;
 
 		public StudentModuleListAdapter(Bundle bundle) {
-			super(getActivity(), R.layout.studentlistitem, data); 
+			super(getActivity(), R.layout.studentlistitem, data);
 			this.bundle = bundle;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 
-			if(convertView == null) {
+			if (convertView == null) {
 
 				convertView = getLayoutInflater(bundle).inflate(R.layout.studentlistitem, parent, false);
 			}
 
-
 			final Module module = data.get(position);
 
-			TextView name     = (TextView) convertView.findViewById(R.id.moduleName);
-			TextView time     = (TextView) convertView.findViewById(R.id.timeInvested);
-			TextView subtext     = (TextView) convertView.findViewById(R.id.subtext);
-			
+			TextView name = (TextView) convertView.findViewById(R.id.moduleName);
+			TextView time = (TextView) convertView.findViewById(R.id.timeInvested);
+			TextView subtext = (TextView) convertView.findViewById(R.id.subtext);
+
 			name.setText(module.getName());
-			time.setText(module.getTimeInvested());
+			time.setText(Float.toString(module.getTimeInvested()));
 			subtext.setText(module.getTeacher());
 
 			return convertView;
 		}
 	}
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
@@ -75,10 +79,10 @@ public class StudentFragment extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
+		switch (item.getItemId()) {
 		case R.id.action_add:
 			Intent intent = new Intent(getActivity(), EnterModuleActivity.class);
-			startActivityForResult(intent, 1);
+			startActivityForResult(intent, REQUEST_NEW);
 			return true;
 		default:
 			return false;
@@ -86,13 +90,22 @@ public class StudentFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.studentfragment, container, false);
 
-		ListView listView = (ListView)view.findViewById(R.id.studentModules);
-
+		ListView listView = (ListView) view.findViewById(R.id.studentModules);
 		listView.setAdapter(new StudentModuleListAdapter(savedInstanceState));
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent intent = new Intent(getActivity(), TimeTrackingActivity.class);
+				intent.putExtra("module_id", (int) ((Module) adapter.getItem(position)).getID());
+				startActivityForResult(intent, REQUEST_TIMETRACKING);
+			}
+
+		});
 
 		return view;
 	}
