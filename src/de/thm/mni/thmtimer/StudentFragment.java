@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 public class StudentFragment extends Fragment {
 	private ListAdapter adapter;
-	protected List<Module> data;
+	private List<Module> data;
 	
 	protected static final int REQUEST_NEW = 1;
 	protected static final int REQUEST_TIMETRACKING = 2;
