@@ -67,9 +67,13 @@ public class Module {
 		return m_semester;
 	}
 	
-	public String getTimeInvested() {
-		
-		return m_timeInvested;
+	public float getTimeInvested() {
+		float time = 0;
+		for(TimeTracking t:timeTracking){
+			time += t.hours;
+			time += t.minutes/60;
+		}
+		return time;
 	}
 	
 	public boolean getTimeLogRunning() {

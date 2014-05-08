@@ -66,7 +66,7 @@ public class StudentFragment extends Fragment {
 			TextView subtext     = (TextView) convertView.findViewById(R.id.subtext);
 			
 			name.setText(module.getName());
-			time.setText(module.getTimeInvested());
+			time.setText(Float.toString(module.getTimeInvested()));
 			subtext.setText(module.getTeacher());
 
 			return convertView;
