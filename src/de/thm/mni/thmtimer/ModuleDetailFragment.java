@@ -16,8 +16,8 @@ public class ModuleDetailFragment extends DialogFragment implements
 OnClickListener {
 
 	private static Dialog dialog;
-	private TextView mModulName, mModulNumber, mCP, mTeacher, mContent;
-	private Button mEnter;
+	private TextView moduleName, moduleNumber, creditPoints, teacher, content;
+	private Button btnEnter;
 
 	@Override	
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -33,22 +33,22 @@ OnClickListener {
 		View view = inflater.inflate(R.layout.moduldetailfragment, container, false);
 
 		// get views
-		mModulName = (TextView) view.findViewById(R.id.name);
-		mModulNumber = (TextView) view.findViewById(R.id.number);
-		mCP = (TextView) view.findViewById(R.id.cp);
-		mTeacher = (TextView) view.findViewById(R.id.teacher);
-		mContent = (TextView) view.findViewById(R.id.content);		
-		mEnter = (Button) view.findViewById(R.id.enter);
-		mEnter.setOnClickListener(this);
+		moduleName = (TextView) view.findViewById(R.id.name);
+		moduleNumber = (TextView) view.findViewById(R.id.number);
+		creditPoints = (TextView) view.findViewById(R.id.cp);
+		teacher = (TextView) view.findViewById(R.id.teacher);
+		content = (TextView) view.findViewById(R.id.content);		
+		btnEnter = (Button) view.findViewById(R.id.enter);
+		btnEnter.setOnClickListener(this);
 
 		Long id = getArguments().getLong("id", -1);
 		Module m = StaticModuleData.findModule(id);
 
-		mModulName.setText(m.getName());
-		mModulNumber.setText("C1231");
-		mCP.setText("6");
-		mTeacher.setText(m.getTeacher());
-		mContent.setText("Inhalt");
+		moduleName.setText(m.getName());
+		moduleNumber.setText("C1231");
+		creditPoints.setText("6");
+		teacher.setText(m.getTeacher());
+		content.setText("Inhalt");
 
 		return view;
 	}	
