@@ -53,12 +53,12 @@ public class ModuleDetailFragment extends DialogFragment implements OnClickListe
 
 	@Override
 	public void onClick(View arg0) {
-		enterModul();
+		enterModule();
 		//dialog.dismiss();		
 
 	}
 
-	private void enterModul() {
+	private void enterModule() {
 		// send Information to Server
 
 	}
