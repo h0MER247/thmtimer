@@ -29,6 +29,10 @@
     <!-- EnterModuleActivity -->
     <string name="enter_module">Modul beitreten</string>
     <string name="action_search">Modulsuche</string>
-    <string name="search_hint">Modul suchen...</string>
+    <string name="search_hint">Modul suchen…</string>
+    
+    <!-- TrackTimeActivity -->
+    <string name="enter_time_header">Zeit eingeben</string>
+    <string name="enter_time">Eintragen</string>
 
 </resources>

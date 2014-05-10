@@ -4,7 +4,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import de.thm.mni.thmtimer.model.*;
@@ -39,6 +38,7 @@ public class TimeTrackingActivity extends ListActivity {
 		switch (item.getItemId()) {
 		case R.id.action_add:
 			Intent intent = new Intent(this, TrackTimeActivity.class);
+			intent.putExtra("module_id",  this.module.getID());
 			startActivityForResult(intent, REQUEST_NEW);
 			return true;
 		default:
