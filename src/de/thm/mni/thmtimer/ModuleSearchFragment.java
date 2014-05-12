@@ -106,44 +106,6 @@ public class ModuleSearchFragment extends Fragment {
 
 			return convertView;
 		}
-
-		@Override
-		public Filter getFilter() {
-			return new Filter() {
-
-				@Override
-				protected FilterResults performFiltering(CharSequence constraint) {
-					constraint = constraint.toString().toLowerCase();
-					FilterResults result = new FilterResults();
-
-					if (constraint != null && constraint.toString().length() > 0) {
-						List<Module> founded = new ArrayList<Module>();
-						for (Module item : origData) {
-							if (item.toString().toLowerCase().contains(constraint)) {
-								founded.add(item);
-							}
-						}
-
-						result.values = founded;
-						result.count = founded.size();
-					} else {
-						result.values = origData;
-						result.count = origData.size();
-					}
-					return result;
-				}
-
-				@Override
-				protected void publishResults(CharSequence constraint, FilterResults results) {
-					clear();
-					for (Module item : (List<Module>) results.values) {
-						add(item);
-					}
-					notifyDataSetChanged();
-
-				}
-			};
-		}
 	}
 
 	@Override
