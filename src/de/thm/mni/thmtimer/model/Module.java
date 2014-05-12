@@ -1,73 +1,75 @@
 package de.thm.mni.thmtimer.model;
 
-// -----------------------------------------------------------------------------------
-// Sebastian: Das hier ist erstmal vorl�ufig damit ich irgendwas anzeigen lassen kann.
-//            Es wird im Endeffekt sowieso ganz anders gemacht ^^
-// -----------------------------------------------------------------------------------
-public class Module {	
-	
-	
+import java.util.LinkedList;
+import java.util.List;
 
-	private long    m_id;             // ModulID
-	private String  m_name;           // Name
-	private int     m_studentCount;   // Anzahl Studenten in diesem Modul
-	private String  m_teacher;        // Dozent
-	private String  m_semester;       // Semester
-	private String  m_timeInvested;   // Gesamte investierte Zeit in dieses Modul
-	private boolean m_timeLogRunning; // Zeiterfassung l�uft (Ja / Nein)
-	
-	
-	
-	public Module(int id, String name, int studentCount, String teacher, String semester, String timeInvested, boolean timeLogRunning) {
-		
-		m_id = id;
-		m_name = name;
-		m_studentCount = studentCount;
-		m_teacher = teacher;
-		m_semester = semester;
-		m_timeInvested = timeInvested;
-		m_timeLogRunning = timeLogRunning;
+public class Module {
+	private long id;
+	private String name;
+	private int studentCount;
+	private String teacher;
+	private String semester;
+	private boolean timeLogRunning;
+	private List<TimeTracking> timeTracking = new LinkedList<TimeTracking>();
+
+	public Module(int id, String name, int studentCount, String teacher, String semester, boolean timeLogRunning) {
+		this.id = id;
+		this.name = name;
+		this.studentCount = studentCount;
+		this.teacher = teacher;
+		this.semester = semester;
+		this.timeLogRunning = timeLogRunning;
 	}
-	
-	
-	
+
+	public List<TimeTracking> getTimeTracking() {
+		return this.timeTracking;
+	}
+
+	public void addTimeTracking(TimeTracking time) {
+		this.timeTracking.add(time);
+	}
+
 	public long getID() {
-		
-		return m_id;
+
+		return id;
 	}
-	
+
 	public String getName() {
-		
-		return m_name;
+
+		return name;
 	}
-	
+
 	public int getStudentCount() {
-		
-		return m_studentCount;
+
+		return studentCount;
 	}
-	
+
 	public String getTeacher() {
-		
-		return m_teacher;
+
+		return teacher;
 	}
-	
+
 	public String getSemester() {
-		
-		return m_semester;
+
+		return semester;
 	}
-	
-	public String getTimeInvested() {
-		
-		return m_timeInvested;
+
+	public float getTimeInvested() {
+		float time = 0;
+		for (TimeTracking t : timeTracking) {
+			time += t.hours;
+			time += t.minutes / 60;
+		}
+		return time;
 	}
-	
+
 	public boolean getTimeLogRunning() {
-		
-		return m_timeLogRunning;
+
+		return timeLogRunning;
 	}
-	
+
 	@Override
 	public String toString() {
-		return m_name;
+		return name;
 	}
 }

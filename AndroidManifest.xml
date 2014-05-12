@@ -25,9 +25,17 @@
             android:name="de.thm.mni.thmtimer.ModuleListActivity"
             android:label="@string/my_modules" >
         </activity>
-                <activity
+        <activity
             android:name="de.thm.mni.thmtimer.EnterModuleActivity"
             android:label="@string/enter_module" >
+        </activity>
+        <activity
+            android:name="de.thm.mni.thmtimer.TimeTrackingActivity"
+            android:label="@string/my_modules" >
+        </activity>
+        <activity
+            android:name="de.thm.mni.thmtimer.TrackTimeActivity"
+            android:label="@string/my_modules" >
         </activity>
     </application>
 
