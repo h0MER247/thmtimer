@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragmentmoduledetail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/fragmentmoduledetail" >
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/name"
@@ -12,43 +12,63 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:text="Modul Name"
-        android:textSize="20sp" />
+        android:textSize="25sp" />
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="Modulnummer" />
-
-        <TextView
-            android:id="@+id/cp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Credit Points" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/teacher"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:text="Dozent" />
+        android:stretchColumns="1" >
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:text="Inhalt" />
+        <TableRow>
+            <TextView
+                android:text="@string/moduleNumber"
+                android:padding="3dip"                
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/number"
+                android:padding="3dip"
+                android:text="Modulnummer" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/cp"
+                android:padding="3dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cp"
+                android:padding="3dip"
+                android:text="Credit Points" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:text="@string/teacher"
+                android:padding="3dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/teacher"
+                android:padding="3dip"
+                android:text="Dozent" />
+        </TableRow>
+
+        <TableRow >
+
+            <TextView
+                android:text="@string/content"
+                android:padding="3dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/content"
+                android:padding="3dip"
+                android:text="Inhalt" />
+        </TableRow>
+    </TableLayout>
 
     <Button
         android:id="@+id/enter"

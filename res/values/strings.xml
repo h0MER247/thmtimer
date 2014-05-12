@@ -22,6 +22,10 @@
     <!-- ModulDetailFragment -->
     <string name="module_details">Modul Detailansicht</string>
     <string name="enter">Beitreten</string>
+    <string name="moduleNumber">Modulnummer</string>
+    <string name="cp">Creditpoints</string>
+    <string name="teacher">Dozent</string>
+    <string name="content">Inhalte</string>
 
     <!-- ModuleSearchFragment -->
     <string name="no_data">Keine Module!</string>
