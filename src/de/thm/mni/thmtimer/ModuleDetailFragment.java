@@ -57,7 +57,9 @@ OnClickListener {
 	@Override
 	public void onClick(View arg0) {
 		enterModul();
-		dialog.dismiss();		
+		if(dialog!=null) {
+			dialog.dismiss();
+		}
 	}
 
 	private void enterModul() {
