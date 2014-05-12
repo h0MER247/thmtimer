@@ -1,6 +1,6 @@
 package de.thm.mni.thmtimer.model;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Module {
@@ -10,7 +10,7 @@ public class Module {
 	private String teacher;
 	private String semester;
 	private boolean timeLogRunning;
-	private List<TimeTracking> timeTracking = new LinkedList<TimeTracking>();
+	private List<TimeTracking> timeTracking = new ArrayList<TimeTracking>();
 
 	public Module(int id, String name, int studentCount, String teacher, String semester, boolean timeLogRunning) {
 		this.id = id;
@@ -57,8 +57,7 @@ public class Module {
 	public float getTimeInvested() {
 		float time = 0;
 		for (TimeTracking t : timeTracking) {
-			time += t.hours;
-			time += t.minutes / 60;
+			time += t.minutes / 60.0f;
 		}
 		return time;
 	}
