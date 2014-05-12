@@ -20,7 +20,7 @@
     <string name="action_add">Neu</string>
 
     <!-- ModulDetailFragment -->
-    <string name="modul_details">Modul Detailansicht</string>
+    <string name="module_details">Modul Detailansicht</string>
     <string name="enter">Beitreten</string>
 
     <!-- ModuleSearchFragment -->
