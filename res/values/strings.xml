@@ -26,6 +26,11 @@
     <string name="cp">Creditpoints</string>
     <string name="teacher">Dozent</string>
     <string name="content">Inhalte</string>
+    <string name="discription">Beschreibung</string>
+    <string name="expenditure">Aufwand</string>
+    <string name="requirement">Vorleistung</string>
+    <string name="testingMethod">Leistungsnachweis</string>    
+    
 
     <!-- ModuleSearchFragment -->
     <string name="no_data">Keine Module!</string>

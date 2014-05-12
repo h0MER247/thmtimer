@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class ModuleDetailFragment extends DialogFragment implements OnClickListener {
 
 	private static Dialog dialog;
-	private TextView moduleName, moduleNumber, creditPoints, teacher, content;
+	private TextView moduleName, moduleNumber, creditPoints, teacher, content, discription, expenditure, requirement, testingMethod;
 	private Button btnEnter;
 
 	@Override
@@ -35,7 +35,11 @@ public class ModuleDetailFragment extends DialogFragment implements OnClickListe
 		moduleNumber = (TextView) view.findViewById(R.id.number);
 		creditPoints = (TextView) view.findViewById(R.id.cp);
 		teacher = (TextView) view.findViewById(R.id.teacher);
+		discription = (TextView) view.findViewById(R.id.discription);
 		content = (TextView) view.findViewById(R.id.content);
+		expenditure = (TextView) view.findViewById(R.id.expenditure);
+		requirement =  (TextView) view.findViewById(R.id.requirement);
+		testingMethod = (TextView) view.findViewById(R.id.testingMethod);
 		btnEnter = (Button) view.findViewById(R.id.enter);
 		btnEnter.setOnClickListener(this);
 
@@ -43,11 +47,15 @@ public class ModuleDetailFragment extends DialogFragment implements OnClickListe
 		Module m = StaticModuleData.findModule(id);
 
 		moduleName.setText(m.getName());
-		moduleNumber.setText("C1231");
+		moduleNumber.setText("MN1007");
 		creditPoints.setText("6");
 		teacher.setText(m.getTeacher());
+		discription.setText("Vermittlung von Grundlagen zu den Themen..");
 		content.setText("Inhalt");
-
+		expenditure.setText("180 Stunden, davon etwa 90 Stunden Präsenzzeit");
+		requirement.setText("2 anerkannte Hausübungen");
+		testingMethod.setText("Klausur");
+		
 		return view;
 	}
 
