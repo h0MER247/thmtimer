@@ -1,5 +1,6 @@
 package de.thm.mni.thmtimer.model;
 
+import android.annotation.SuppressLint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,12 +55,12 @@ public class Module {
 		return semester;
 	}
 
-	public float getTimeInvested() {
-		float time = 0;
+	public String getTimeInvested() {
+		int time = 0;
 		for (TimeTracking t : timeTracking) {
-			time += t.minutes / 60.0f;
+			time += t.minutes;
 		}
-		return time;
+		return String.format("%d:%02d", time / 60, time % 60);
 	}
 
 	public boolean getTimeLogRunning() {

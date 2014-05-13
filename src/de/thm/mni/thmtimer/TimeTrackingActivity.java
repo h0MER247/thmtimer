@@ -24,7 +24,7 @@ public class TimeTrackingActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		Bundle extras = getIntent().getExtras();
-		int moduleID = extras.getInt("module_id");
+		long moduleID = extras.getLong("module_id");
 		this.module = StaticModuleData.findModule(moduleID);
 		this.timeTrackingList = new ArrayList<TimeTracking>(this.module.getTimeTracking());
 

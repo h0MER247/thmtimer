@@ -37,7 +37,6 @@ public class StudentFragment extends Fragment {
 		if (adapter == null) {
 			adapter = new StudentModuleListAdapter(savedInstanceState);
 		}
-
 	}
 
 	private class StudentModuleListAdapter extends ArrayAdapter<Module> {
@@ -53,7 +52,6 @@ public class StudentFragment extends Fragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 
 			if (convertView == null) {
-
 				convertView = getLayoutInflater(bundle).inflate(R.layout.studentlistitem, parent, false);
 			}
 
@@ -64,7 +62,7 @@ public class StudentFragment extends Fragment {
 			TextView subtext = (TextView) convertView.findViewById(R.id.subtext);
 
 			name.setText(module.getName());
-			time.setText(Float.toString(module.getTimeInvested()));
+			time.setText(module.getTimeInvested());
 			subtext.setText(module.getTeacher());
 
 			return convertView;
@@ -101,7 +99,7 @@ public class StudentFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent(getActivity(), TimeTrackingActivity.class);
-				intent.putExtra("module_id", (int) ((Module) adapter.getItem(position)).getID());
+				intent.putExtra("module_id", ((Module) adapter.getItem(position)).getID());
 				startActivityForResult(intent, REQUEST_TIMETRACKING);
 			}
 
