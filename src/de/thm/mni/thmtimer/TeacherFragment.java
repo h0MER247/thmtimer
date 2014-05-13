@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.model.Module;
+import de.thm.mni.thmtimer.util.ModuleComparator;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class TeacherFragment extends Fragment {
-	private ListAdapter adapter;
+	private TeacherModuleListAdapter adapter;
 	private List<Module> data;
 
 	@Override
@@ -28,6 +29,7 @@ public class TeacherFragment extends Fragment {
 		}
 		if (adapter == null) {
 			adapter = new TeacherModuleListAdapter(savedInstanceState);
+			adapter.sort(new ModuleComparator());
 		}
 
 	}

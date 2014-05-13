@@ -19,6 +19,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.SearchView.OnQueryTextListener;
 import de.thm.mni.thmtimer.model.Module;
+import de.thm.mni.thmtimer.util.ModuleComparator;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 
 public class ModuleSearchFragment extends Fragment {
@@ -76,6 +77,7 @@ public class ModuleSearchFragment extends Fragment {
 				}
 			}
 		});
+		adapter.sort(new ModuleComparator());
 		lv.setAdapter(adapter);
 		return view;
 	}
@@ -146,6 +148,10 @@ public class ModuleSearchFragment extends Fragment {
 		}
 	}
 
+	public void clearFilter(){
+		adapter.getFilter().filter("");
+	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();

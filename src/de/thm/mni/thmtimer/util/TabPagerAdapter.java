@@ -30,6 +30,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public int getItemPosition(Object object) {
+		//Without this, it won't update fragments in case they changed
 		return POSITION_NONE;
 	}
 }

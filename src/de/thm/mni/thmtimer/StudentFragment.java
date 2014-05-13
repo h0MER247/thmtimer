@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.model.Module;
+import de.thm.mni.thmtimer.util.ModuleComparator;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class StudentFragment extends Fragment {
-	private ListAdapter adapter;
+	private StudentModuleListAdapter adapter;
 	private List<Module> data;
 
 	protected static final int REQUEST_NEW = 1;
@@ -36,6 +37,7 @@ public class StudentFragment extends Fragment {
 		}
 		if (adapter == null) {
 			adapter = new StudentModuleListAdapter(savedInstanceState);
+			adapter.sort(new ModuleComparator());
 		}
 
 	}

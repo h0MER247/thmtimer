@@ -12,7 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
 public class ModuleListActivity extends FragmentActivity {
-	private ViewPager tab;
+	private ViewPager pager;
 	private TabPagerAdapter tabAdapter;
 	private ActionBar actionBar;
 
@@ -43,9 +43,9 @@ public class ModuleListActivity extends FragmentActivity {
 			});
 		}
 
-		if (tab == null) {
-			tab = (ViewPager) findViewById(R.id.pager);
-			tab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		if (pager == null) {
+			pager = (ViewPager) findViewById(R.id.pager);
+			pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
 				@Override
 				public void onPageSelected(int position) {
@@ -63,8 +63,8 @@ public class ModuleListActivity extends FragmentActivity {
 
 				}
 			});
-			tab.setAdapter(tabAdapter);
-			tab.setPageTransformer(true, new MyPageTransformer());
+			pager.setAdapter(tabAdapter);
+			pager.setPageTransformer(true, new MyPageTransformer());
 		}
 
 		if (actionBar == null) {
@@ -81,7 +81,7 @@ public class ModuleListActivity extends FragmentActivity {
 
 				@Override
 				public void onTabSelected(ActionBar.Tab actionTab, FragmentTransaction ft) {
-					tab.setCurrentItem(actionTab.getPosition());
+					pager.setCurrentItem(actionTab.getPosition());
 				}
 
 				@Override
