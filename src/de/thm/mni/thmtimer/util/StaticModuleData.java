@@ -43,6 +43,6 @@ public class StaticModuleData {
 				return m;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException("Module " + id + " not found");
 	}
 }

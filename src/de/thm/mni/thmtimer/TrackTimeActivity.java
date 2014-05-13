@@ -25,7 +25,7 @@ public class TrackTimeActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		Bundle extras = getIntent().getExtras();
-		int moduleID = extras.getInt("module_id");
+		long moduleID = extras.getLong("module_id");
 		this.module = StaticModuleData.findModule(moduleID);
 
 		timeEdit = (EditText) findViewById(R.id.timeEntry);
