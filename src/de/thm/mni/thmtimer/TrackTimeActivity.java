@@ -36,6 +36,9 @@ public class TrackTimeActivity extends Activity {
 		usageSpinner.setAdapter(new ArrayAdapter<TimeCategory>(this, android.R.layout.simple_spinner_dropdown_item, StaticModuleData.getTimeCategorys()));
 		
 		timeEdit = (EditText) findViewById(R.id.timeEntry);
+		timeEdit.setHint("HH:MM:SS");
+		
+		
 		
 		Button btnEnter = (Button) findViewById(R.id.enterTime);
 		btnEnter.setOnClickListener(new OnClickListener() {
@@ -59,20 +62,6 @@ public class TrackTimeActivity extends Activity {
 					
 					Toast.makeText(getApplicationContext(), "Zeitangabe in HH:MM oder HH:MM:SS!", Toast.LENGTH_LONG).show();
 				}
-				/*
-				int minutes;
-				try {
-					minutes = Integer.parseInt(timeEdit.getText().toString());
-				} catch (NumberFormatException e) {
-					setResult(Activity.RESULT_CANCELED);
-					finish();
-					return;
-				}
-				TimeTracking time = new TimeTracking(usageSpinner.getSelectedItem().toString(), minutes);
-				module.addTimeTracking(time);
-				setResult(Activity.RESULT_OK);
-				finish();
-				*/
 			}
 		});
 

@@ -52,7 +52,7 @@ public class TimeTrackingActivity extends ListActivity {
 		switch (item.getItemId()) {
 		case R.id.action_add:
 			Intent intent = new Intent(this, TrackTimeActivity.class);
-			intent.putExtra("module_id", this.courseID); // this.module.getID());
+			intent.putExtra("course_id", this.courseID); // this.module.getID());
 			startActivityForResult(intent, REQUEST_NEW);
 			return true;
 		case android.R.id.home:
