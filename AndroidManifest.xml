@@ -37,6 +37,10 @@
             android:name="de.thm.mni.thmtimer.TrackTimeActivity"
             android:label="@string/my_modules" >
         </activity>
+        <activity
+            android:name="de.thm.mni.thmtimer.TeacherCourseDetailActivity"
+            android:label="@string/course_details" >
+        </activity>
     </application>
 
 </manifest>

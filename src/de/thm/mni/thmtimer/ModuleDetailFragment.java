@@ -1,5 +1,6 @@
 package de.thm.mni.thmtimer;
 
+import de.thm.mni.thmtimer.model.Course;
 import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.app.Dialog;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 public class ModuleDetailFragment extends DialogFragment implements OnClickListener {
 
 	private static Dialog dialog;
-	private TextView moduleName, moduleNumber, creditPoints, teacher, content, discription, expenditure, requirement, testingMethod;
+	private TextView moduleName, moduleNumber, creditPoints, teacher, content, description, expenditure, requirement, testingMethod;
 	private Button btnEnter;
 
 	@Override
@@ -35,7 +36,7 @@ public class ModuleDetailFragment extends DialogFragment implements OnClickListe
 		moduleNumber = (TextView) view.findViewById(R.id.number);
 		creditPoints = (TextView) view.findViewById(R.id.cp);
 		teacher = (TextView) view.findViewById(R.id.teacher);
-		discription = (TextView) view.findViewById(R.id.discription);
+		description = (TextView) view.findViewById(R.id.discription);
 		content = (TextView) view.findViewById(R.id.content);
 		expenditure = (TextView) view.findViewById(R.id.expenditure);
 		requirement =  (TextView) view.findViewById(R.id.requirement);
@@ -43,16 +44,20 @@ public class ModuleDetailFragment extends DialogFragment implements OnClickListe
 		btnEnter = (Button) view.findViewById(R.id.enter);
 		btnEnter.setOnClickListener(this);
 
-		Long id = getArguments().getLong("id", -1);
-		Module m = StaticModuleData.findModule(id);
+		//Long id = getArguments().getLong("id", -1);
+		Long courseID = getArguments().getLong("id", -1);
+		//Module m = StaticModuleData.findModule(id);
+		Course c = StaticModuleData.findCourse(courseID);
+		Module m = StaticModuleData.findModule(c.getModuleID());
 
 		moduleName.setText(m.getName());
-		moduleNumber.setText("MN1007");
-		creditPoints.setText("6");
-		teacher.setText(m.getTeacher());
-		discription.setText("Vermittlung von Grundlagen zu den Themen..");
-		content.setText("Inhalt");
-		expenditure.setText("180 Stunden, davon etwa 90 Stunden Präsenzzeit");
+		moduleNumber.setText(m.getModuleNumber());
+		creditPoints.setText(m.getCreditPoints().toString());
+		//teacher.setText(m.getTeacher());
+		teacher.setText(c.getTeacher());
+		description.setText(m.getDescription());
+		content.setText("Inhalt"); // Was ist das?
+		expenditure.setText(m.getTimeToInvestInHours().getHours().toString() + " Stunden");
 		requirement.setText("2 anerkannte Hausübungen");
 		testingMethod.setText("Klausur");
 		

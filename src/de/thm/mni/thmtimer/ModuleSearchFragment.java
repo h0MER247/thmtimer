@@ -1,7 +1,6 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,31 +11,35 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.SearchView.OnQueryTextListener;
-import de.thm.mni.thmtimer.model.Module;
+import de.thm.mni.thmtimer.model.Course;
 import de.thm.mni.thmtimer.util.StaticModuleData;
+
+
 
 public class ModuleSearchFragment extends Fragment {
 
 	private ModuleListAdapter adapter;
-	private List<Module> data;
-
+	private ArrayList<Course> data;
+	//private List<Module> data;
 	private SearchView search;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-
-		if (data == null) {
-			data = StaticModuleData.data;
+		
+		if(data == null) {
+			
+			data = StaticModuleData.getCourseList();
 		}
 		if (adapter == null) {
+			
 			adapter = new ModuleListAdapter(savedInstanceState);
 		}
 	}
@@ -44,7 +47,7 @@ public class ModuleSearchFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.modulesearchfragment, container, false);
-
+		
 		search = (SearchView) view.findViewById(R.id.searchfragment);
 		search.setQueryHint(getString(R.string.search_hint));
 		search.setOnQueryTextListener(new OnQueryTextListener() {
@@ -69,27 +72,33 @@ public class ModuleSearchFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> aView, View view, int pos, long id) {
+				
 				Activity a = getActivity();
 				if (a instanceof EnterModuleActivity) {
+					
 					EnterModuleActivity ea = (EnterModuleActivity) a;
-					ea.closeSearch(data.get((int) id).getID());
+					
+					//ea.closeSearch(data.get((int) id).getID());
+					ea.closeSearch(adapter.getItem(pos).getID());
 				}
 			}
 		});
 		lv.setAdapter(adapter);
 		return view;
 	}
-
-	private class ModuleListAdapter extends ArrayAdapter<Module> {
+	
+	
+	//private class ModuleListAdapter extends ArrayAdapter<Module> {
+	private class ModuleListAdapter extends ArrayAdapter<Course> {
 
 		private Bundle bundle;
-		private List<Module> origData;
+		//private List<Module> origData;
 
 		public ModuleListAdapter(Bundle bundle) {
 			super(getActivity(), R.layout.modulelistitem, data);
 			this.bundle = bundle;
 
-			origData = new ArrayList<Module>(data);
+			//origData = new ArrayList<Module>(data);
 		}
 
 		@Override
@@ -97,15 +106,20 @@ public class ModuleSearchFragment extends Fragment {
 			if (convertView == null) {
 				convertView = getLayoutInflater(bundle).inflate(R.layout.modulelistitem, parent, false);
 			}
-			final Module module = getItem(position);
-
+			//final Module module = getItem(position);
+			final Course course = getItem(position);
+			
 			TextView name = (TextView) convertView.findViewById(R.id.moduleName);
-			name.setText(module.getName());
+			//name.setText(module.getName());
+			name.setText(course.getName());
 			TextView subtext = (TextView) convertView.findViewById(R.id.subtext);
-			subtext.setText(module.getTeacher());
-
+			//subtext.setText(module.getTeacher());
+			subtext.setText(course.getTeacher());
+			
 			return convertView;
 		}
+		
+		
 	}
 
 	@Override

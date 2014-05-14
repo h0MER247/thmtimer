@@ -70,9 +70,10 @@ public class EnterModuleActivity extends FragmentActivity {
 	}
 
 	public void closeSearch(long id) {
+		
 		moduleDetail = new ModuleDetailFragment();
 		Bundle b = new Bundle();
-		b.putLong("id", id);
+		b.putLong("id", id); // id ist jetzt ne kursid!!!
 		moduleDetail.setArguments(b);
 		pagerAdapter.notifyDataSetChanged();
 

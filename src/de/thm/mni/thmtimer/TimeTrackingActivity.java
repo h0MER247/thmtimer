@@ -1,8 +1,6 @@
 package de.thm.mni.thmtimer;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -13,20 +11,27 @@ import android.widget.ArrayAdapter;
 import de.thm.mni.thmtimer.model.*;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 
+
+
 public class TimeTrackingActivity extends ListActivity {
-	protected static final int REQUEST_NEW = 1;
-	ArrayAdapter<TimeTracking> adapter;
-	private Module module;
+	
+	private final int REQUEST_NEW = 1;
+	private ArrayAdapter<TimeTracking> adapter;
+	//private Module module;
+	private Long courseID;
 	private List<TimeTracking> timeTrackingList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		Bundle extras = getIntent().getExtras();
-		long moduleID = extras.getLong("module_id");
-		this.module = StaticModuleData.findModule(moduleID);
-		this.timeTrackingList = new ArrayList<TimeTracking>(this.module.getTimeTracking());
+		this.courseID = extras.getLong("course_id");
+		
+		//this.module = StaticModuleData.findModule(moduleID);
+		//this.timeTrackingList = new ArrayList<TimeTracking>(this.module.getTimeTracking());
+		this.timeTrackingList = StaticModuleData.getStudentData().getTimeTrackingData(this.courseID);
 
 		this.adapter = new ArrayAdapter<TimeTracking>(this,
 				android.R.layout.simple_list_item_1,
@@ -47,7 +52,7 @@ public class TimeTrackingActivity extends ListActivity {
 		switch (item.getItemId()) {
 		case R.id.action_add:
 			Intent intent = new Intent(this, TrackTimeActivity.class);
-			intent.putExtra("module_id", this.module.getID());
+			intent.putExtra("module_id", this.courseID); // this.module.getID());
 			startActivityForResult(intent, REQUEST_NEW);
 			return true;
 		case android.R.id.home:
@@ -64,9 +69,11 @@ public class TimeTrackingActivity extends ListActivity {
 			return;
 		}
 		if (requestCode == REQUEST_NEW) {
+			/*
 			this.timeTrackingList = this.module.getTimeTracking();
 			adapter.clear();
 			adapter.addAll(this.module.getTimeTracking());
+			*/
 			adapter.notifyDataSetChanged();
 		}
 	}
