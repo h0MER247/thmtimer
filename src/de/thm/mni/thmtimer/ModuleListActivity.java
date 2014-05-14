@@ -1,5 +1,8 @@
 package de.thm.mni.thmtimer;
 
+import java.lang.reflect.Field;
+
+import de.thm.mni.thmtimer.util.FixedSpeedScroller;
 import de.thm.mni.thmtimer.util.MyPageTransformer;
 import de.thm.mni.thmtimer.util.TabFactory;
 import de.thm.mni.thmtimer.util.TabPagerAdapter;
@@ -65,6 +68,20 @@ public class ModuleListActivity extends FragmentActivity {
 			});
 			pager.setAdapter(tabAdapter);
 			pager.setPageTransformer(true, new MyPageTransformer());
+			try {
+				Field scroller = ViewPager.class.getDeclaredField("mScroller");
+				scroller.setAccessible(true);
+				scroller.set(pager, new FixedSpeedScroller(this));
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		if (actionBar == null) {

@@ -1,5 +1,6 @@
 package de.thm.mni.thmtimer;
 
+import java.util.Date;
 import java.util.List;
 
 import de.thm.mni.thmtimer.R;
@@ -7,6 +8,7 @@ import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.util.ModuleComparator;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -39,12 +41,12 @@ public class StudentFragment extends Fragment {
 			adapter = new StudentModuleListAdapter(savedInstanceState);
 			adapter.sort(new ModuleComparator());
 		}
-
 	}
 
 	private class StudentModuleListAdapter extends ArrayAdapter<Module> {
 
 		private Bundle bundle;
+		private final long FOUR_MONTHS = 10368000000l;
 
 		public StudentModuleListAdapter(Bundle bundle) {
 			super(getActivity(), R.layout.studentlistitem, data);
@@ -55,7 +57,6 @@ public class StudentFragment extends Fragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 
 			if (convertView == null) {
-
 				convertView = getLayoutInflater(bundle).inflate(R.layout.studentlistitem, parent, false);
 			}
 
@@ -66,7 +67,24 @@ public class StudentFragment extends Fragment {
 			TextView subtext = (TextView) convertView.findViewById(R.id.subtext);
 
 			name.setText(module.getName());
-			time.setText(Float.toString(module.getTimeInvested()));
+			time.setText(module.getTimeInvested());
+			Date d = module.getStartDate();
+			if(d!=null) {
+				//Time of the current semester
+				long delta = new Date().getTime()-d.getTime();
+				double percentSemester = delta/(FOUR_MONTHS/100.0);
+				double percentInvested = (int)(Math.random()*module.getCp()*30.0)
+						/(module.getCp()*30.0/100);
+				double percentDelta = percentInvested - percentSemester;
+				int red = 255, green = 255;
+				if(percentDelta>0) {
+					red+=10*percentDelta;
+				}
+				else if(percentDelta<0) {
+					green+=10*percentDelta;
+				}
+				time.setBackgroundColor(Color.rgb(red, green, 0));
+			}
 			subtext.setText(module.getTeacher());
 
 			return convertView;
@@ -103,7 +121,7 @@ public class StudentFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent(getActivity(), TimeTrackingActivity.class);
-				intent.putExtra("module_id", (int) ((Module) adapter.getItem(position)).getID());
+				intent.putExtra("module_id", ((Module) adapter.getItem(position)).getID());
 				startActivityForResult(intent, REQUEST_TIMETRACKING);
 			}
 

@@ -22,6 +22,14 @@
     <!-- ModuleDetailFragment -->
     <string name="module_details">Modul Detailansicht</string>
     <string name="enter">Beitreten</string>
+    <string name="moduleNumber">Modulnummer</string>
+    <string name="cp">Creditpoints</string>
+    <string name="teacher">Dozent</string>
+    <string name="content">Inhalte</string>
+    <string name="discription">Beschreibung</string>
+    <string name="expenditure">Aufwand</string>
+    <string name="requirement">Vorleistung</string>
+    <string name="testingMethod">Leistungsnachweis</string>
 
     <!-- ModuleSearchFragment -->
     <string name="no_data">Keine Module!</string>
@@ -30,9 +38,19 @@
     <string name="enter_module">Modul beitreten</string>
     <string name="action_search">Modulsuche</string>
     <string name="search_hint">Modul suchen…</string>
-    
+
     <!-- TrackTimeActivity -->
     <string name="enter_time_header">Zeit eingeben</string>
+    <string name="enter_time_time">Zeit</string>
+    <string name="enter_time_usage">Aktivität</string>
     <string name="enter_time">Eintragen</string>
+
+    <string-array name="usage_types">
+        <item>Vorlesung</item>
+        <item>Übung/Praktikum</item>
+        <item>Hausübung</item>
+        <item>Vor-/Nachbereitung</item>
+        <item>Prüfungsvorbereitung</item>
+    </string-array>
 
 </resources>

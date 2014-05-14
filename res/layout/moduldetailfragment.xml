@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragmentmoduledetail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/fragmentmoduledetail" >
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/name"
@@ -11,44 +11,110 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:text="Modul Name"
-        android:textSize="20sp" />
+        android:textSize="25sp" />
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="Modulnummer" />
-
-        <TextView
-            android:id="@+id/cp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Credit Points" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/teacher"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:text="Dozent" />
+        android:stretchColumns="1" >
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:text="Inhalt" />
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/moduleNumber"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/number"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/cp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cp"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/teacher"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/teacher"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/discription"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/discription"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/content"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/content"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/expenditure"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/expenditure"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/requirement"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/requirement"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/testingMethod"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/testingMethod"
+                android:padding="3dip" />
+        </TableRow>
+    </TableLayout>
 
     <Button
         android:id="@+id/enter"
