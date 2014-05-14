@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class TimeData implements Comparable<TimeData> {
 	
 	// Format: HH:MM(:SS) --> Sekunden sind optional !!!
-	private final Pattern m_pattern = Pattern.compile("^([0-1]?\\d|2[0-3]):([0-5]?\\d)(?>:([0-5]?\\d))?$");
+	private final Pattern m_pattern = Pattern.compile("^(\\d*):([0-5]?\\d)(?>:([0-5]?\\d))?$");
 	
 	private Integer m_hours;
 	private Integer m_minutes;
