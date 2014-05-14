@@ -24,10 +24,10 @@ public class LoginActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
+				
 				Intent intent = new Intent(LoginActivity.this, ModuleListActivity.class);
 				startActivity(intent);
 			}
-
 		});
 	}
 }

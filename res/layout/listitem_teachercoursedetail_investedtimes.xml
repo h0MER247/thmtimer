@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:activatedBackgroundIndicator"
+    android:minHeight="?android:listPreferredItemHeight"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/teachercoursedetail_txtCategorys"
+        android:layout_width="195dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="35dp"
+        android:singleLine="false"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorSecondaryInverse" />
+
+    <TextView
+        android:id="@+id/teachercoursedetail_txtTimesInvested"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/teachercoursedetail_txtCategorys"
+        android:gravity="left|center_vertical"
+        android:singleLine="false"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorSecondaryInverse" />
+
+    <de.thm.mni.thmtimer.PieChart
+        android:id="@+id/teachercoursedetail_pieChart"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/teachercoursedetail_txtCategorys"
+        android:layout_below="@+id/teachercoursedetail_txtCategorys"
+        android:paddingBottom="10dp"
+        android:paddingLeft="35dp"
+        android:paddingTop="10dp" />
+
+    <de.thm.mni.thmtimer.PieChartLegend
+        android:id="@+id/teachercoursedetail_pieChartLegend"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignLeft="@+id/teachercoursedetail_txtTimesInvested"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/teachercoursedetail_pieChart"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
+    
+</RelativeLayout>

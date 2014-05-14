@@ -29,8 +29,7 @@
     <string name="discription">Beschreibung</string>
     <string name="expenditure">Aufwand</string>
     <string name="requirement">Vorleistung</string>
-    <string name="testingMethod">Leistungsnachweis</string>    
-    
+    <string name="testingMethod">Leistungsnachweis</string>
 
     <!-- ModuleSearchFragment -->
     <string name="no_data">Keine Module!</string>
@@ -39,9 +38,20 @@
     <string name="enter_module">Modul beitreten</string>
     <string name="action_search">Modulsuche</string>
     <string name="search_hint">Modul suchen…</string>
-    
+
     <!-- TrackTimeActivity -->
     <string name="enter_time_header">Zeit eingeben</string>
+    <string name="enter_time_time">Zeit</string>
+    <string name="enter_time_usage">Aktivität</string>
     <string name="enter_time">Eintragen</string>
+
+    <!--  TeacherCourseDetailActivity -->
+    <string name="hours">Stunden</string>
+    <string name="courselist">Kursliste</string>
+    <string name="piechart">Tortendiagramm</string>
+    <string name="inscribedstudents">Eingeschriebene Studenten</string>
+	<string name="timedistribution">Zeitverteilung</string>
+	<string name="superfeature">Tolles Feature</string>
+	<string name="course_details">Kurs Details</string>
 
 </resources>

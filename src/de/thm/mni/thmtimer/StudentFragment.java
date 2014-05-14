@@ -1,9 +1,8 @@
 package de.thm.mni.thmtimer;
 
-import java.util.List;
-
 import de.thm.mni.thmtimer.R;
-import de.thm.mni.thmtimer.model.Module;
+import de.thm.mni.thmtimer.model.Course;
+import de.thm.mni.thmtimer.model.StudentData;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,35 +19,46 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+
+
 public class StudentFragment extends Fragment {
+	
 	private ListAdapter adapter;
-	private List<Module> data;
+	private StudentData data;
 
 	protected static final int REQUEST_NEW = 1;
 	protected static final int REQUEST_TIMETRACKING = 2;
+	
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		if (data == null) {
-			data = StaticModuleData.data;
+		
+		if(data == null) {
+			
+			data = StaticModuleData.getStudentData();
 		}
-		if (adapter == null) {
+		if(adapter == null) {
+			
 			adapter = new StudentModuleListAdapter(savedInstanceState);
 		}
-
 	}
 
-	private class StudentModuleListAdapter extends ArrayAdapter<Module> {
-
+	
+	
+	private class StudentModuleListAdapter extends ArrayAdapter<Long> {
+		
 		private Bundle bundle;
 
 		public StudentModuleListAdapter(Bundle bundle) {
-			super(getActivity(), R.layout.studentlistitem, data);
+			
+			super(getActivity(), R.layout.studentlistitem, data.getCourseIDs());
 			this.bundle = bundle;
 		}
-
+		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -56,17 +66,19 @@ public class StudentFragment extends Fragment {
 
 				convertView = getLayoutInflater(bundle).inflate(R.layout.studentlistitem, parent, false);
 			}
-
-			final Module module = data.get(position);
+			
+			final Long courseID = data.getCourseIDs().get(position);
+			final Course course = StaticModuleData.findCourse(courseID);
+			
 
 			TextView name = (TextView) convertView.findViewById(R.id.moduleName);
-			TextView time = (TextView) convertView.findViewById(R.id.timeInvested);
 			TextView subtext = (TextView) convertView.findViewById(R.id.subtext);
-
-			name.setText(module.getName());
-			time.setText(Float.toString(module.getTimeInvested()));
-			subtext.setText(module.getTeacher());
-
+			TextView time = (TextView) convertView.findViewById(R.id.timeInvested);
+			
+			name.setText(course.getName());
+			subtext.setText(course.getTeacher());
+			time.setText(data.getTimeInvestedTotal(courseID).getTimeStringHHMM());
+			
 			return convertView;
 		}
 	}
@@ -91,20 +103,23 @@ public class StudentFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		
 		View view = inflater.inflate(R.layout.studentfragment, container, false);
+		
 
 		ListView listView = (ListView) view.findViewById(R.id.studentModules);
+		
 		listView.setAdapter(new StudentModuleListAdapter(savedInstanceState));
-
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				
 				Intent intent = new Intent(getActivity(), TimeTrackingActivity.class);
-				intent.putExtra("module_id", (int) ((Module) adapter.getItem(position)).getID());
+				
+				intent.putExtra("course_id", (Long)adapter.getItem(position)); //  (int) ((Module) adapter.getItem(position)).getID());
 				startActivityForResult(intent, REQUEST_TIMETRACKING);
 			}
-
 		});
 
 		return view;
