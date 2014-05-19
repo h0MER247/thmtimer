@@ -51,7 +51,7 @@ public class StaticModuleData {
 
 			m_modules = new ArrayList<Module>();
 
-			m_modules.add(new Module(0l,                                 // ModulID (so wie sie in der Serverdatenbank stehen w�rde)
+			m_modules.add(new Module(0l,                // ModulID (so wie sie in der Serverdatenbank stehen würde)
 					"Objektorientierte Programmierung", // Modulbezeichnung
 					"MN1007",							 // Modulnummer
 					6,									 // Anzahl Creditpoints
@@ -76,8 +76,8 @@ public class StaticModuleData {
 			m_courses = new ArrayList<Course>();
 
 			// OOP
-			m_courses.add(new Course(0l,									// KursID (so wie sie in der Serverdatenbank stehen w�rde)
-					0l,									// ModulID (so wie sie in der Serverdatenbank stehen w�rde) -> "Verbindet" den Kurs mit dem dazugeh�rigen Modul
+			m_courses.add(new Course(0l,				// KursID (so wie sie in der Serverdatenbank stehen würde)
+					0l,									// ModulID (so wie sie in der Serverdatenbank stehen würde) -> "Verbindet" den Kurs mit dem dazugeh�rigen Modul
 					"Objektorientierte Programmierung",	// Kursbezeichnung (Der Server sollte uns die Modulbezeichnung geben, wenn nur ein Kurs vorhanden ist)
 					"Prof. Dr. Letschert", 				// Dozent dieses Kurses
 					131));									// Eingeschriebene Studenten
@@ -93,7 +93,7 @@ public class StaticModuleData {
 			m_courses.add(new Course(4l, 3l, "Programmieren interaktiver Systeme - Kurs B", "Prof. Dr. Lauwerth", 60));
 
 			// Rechnernetze und ihre Anwendung
-			m_courses.add(new Course(5l, 4l, "Rechnernetze und ihre Anwendung", "Prof. Dr. M�ller", 61));
+			m_courses.add(new Course(5l, 4l, "Rechnernetze und ihre Anwendung", "Prof. Dr. Müller", 61));
 
 			// Datenbanken
 			m_courses.add(new Course(6l, 5l, "Datenbanken", "Prof. Dr. Renz", 53));
@@ -115,10 +115,10 @@ public class StaticModuleData {
 
 			m_timeCategorys = new ArrayList<TimeCategory>();
 
-			m_timeCategorys.add(new TimeCategory(0l,			// KategorieID (so wie sie in der Serverdatenbank stehen w�rde)
+			m_timeCategorys.add(new TimeCategory(0l,			// KategorieID (so wie sie in der Serverdatenbank stehen würde)
 					"Vorlesung"));	// Bezeichnung f�r diese Kategorie
 
-			m_timeCategorys.add(new TimeCategory(1l, "Praktika"));
+			m_timeCategorys.add(new TimeCategory(1l, "Praktikum"));
 			m_timeCategorys.add(new TimeCategory(2l, "Hausarbeit"));
 			m_timeCategorys.add(new TimeCategory(3l, "Vorbereitung"));
 			m_timeCategorys.add(new TimeCategory(4l, "Sonstiges"));
@@ -150,25 +150,25 @@ public class StaticModuleData {
 
 			m_studentData.addTimeTracking(0l, new TimeTracking(1l, 0l, "War in der Vorlesung", new TimeData("1:31")));
 			m_studentData.addTimeTracking(0l, new TimeTracking(2l, 1l, "War im Praktikum... War ganz gut", new TimeData("0:46")));
-			m_studentData.addTimeTracking(0l, new TimeTracking(3l, 2l, "Haus�bung 1 fertig", new TimeData("2:12")));
-			m_studentData.addTimeTracking(0l, new TimeTracking(4l, 4l, "Getr�umt von Android", new TimeData("7:42")));
+			m_studentData.addTimeTracking(0l, new TimeTracking(3l, 2l, "Hausübung 1 fertig", new TimeData("2:12")));
+			m_studentData.addTimeTracking(0l, new TimeTracking(4l, 4l, "Geträumt von Android", new TimeData("7:42")));
 
 			// Compilerbau
 			m_studentData.addTimeTracking(2l, new TimeTracking(5l, 0l, "War in der Vorlesung, Compilerbau ist top...", new TimeData("1:31")));
 			m_studentData.addTimeTracking(2l, new TimeTracking(6l, 1l, "War im Praktikum... Es l�uft...", new TimeData("1:36")));
-			m_studentData.addTimeTracking(2l, new TimeTracking(7l, 2l, "Haus�bung 1 angefangen", new TimeData("1:12")));
-			m_studentData.addTimeTracking(2l, new TimeTracking(8l, 2l, "Haus�bung 1 fertiggestellt", new TimeData("2:51")));
+			m_studentData.addTimeTracking(2l, new TimeTracking(7l, 2l, "Hausübung 1 angefangen", new TimeData("1:12")));
+			m_studentData.addTimeTracking(2l, new TimeTracking(8l, 2l, "Hausübung 1 fertiggestellt", new TimeData("2:51")));
 
 			// Rechnernetze
-			m_studentData.addTimeTracking(5l, new TimeTracking(9l, 0l, "Vorlesung gut, Prof. Dr. M�ller ist super", new TimeData("1:33")));
-			m_studentData.addTimeTracking(5l, new TimeTracking(10l, 1l, "War im Praktikum... Es l�uft...", new TimeData("1:36")));
-			m_studentData.addTimeTracking(5l, new TimeTracking(11l, 2l, "Haus�bung 1 angefangen", new TimeData("1:12")));
-			m_studentData.addTimeTracking(5l, new TimeTracking(12l, 2l, "Haus�bung 1 fertiggestellt", new TimeData("2:51")));
+			m_studentData.addTimeTracking(5l, new TimeTracking(9l, 0l, "Vorlesung gut, Prof. Dr. Müller ist super", new TimeData("1:33")));
+			m_studentData.addTimeTracking(5l, new TimeTracking(10l, 1l, "War im Praktikum... Es läuft...", new TimeData("1:36")));
+			m_studentData.addTimeTracking(5l, new TimeTracking(11l, 2l, "Hausübung 1 angefangen", new TimeData("1:12")));
+			m_studentData.addTimeTracking(5l, new TimeTracking(12l, 2l, "Hausübung 1 fertiggestellt", new TimeData("2:51")));
 			m_studentData.addTimeTracking(5l, new TimeTracking(13l, 4l, "In der Mensa gegessen", new TimeData("0:12")));
 
 			// Datenbanken
 			m_studentData.addTimeTracking(6l, new TimeTracking(14l, 0l, "Vorlesung gehabt", new TimeData("1:30")));
-			m_studentData.addTimeTracking(6l, new TimeTracking(15l, 2l, "Haus�bung 1 ist endlich fertig", new TimeData("4:22")));
+			m_studentData.addTimeTracking(6l, new TimeTracking(15l, 2l, "Hausübung 1 ist endlich fertig", new TimeData("4:22")));
 
 			// SWT-P (Kurs Volkmer)
 			m_studentData.addTimeTracking(9l, new TimeTracking(16l, 1l, "Praktika Stunde gehabt", new TimeData("3:00")));
