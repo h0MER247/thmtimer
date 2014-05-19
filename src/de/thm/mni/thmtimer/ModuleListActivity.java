@@ -15,9 +15,9 @@ import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
 public class ModuleListActivity extends FragmentActivity {
-	private ViewPager pager;
-	private TabPagerAdapter tabAdapter;
-	private ActionBar actionBar;
+	private ViewPager mPager;
+	private TabPagerAdapter mTabAdapter;
+	private ActionBar mActionBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +26,8 @@ public class ModuleListActivity extends FragmentActivity {
 		setContentView(R.layout.modulelistactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		if (tabAdapter == null) {
-			tabAdapter = new TabPagerAdapter(getSupportFragmentManager(), new TabFactory() {
+		if (mTabAdapter == null) {
+			mTabAdapter = new TabPagerAdapter(getSupportFragmentManager(), new TabFactory() {
 
 				@Override
 				public Fragment firstTab() {
@@ -46,14 +46,14 @@ public class ModuleListActivity extends FragmentActivity {
 			});
 		}
 
-		if (pager == null) {
-			pager = (ViewPager) findViewById(R.id.pager);
-			pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		if (mPager == null) {
+			mPager = (ViewPager) findViewById(R.id.pager);
+			mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
 				@Override
 				public void onPageSelected(int position) {
-					actionBar = getActionBar();
-					actionBar.setSelectedNavigationItem(position);
+					mActionBar = getActionBar();
+					mActionBar.setSelectedNavigationItem(position);
 				}
 
 				@Override
@@ -66,12 +66,12 @@ public class ModuleListActivity extends FragmentActivity {
 
 				}
 			});
-			pager.setAdapter(tabAdapter);
-			pager.setPageTransformer(true, new ZoomPageTransformer());
+			mPager.setAdapter(mTabAdapter);
+			mPager.setPageTransformer(true, new ZoomPageTransformer());
 			try {
 				Field scroller = ViewPager.class.getDeclaredField("mScroller");
 				scroller.setAccessible(true);
-				scroller.set(pager, new FixedSpeedScroller(this));
+				scroller.set(mPager, new FixedSpeedScroller(this));
 			} catch (NoSuchFieldException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -84,11 +84,11 @@ public class ModuleListActivity extends FragmentActivity {
 			}
 		}
 
-		if (actionBar == null) {
-			actionBar = getActionBar();
+		if (mActionBar == null) {
+			mActionBar = getActionBar();
 
 			// Enable Tabs on Action Bar
-			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+			mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 			ActionBar.TabListener tabListener = new ActionBar.TabListener() {
 
 				@Override
@@ -98,7 +98,7 @@ public class ModuleListActivity extends FragmentActivity {
 
 				@Override
 				public void onTabSelected(ActionBar.Tab actionTab, FragmentTransaction ft) {
-					pager.setCurrentItem(actionTab.getPosition());
+					mPager.setCurrentItem(actionTab.getPosition());
 				}
 
 				@Override
@@ -108,8 +108,8 @@ public class ModuleListActivity extends FragmentActivity {
 			};
 
 			// Add tabs to actionbar
-			actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab1)).setTabListener(tabListener));
-			actionBar.addTab(actionBar.newTab().setText(getString(R.string.tab2)).setTabListener(tabListener));
+			mActionBar.addTab(mActionBar.newTab().setText(getString(R.string.tab1)).setTabListener(tabListener));
+			mActionBar.addTab(mActionBar.newTab().setText(getString(R.string.tab2)).setTabListener(tabListener));
 		}
 
 	}

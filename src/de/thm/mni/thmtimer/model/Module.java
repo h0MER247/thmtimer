@@ -6,83 +6,73 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Module {
-	
-	private Long m_id;
-	private String m_name;
-	private Integer m_creditPoints;
+
+	private Long mId;
+	private String mName;
+	private Integer mCreditPoints;
 	private String m_description;
-	private String m_moduleNumber;
-	private List<Course> m_courseList = new ArrayList<Course>();
-	private TimeData m_timeToInvestInHours;
-	private Date m_startDate;
-	
+	private String mModuleNumber;
+	private List<Course> mCourseList = new ArrayList<Course>();
+	private TimeData mTimeToInvestInHours;
+	private Date mStartDate;
+
 	// ToDo: Mehr Informationen zu einem Modul hinzufügen!
-	
-	
-	public Module(Long id, String name, String moduleNumber, Integer creditPoints, Integer timeToInvestInHours, String description) {
-		
-		m_id = id;
-		m_name = name;
-		m_moduleNumber = moduleNumber;
-		m_creditPoints = creditPoints;
+
+	public Module(Long id, String name, String moduleNumber, Integer creditPoints, Integer timeToInvestInHours,
+			String description) {
+
+		mId = id;
+		mName = name;
+		mModuleNumber = moduleNumber;
+		mCreditPoints = creditPoints;
 		m_description = description;
-		m_timeToInvestInHours = new TimeData(timeToInvestInHours, 0);
+		mTimeToInvestInHours = new TimeData(timeToInvestInHours, 0);
 		GregorianCalendar gc = new GregorianCalendar(2014, 4, 1);
 		setStartDate(new Date(gc.getTimeInMillis()));
 	}
-	
-	
-	
+
 	public Long getID() {
-		
-		return m_id;
+
+		return mId;
 	}
-	
+
 	public String getName() {
-		
-		return m_name;
+
+		return mName;
 	}
-	
+
 	public String getModuleNumber() {
-		
-		return m_moduleNumber;
+
+		return mModuleNumber;
 	}
-	
+
 	public Integer getCreditPoints() {
-		
-		return m_creditPoints;
+
+		return mCreditPoints;
 	}
-	
+
 	public String getDescription() {
 		return m_description;
 	}
 
-
-
 	public List<Course> getCourseList() {
-		return m_courseList;
+		return mCourseList;
 	}
-
-
 
 	public void addCourse(Course course) {
-		m_courseList.add(course);
+		mCourseList.add(course);
 	}
-
-
 
 	public Date getStartDate() {
-		return m_startDate;
+		return mStartDate;
 	}
-
-
 
 	public void setStartDate(Date m_startDate) {
-		this.m_startDate = m_startDate;
+		this.mStartDate = m_startDate;
 	}
-	
+
 	@Override
 	public String toString() {
-		return m_name;
+		return mName;
 	}
 }

@@ -16,57 +16,57 @@ import android.view.MenuItem;
 
 public class EnterModuleActivity extends FragmentActivity {
 
-	private Fragment moduleDetail;
-	private ModuleSearchFragment moduleSearch;
-	private FragmentManager fragmentManager;
-	private ViewPager pager;
-	private TabPagerAdapter pagerAdapter;
+	private Fragment mModuleDetail;
+	private ModuleSearchFragment mModuleSearch;
+	private FragmentManager mFragmentManager;
+	private ViewPager mPager;
+	private TabPagerAdapter mPagerAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (fragmentManager == null) {
-			fragmentManager = getSupportFragmentManager();
+		if (mFragmentManager == null) {
+			mFragmentManager = getSupportFragmentManager();
 		}
-		if (savedInstanceState != null) { 
-			moduleSearch = (ModuleSearchFragment) fragmentManager.getFragment(savedInstanceState, "moduleSearch");
-			moduleDetail = fragmentManager.getFragment(savedInstanceState, "moduleDetail");
+		if (savedInstanceState != null) {
+			mModuleSearch = (ModuleSearchFragment) mFragmentManager.getFragment(savedInstanceState, "moduleSearch");
+			mModuleDetail = mFragmentManager.getFragment(savedInstanceState, "moduleDetail");
 		}
 
 		setContentView(R.layout.entermoduleactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		if (moduleSearch == null) {
-			moduleSearch = new ModuleSearchFragment();
+		if (mModuleSearch == null) {
+			mModuleSearch = new ModuleSearchFragment();
 		}
 
-		pager = (ViewPager) findViewById(R.id.entermodulepager);
-		pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), new TabFactory() {
+		mPager = (ViewPager) findViewById(R.id.entermodulepager);
+		mPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), new TabFactory() {
 
 			@Override
 			public Fragment firstTab() {
-				return moduleSearch;
+				return mModuleSearch;
 			}
 
 			@Override
 			public Fragment secondTab() {
-				return moduleDetail;
+				return mModuleDetail;
 			}
 
 			@Override
 			public int getNumberOfTabs() {
-				if (moduleDetail == null) {
+				if (mModuleDetail == null) {
 					return 1;
 				} else {
 					return 2;
 				}
 			}
 		});
-		pager.setAdapter(pagerAdapter);
-		pager.setPageTransformer(true, new DepthPageTransformer());
+		mPager.setAdapter(mPagerAdapter);
+		mPager.setPageTransformer(true, new DepthPageTransformer());
 		try {
 			Field scroller = ViewPager.class.getDeclaredField("mScroller");
 			scroller.setAccessible(true);
-			scroller.set(pager, new FixedSpeedScroller(this));
+			scroller.set(mPager, new FixedSpeedScroller(this));
 		} catch (NoSuchFieldException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,30 +77,30 @@ public class EnterModuleActivity extends FragmentActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public void openSearch() {
-		pager.setCurrentItem(0);
+		mPager.setCurrentItem(0);
 	}
 
 	public void closeSearch(long id) {
-		
-		moduleDetail = new ModuleDetailFragment();
+
+		mModuleDetail = new ModuleDetailFragment();
 		Bundle b = new Bundle();
 		b.putLong("id", id); // id ist jetzt ne kursid!!!
-		moduleDetail.setArguments(b);
-		pagerAdapter.notifyDataSetChanged();
+		mModuleDetail.setArguments(b);
+		mPagerAdapter.notifyDataSetChanged();
 
-		pager.setCurrentItem(1);
+		mPager.setCurrentItem(1);
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		fragmentManager.putFragment(outState, "moduleSearch", moduleSearch);
-		if (moduleDetail != null) {
-			fragmentManager.putFragment(outState, "moduleDetail", moduleDetail);
+		mFragmentManager.putFragment(outState, "moduleSearch", mModuleSearch);
+		if (mModuleDetail != null) {
+			mFragmentManager.putFragment(outState, "moduleDetail", mModuleDetail);
 		}
 	}
 
@@ -121,17 +121,17 @@ public class EnterModuleActivity extends FragmentActivity {
 	}
 
 	private void onBack() {
-		int cur = pager.getCurrentItem();
+		int cur = mPager.getCurrentItem();
 		if (cur == 0) {
 			finish();
 		} else {
 			openSearch();
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		moduleSearch.clearFilter();
+		mModuleSearch.clearFilter();
 	}
 }

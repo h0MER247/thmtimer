@@ -28,9 +28,8 @@ import android.widget.TextView;
 
 
 public class StudentFragment extends Fragment {
-	
-	private StudentModuleListAdapter adapter;
-	private List<Module> data;
+	private StudentModuleListAdapter mAdapter;
+	private List<Module> mData;
 
 	protected static final int REQUEST_NEW = 1;
 	protected static final int REQUEST_TIMETRACKING = 2;
@@ -43,17 +42,17 @@ public class StudentFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		
-		if(data == null) {
+		if(mData == null) {
 			
-			data = new ArrayList<Module>();
+			mData = new ArrayList<Module>();
 			for(Long l:StaticModuleData.getStudentData().getCourseIDs()) {
-				data.add(StaticModuleData.findModule(StaticModuleData.findCourse(l).getModuleID()));
+				mData.add(StaticModuleData.findModule(StaticModuleData.findCourse(l).getModuleID()));
 			}
 		}
-		if(adapter == null) {
+		if(mAdapter == null) {
 			
-			adapter = new StudentModuleListAdapter(savedInstanceState);
-			adapter.sort(new ModuleComparator());
+			mAdapter = new StudentModuleListAdapter(savedInstanceState);
+			mAdapter.sort(new ModuleComparator());
 		}
 	}
 
@@ -66,7 +65,7 @@ public class StudentFragment extends Fragment {
 
 		public StudentModuleListAdapter(Bundle bundle) {
 			
-			super(getActivity(), R.layout.studentlistitem, data);
+			super(getActivity(), R.layout.studentlistitem, mData);
 			this.bundle = bundle;
 		}
 		
@@ -78,7 +77,7 @@ public class StudentFragment extends Fragment {
 				convertView = getLayoutInflater(bundle).inflate(R.layout.studentlistitem, parent, false);
 			}
 			
-			final Module module = data.get(position);
+			final Module module = mData.get(position);
 
 			TextView name = (TextView) convertView.findViewById(R.id.moduleName);
 			TextView time = (TextView) convertView.findViewById(R.id.timeInvested);
@@ -151,7 +150,7 @@ public class StudentFragment extends Fragment {
 				
 				Intent intent = new Intent(getActivity(), TimeTrackingActivity.class);
 				
-				intent.putExtra("course_id", adapter.getItem(position).getCourseList().get(0).getID()); //  (int) ((Module) adapter.getItem(position)).getID());
+				intent.putExtra("course_id", mAdapter.getItem(position).getCourseList().get(0).getID()); //  (int) ((Module) adapter.getItem(position)).getID());
 				startActivityForResult(intent, REQUEST_TIMETRACKING);
 			}
 		});
@@ -162,13 +161,13 @@ public class StudentFragment extends Fragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //		if (requestCode == REQUEST_TIMETRACKING) {
-		adapter.clear();
-		this.data = new ArrayList<Module>();
+		mAdapter.clear();
+		this.mData = new ArrayList<Module>();
 		for(Long l:StaticModuleData.getStudentData().getCourseIDs()) {
-			this.data.add(StaticModuleData.findModule(StaticModuleData.findCourse(l).getModuleID()));
+			this.mData.add(StaticModuleData.findModule(StaticModuleData.findCourse(l).getModuleID()));
 		}
-		adapter.addAll(this.data);
-		adapter.notifyDataSetChanged();
+		mAdapter.addAll(this.mData);
+		mAdapter.notifyDataSetChanged();
 //		}
 	}
 }

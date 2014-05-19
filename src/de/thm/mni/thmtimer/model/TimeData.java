@@ -3,132 +3,99 @@ package de.thm.mni.thmtimer.model;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
 public class TimeData implements Comparable<TimeData> {
-	
 	// Format: HH:MM(:SS) --> Sekunden sind optional !!!
 	private final Pattern m_pattern = Pattern.compile("^(\\d+):([0-5]?\\d)(?>:([0-5]?\\d))?$");
-	
-	private Integer m_hours;
-	private Integer m_minutes;
-	
-	
+
+	private Integer mHours;
+	private Integer mMinutes;
+
 	public TimeData() {
-		
-		m_hours = 0;
-		m_minutes = 0;
+		mHours = 0;
+		mMinutes = 0;
 	}
-	
+
 	public TimeData(String time) {
-		
-		if(!parseString(time)) {
-			
-			m_hours = 0;
-			m_minutes = 0;
+		if (!parseString(time)) {
+			mHours = 0;
+			mMinutes = 0;
 		}
 	}
-	
+
 	public TimeData(Integer hours, Integer minutes) {
-		
-		m_hours = hours;
-		m_minutes = minutes;
+		mHours = hours;
+		mMinutes = minutes;
 	}
-	
-	
-	
+
 	public boolean parseString(String time) {
-		
 		Matcher m = m_pattern.matcher(time);
-		
-		if(m.matches()) {
-			
-			m_hours = Integer.valueOf(m.group(1));
-			m_minutes = Integer.valueOf(m.group(2));
+		if (m.matches()) {
+			mHours = Integer.valueOf(m.group(1));
+			mMinutes = Integer.valueOf(m.group(2));
 			return true;
 		}
-		
+
 		// Hat nicht geklappt :(
 		return false;
 	}
-	
-	
-	
+
 	public void setHours(Integer hours) {
-		
-		m_hours = hours;
+		mHours = hours;
 	}
-	
+
 	public Integer getHours() {
-		
-		return m_hours;
+		return mHours;
 	}
-	
+
 	public void setMinutes(Integer minutes) {
-		
-		m_minutes = minutes;
+		mMinutes = minutes;
 	}
-	
+
 	public Integer getMinutes() {
-		
-		return m_minutes;
+		return mMinutes;
 	}
-	
-	
+
 	public void setTimeInSeconds(Integer seconds) {
-		
-		m_hours = seconds / 3600;
-		m_minutes = (seconds - (m_hours * 3600)) / 60;
+		mHours = seconds / 3600;
+		mMinutes = (seconds - (mHours * 3600)) / 60;
 	}
-	
+
 	public Integer getTimeInSeconds() {
-		
-		return m_hours * 3600 + m_minutes * 60;
+		return mHours * 3600 + mMinutes * 60;
 	}
-	
+
 	public void setTimeInMinutes(Integer minutes) {
-		
-		m_hours   = minutes / 60;
-		m_minutes = minutes - (m_hours * 60);
+		mHours = minutes / 60;
+		mMinutes = minutes - (mHours * 60);
 	}
-	
+
 	public Integer getTimeInMinutes() {
-		
-		return (m_hours * 60) + m_minutes; 
+		return (mHours * 60) + mMinutes;
 	}
-	
+
 	public String getTimeStringHHMM() {
-		
-		return String.format("%02d:%02d", m_hours, m_minutes);
+		return String.format("%02d:%02d", mHours, mMinutes);
 	}
-	
+
 	public String getTimeStringHHMMSS() {
-		
-		return String.format("%02d:%02d", m_hours, m_minutes);
+		return String.format("%02d:%02d", mHours, mMinutes);
 	}
-	
+
 	@Override
 	public String toString() {
-		
 		return getTimeStringHHMM();
 	}
-	
+
 	@Override
 	public int compareTo(TimeData another) {
-		
-		Integer me    = getTimeInSeconds();
+		Integer me = getTimeInSeconds();
 		Integer other = another.getTimeInSeconds();
-		
-		if(me > other) {
-			
+
+		if (me > other) {
 			return -1;
-		}
-		else if(me == other) {
-			
+		} else if (me == other) {
 			return 0;
-		}
-		else {
-			
+		} else {
 			return 1;
 		}
 	}

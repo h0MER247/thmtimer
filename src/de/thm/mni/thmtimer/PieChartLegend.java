@@ -11,125 +11,101 @@ import android.util.AttributeSet;
 import android.view.View;
 
 
-
 public class PieChartLegend extends View {
-
 	public final static Integer[] DEFAULT_COLORS = { 0xFF0099CC, 0xFF9933CC, 0xFF669900, 0xFFFF8800, 0xFFCC0000 };
-	
-	private ArrayList<String> m_labels;
-	private Integer[] m_colors;
-	private Paint m_paint;
-	private Float m_bulletSize;
-	private Float m_bulletPadding;
-	
-	
-	
+
+	private ArrayList<String> mLabels;
+	private Integer[] mColors;
+	private Paint mPaint;
+	private Float mBulletSize;
+	private Float mBulletPadding;
+
 	public PieChartLegend(Context context, AttributeSet attrs) {
-		
 		super(context, attrs);
-		
-		m_labels = new ArrayList<String>();
-		
-		m_paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		m_paint.setStrokeWidth(1f);
-		
+
+		mLabels = new ArrayList<String>();
+
+		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mPaint.setStrokeWidth(1f);
+
 		setTextSize(25f);
 		setBulletSize(20f);
 		setBulletPadding(15f);
 		setColors(DEFAULT_COLORS);
 	}
-	
 
-	
 	public void setTextSize(Float textSize) {
-		
-		m_paint.setTextSize(textSize);
+		mPaint.setTextSize(textSize);
 	}
-	
+
 	public void setBulletSize(Float bulletSize) {
-		
-		m_bulletSize = bulletSize;
+		mBulletSize = bulletSize;
 	}
-	
+
 	public void setBulletPadding(Float bulletPadding) {
-		
-		m_bulletPadding = bulletPadding;
+		mBulletPadding = bulletPadding;
 	}
-	
+
 	public void setColors(Integer[] colors) {
-		
-		m_colors = colors;
+		mColors = colors;
 	}
-	
+
 	private Integer getColor(int entryNumber) {
-		
-		return m_colors[entryNumber % m_colors.length];
+		return mColors[entryNumber % mColors.length];
 	}
-	
+
 	public void addLabel(String label) {
-		
-		m_labels.add(label);
+		mLabels.add(label);
 		invalidate();
 	}
-	
-	
-	
+
 	@Override
 	public void draw(Canvas canvas) {
-		
-		if(m_labels.size() != 0) {
-			
+		if (mLabels.size() != 0) {
 			//
 			// Position des ersten Bullets bzw. Labels berechnen
 			//
-			Float bulletX = (float)getPaddingLeft() + (m_bulletSize / 2);
-			Float bulletY = (float)getPaddingTop();
-			Float labelX  = bulletX + (m_bulletSize / 2) + m_bulletPadding; 
-			Float labelY  = bulletY;
-			
+			Float bulletX = (float) getPaddingLeft() + (mBulletSize / 2);
+			Float bulletY = (float) getPaddingTop();
+			Float labelX = bulletX + (mBulletSize / 2) + mBulletPadding;
+			Float labelY = bulletY;
+
 			//
 			// Die Legende zeichnen
 			//
 			Rect r = new Rect();
-			
-			for(int i = 0;
-					i < m_labels.size();
-					i++) {
-				
-				String label = m_labels.get(i);
-				
-				
+
+			for (int i = 0; i < mLabels.size(); i++) {
+
+				String label = mLabels.get(i);
+
 				// Abmessungen des Textes holen
-				m_paint.getTextBounds(label, 0, label.length(), r);
-				
-				if(i == 0) {
-					
-					// labelY so verschieben das (labelX, labelY) die obere linke Ecke des Textes ist
+				mPaint.getTextBounds(label, 0, label.length(), r);
+
+				if (i == 0) {
+
+					// labelY so verschieben das (labelX, labelY) die obere
+					// linke Ecke des Textes ist
 					labelY += r.height() - r.bottom;
 				}
-				
-				
+
 				//
 				// Zeichnen des Bullets
 				//
-				m_paint.setColor(getColor(i));
-				
-				canvas.drawRect(bulletX - (m_bulletSize / 2),
-						        bulletY + ((r.height() - m_bulletSize) / 2),
-						        bulletX + (m_bulletSize / 2),
-						        bulletY + ((r.height() - m_bulletSize) / 2) + m_bulletSize,
-						        m_paint);
+				mPaint.setColor(getColor(i));
+
+				canvas.drawRect(bulletX - (mBulletSize / 2), bulletY + ((r.height() - mBulletSize) / 2), bulletX
+						+ (mBulletSize / 2), bulletY + ((r.height() - mBulletSize) / 2) + mBulletSize, mPaint);
 
 				//
 				// Zeichnen des Textes
 				//
-				m_paint.setColor(Color.BLACK);
-				m_paint.setStyle(Paint.Style.FILL);
-				canvas.drawText(label, labelX, labelY, m_paint);
-				
-				
-				labelY  += m_bulletPadding + r.height();
-				bulletY += m_bulletPadding + r.height();
+				mPaint.setColor(Color.BLACK);
+				mPaint.setStyle(Paint.Style.FILL);
+				canvas.drawText(label, labelX, labelY, mPaint);
+
+				labelY += mBulletPadding + r.height();
+				bulletY += mBulletPadding + r.height();
 			}
 		}
 	}

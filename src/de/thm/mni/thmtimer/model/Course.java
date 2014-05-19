@@ -1,57 +1,44 @@
 package de.thm.mni.thmtimer.model;
 
-
-
 public class Course {
 
-	private Long m_id;
-	private Long m_moduleID;
-	private String m_name;
-	private String m_teacher;
-	private Integer m_studentCount;
-	
-	
+	private Long mId;
+	private Long mModuleID;
+	private String mName;
+	private String mTeacher;
+	private Integer mStudentCount;
+
 	public Course(Long id, Long moduleID, String name, String teacher, Integer studentCount) {
-		
-		m_id = id;
-		m_moduleID = moduleID;
-		m_name = name;
-		m_teacher = teacher;
-		m_studentCount = studentCount;
+
+		mId = id;
+		mModuleID = moduleID;
+		mName = name;
+		mTeacher = teacher;
+		mStudentCount = studentCount;
 	}
-	
-	
-	
+
 	public Long getID() {
-		
-		return m_id;
+		return mId;
 	}
-	
+
 	public Long getModuleID() {
-		
-		return m_moduleID;
+		return mModuleID;
 	}
-	
+
 	public String getName() {
-		
-		return m_name;
+		return mName;
 	}
-	
+
 	public String getTeacher() {
-		
-		return m_teacher;
+		return mTeacher;
 	}
-	
+
 	public Integer getStudentCount() {
-		
-		return m_studentCount;
+		return mStudentCount;
 	}
-	
-	
-	
+
 	@Override
 	public String toString() {
-		
-		return m_name;
+		return mName;
 	}
 }

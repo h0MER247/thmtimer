@@ -20,27 +20,24 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
-
 public class TeacherFragment extends Fragment {
-	
-	private TeacherModuleListAdapter adapter;
-	private List<Module> data;
+	private TeacherModuleListAdapter mAdapter;
+	private List<Module> mData;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		if(data == null) {
-			data = new ArrayList<Module>();
-			for(Long l:StaticModuleData.getTeacherData().getCourseIDs()) {
-				data.add(StaticModuleData.findModule(StaticModuleData.findCourse(l).getModuleID()));
+
+		if (mData == null) {
+			mData = new ArrayList<Module>();
+			for (Long l : StaticModuleData.getTeacherData().getCourseIDs()) {
+				mData.add(StaticModuleData.findModule(StaticModuleData.findCourse(l).getModuleID()));
 			}
 		}
-		if(adapter == null) {
-			
-			adapter = new TeacherModuleListAdapter(savedInstanceState);
-			adapter.sort(new ModuleComparator());
+		if (mAdapter == null) {
+
+			mAdapter = new TeacherModuleListAdapter(savedInstanceState);
+			mAdapter.sort(new ModuleComparator());
 		}
 	}
 
@@ -49,8 +46,8 @@ public class TeacherFragment extends Fragment {
 		private Bundle bundle;
 
 		public TeacherModuleListAdapter(Bundle bundle) {
-			
-			super(getActivity(), R.layout.teacherlistitem, data);
+
+			super(getActivity(), R.layout.teacherlistitem, mData);
 			this.bundle = bundle;
 		}
 
@@ -58,31 +55,29 @@ public class TeacherFragment extends Fragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 
 			if (convertView == null) {
-				
+
 				convertView = getLayoutInflater(bundle).inflate(R.layout.teacherlistitem, parent, false);
 			}
-			
 
-			final Module module = data.get(position);
+			final Module module = mData.get(position);
 
 			TextView name = (TextView) convertView.findViewById(R.id.moduleName);
 			TextView subtext = (TextView) convertView.findViewById(R.id.subtext);
 
 			name.setText(module.getName());
 			int studentCount = 0;
-			for(Course c:module.getCourseList()) {
-				studentCount+=c.getStudentCount();
+			for (Course c : module.getCourseList()) {
+				studentCount += c.getStudentCount();
 			}
 			subtext.setText(Integer.toString(studentCount) + " " + getString(R.string.students));
-			
-			
+
 			return convertView;
 		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		
+
 		View view = inflater.inflate(R.layout.teacherfragment, container, false);
 
 		ListView listView = (ListView) view.findViewById(R.id.teacherModules);
@@ -92,16 +87,12 @@ public class TeacherFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				
 				Intent intent = new Intent(getActivity(), TeacherCourseDetailActivity.class);
-				
-				//Toast.makeText(getActivity().getApplicationContext(), "Touched ID " + ((Long)adapter.getItem(position)).toString(), Toast.LENGTH_LONG).show();
-
-				intent.putExtra("course_id", adapter.getItem(position).getCourseList().get(0).getID());
+				intent.putExtra("course_id", mAdapter.getItem(position).getCourseList().get(0).getID());
 				startActivity(intent);
 			}
 		});
-		
+
 		return view;
 	}
 }

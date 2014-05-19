@@ -4,66 +4,48 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-
 public class StudentData {
 
-	private ArrayList<Long> m_courseIDs;
-	private HashMap<Long, ArrayList<TimeTracking>> m_timeTrackingData;
+	private ArrayList<Long> mCourseIDs;
+	private HashMap<Long, ArrayList<TimeTracking>> mTimeTrackingData;
 	
 	
 	public StudentData() {
-		
-		m_courseIDs = new ArrayList<Long>();
-		m_timeTrackingData = new HashMap<Long, ArrayList<TimeTracking>>();
+		mCourseIDs = new ArrayList<Long>();
+		mTimeTrackingData = new HashMap<Long, ArrayList<TimeTracking>>();
 	}
 	
-	
-	
 	public void addCourse(Long courseID) {
-		
-		m_courseIDs.add(courseID);
+		mCourseIDs.add(courseID);
 	}
 	
 	public ArrayList<Long> getCourseIDs() {
-		
-		return m_courseIDs;
+		return mCourseIDs;
 	}
 	
 	public boolean hasCourses() {
-		
-		return m_courseIDs.size() > 0;
+		return mCourseIDs.size() > 0;
 	}
 	
-	
-	
 	public void addTimeTracking(Long courseID, TimeTracking data) {
-		
 		ArrayList<TimeTracking> list;
-		
-		if(m_timeTrackingData.get(courseID) != null) {
-			
-			list = m_timeTrackingData.get(courseID);
+		if(mTimeTrackingData.get(courseID) != null) {
+			list = mTimeTrackingData.get(courseID);
 		}
 		else {
-		
 			list = new ArrayList<TimeTracking>();
-			
-			m_timeTrackingData.put(courseID, list);
+			mTimeTrackingData.put(courseID, list);
 		}
-		
-		
 		list.add(data);
 	}
 	
 	public ArrayList<TimeTracking> getTimeTrackingData(Long courseID) {
-		
-		return m_timeTrackingData.get(courseID);
+		return mTimeTrackingData.get(courseID);
 	}
 	
 	public boolean hasTimeTrackingData(Long courseID) {
-		
-		return m_timeTrackingData.get(courseID) != null &&
-			   m_timeTrackingData.get(courseID).size() > 0;
+		return mTimeTrackingData.get(courseID) != null &&
+			   mTimeTrackingData.get(courseID).size() > 0;
 	}
 	
 	
@@ -71,17 +53,14 @@ public class StudentData {
 	// Hilfsfunktionen
 	//
 	public TimeData getTimeInvestedTotal(Long courseID) {
-		
-		ArrayList<TimeTracking> trackingData = m_timeTrackingData.get(courseID);
+		ArrayList<TimeTracking> trackingData = mTimeTrackingData.get(courseID);
 		Integer timeInSeconds = 0;
 		
 		//
-		// Alle erfassten Zeiten zusammenz�hlen
+		// Alle erfassten Zeiten zusammenzählen
 		//
 		if(trackingData != null) {
-
 			for(TimeTracking t : trackingData) {
-				
 				timeInSeconds += t.getTime().getTimeInSeconds();
 			}
 		}

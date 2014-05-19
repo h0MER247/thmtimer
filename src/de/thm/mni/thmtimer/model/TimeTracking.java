@@ -4,34 +4,30 @@ import de.thm.mni.thmtimer.util.StaticModuleData;
 
 public class TimeTracking {
 
-	private Long m_id;
-	private Long m_categoryID;
-	private TimeData m_time;
+	private Long mId;
+	private Long mCategoryID;
+	private TimeData mTime;
 
 	public TimeTracking(Long id, Long categoryID, String description, TimeData time) {
-
-		m_id = id;
-		m_categoryID = categoryID;
-		m_time = time;
+		mId = id;
+		mCategoryID = categoryID;
+		mTime = time;
 	}
 
 	public Long getID() {
-
-		return m_id;
+		return mId;
 	}
 
 	public Long getCategoryID() {
-
-		return m_categoryID;
+		return mCategoryID;
 	}
 
 	public TimeData getTime() {
-
-		return m_time;
+		return mTime;
 	}
 
 	@Override
 	public String toString() {
-		return StaticModuleData.findTimeCategory(m_categoryID).toString() + " (" + m_time.getTimeStringHHMM() + ")";
+		return StaticModuleData.findTimeCategory(mCategoryID).toString() + " (" + mTime.getTimeStringHHMM() + ")";
 	}
 }

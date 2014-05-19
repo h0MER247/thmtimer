@@ -22,27 +22,22 @@ import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.util.ModuleComparator;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 
-
-
 public class ModuleSearchFragment extends Fragment {
 
-	private ModuleListAdapter adapter;
-	private List<Module> data;
-	private SearchView search;
-
+	private ModuleListAdapter mAdapter;
+	private List<Module> mData;
+	private SearchView mSearch;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 
-		if(data == null) {
-
-			data = StaticModuleData.getModuleList();
+		if (mData == null) {
+			mData = StaticModuleData.getModuleList();
 		}
-		if (adapter == null) {
-
-			adapter = new ModuleListAdapter(savedInstanceState);
+		if (mAdapter == null) {
+			mAdapter = new ModuleListAdapter(savedInstanceState);
 		}
 	}
 
@@ -50,24 +45,24 @@ public class ModuleSearchFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.modulesearchfragment, container, false);
 
-		search = (SearchView) view.findViewById(R.id.searchfragment);
-		search.setQueryHint(getString(R.string.search_hint));
-		search.setOnQueryTextListener(new OnQueryTextListener() {
+		mSearch = (SearchView) view.findViewById(R.id.searchfragment);
+		mSearch.setQueryHint(getString(R.string.search_hint));
+		mSearch.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				search.clearFocus();
+				mSearch.clearFocus();
 				return true;
 			}
 
 			@Override
 			public boolean onQueryTextChange(String newText) {
-				adapter.getFilter().filter(newText);
+				mAdapter.getFilter().filter(newText);
 				return true;
 			}
 		});
-		search.setFocusable(false);
-		search.setFocusableInTouchMode(false);
+		mSearch.setFocusable(false);
+		mSearch.setFocusableInTouchMode(false);
 
 		ListView lv = (ListView) view.findViewById(R.id.searchlist);
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -80,15 +75,14 @@ public class ModuleSearchFragment extends Fragment {
 
 					EnterModuleActivity ea = (EnterModuleActivity) a;
 
-					ea.closeSearch(adapter.getItem(pos).getID());
+					ea.closeSearch(mAdapter.getItem(pos).getID());
 				}
 			}
 		});
-		adapter.sort(new ModuleComparator());
-		lv.setAdapter(adapter);
+		mAdapter.sort(new ModuleComparator());
+		lv.setAdapter(mAdapter);
 		return view;
 	}
-
 
 	private class ModuleListAdapter extends ArrayAdapter<Module> {
 
@@ -96,10 +90,10 @@ public class ModuleSearchFragment extends Fragment {
 		private List<Module> origData;
 
 		public ModuleListAdapter(Bundle bundle) {
-			super(getActivity(), R.layout.modulelistitem, data);
+			super(getActivity(), R.layout.modulelistitem, mData);
 			this.bundle = bundle;
 
-			origData = new ArrayList<Module>(data);
+			origData = new ArrayList<Module>(mData);
 		}
 
 		@Override
@@ -118,8 +112,8 @@ public class ModuleSearchFragment extends Fragment {
 		}
 
 		@Override
-		public Filter getFilter(){
-			return new Filter(){
+		public Filter getFilter() {
+			return new Filter() {
 
 				@Override
 				protected FilterResults performFiltering(CharSequence constraint) {
@@ -128,22 +122,22 @@ public class ModuleSearchFragment extends Fragment {
 
 					if (constraint != null && constraint.toString().length() > 0) {
 						List<Module> founded = new ArrayList<Module>();
-						for(Module item: origData){
-							if(item.toString().toLowerCase().contains(constraint)){
+						for (Module item : origData) {
+							if (item.toString().toLowerCase().contains(constraint)) {
 								founded.add(item);
 							}
 						}
 
 						result.values = founded;
 						result.count = founded.size();
-					}else {
+					} else {
 						result.values = origData;
 						result.count = origData.size();
 					}
 					return result;
 
-
 				}
+
 				@Override
 				protected void publishResults(CharSequence constraint, FilterResults results) {
 					clear();
@@ -157,8 +151,8 @@ public class ModuleSearchFragment extends Fragment {
 		}
 	}
 
-	public void clearFilter(){
-		adapter.getFilter().filter("");
+	public void clearFilter() {
+		mAdapter.getFilter().filter("");
 	}
 
 	@Override

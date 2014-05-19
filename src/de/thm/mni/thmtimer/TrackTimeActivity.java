@@ -11,53 +11,45 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
-
-
 public class TrackTimeActivity extends Activity {
-
-	private Long courseID;
-	private EditText timeEdit;
-	private Spinner usageSpinner;
-	
+	private Long mCourseID;
+	private EditText mTimeEdit;
+	private Spinner mUsageSpinner;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.tracktimeactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		Bundle extras = getIntent().getExtras();
-		this.courseID = extras.getLong("course_id");
+		mCourseID = extras.getLong("course_id");
 
-		usageSpinner = (Spinner) findViewById(R.id.usageSpinner);
-		usageSpinner.setAdapter(new ArrayAdapter<TimeCategory>(this, android.R.layout.simple_spinner_dropdown_item, StaticModuleData.getTimeCategorys()));
-		
-		timeEdit = (EditText) findViewById(R.id.timeEntry);
-		timeEdit.setHint("HH:MM");
-		
-		
-		
+		mUsageSpinner = (Spinner) findViewById(R.id.usageSpinner);
+		mUsageSpinner.setAdapter(new ArrayAdapter<TimeCategory>(this, android.R.layout.simple_spinner_dropdown_item,
+				StaticModuleData.getTimeCategorys()));
+
+		mTimeEdit = (EditText) findViewById(R.id.timeEntry);
+		mTimeEdit.setHint("HH:MM");
+
 		Button btnEnter = (Button) findViewById(R.id.enterTime);
 		btnEnter.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				
 				TimeData time = new TimeData();
-				
-				if(time.parseString(timeEdit.getText().toString())) {
-					
-					TimeCategory category = (TimeCategory)usageSpinner.getSelectedItem();
-					
+
+				if (time.parseString(mTimeEdit.getText().toString())) {
+					TimeCategory category = (TimeCategory) mUsageSpinner.getSelectedItem();
+
 					TimeTracking data = new TimeTracking(-1l, category.getID(), "Gelernt", time);
-					StaticModuleData.getStudentData().addTimeTracking(courseID, data);
-					
+					StaticModuleData.getStudentData().addTimeTracking(mCourseID, data);
+
 					setResult(Activity.RESULT_OK);
 					finish();
-				}
-				else {
-					
+				} else {
+					//FIXME: Put into resources file
 					Toast.makeText(getApplicationContext(), "Zeitangabe in HH:MM!", Toast.LENGTH_LONG).show();
 				}
 			}

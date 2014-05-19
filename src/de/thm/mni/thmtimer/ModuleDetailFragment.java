@@ -1,6 +1,5 @@
 package de.thm.mni.thmtimer;
 
-import de.thm.mni.thmtimer.model.Course;
 import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.app.Dialog;
@@ -15,15 +14,16 @@ import android.widget.TextView;
 
 public class ModuleDetailFragment extends DialogFragment implements OnClickListener {
 
-	private static Dialog dialog;
-	private TextView moduleName, moduleNumber, creditPoints, teacher, content, description, expenditure, requirement, testingMethod;
-	private Button btnEnter;
+	private static Dialog mDialog;
+	private TextView mModuleName, mModuleNumber, mCreditPoints, mTeacher, mContent, mDescription, mExpenditure,
+			mRequirement, mTestingMethod;
+	private Button mBtnEnter;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		dialog = super.onCreateDialog(savedInstanceState);
-		dialog.setTitle(R.string.module_details);
-		return dialog;
+		mDialog = super.onCreateDialog(savedInstanceState);
+		mDialog.setTitle(R.string.module_details);
+		return mDialog;
 	}
 
 	@Override
@@ -32,40 +32,40 @@ public class ModuleDetailFragment extends DialogFragment implements OnClickListe
 		View view = inflater.inflate(R.layout.moduldetailfragment, container, false);
 
 		// get views
-		moduleName = (TextView) view.findViewById(R.id.name);
-		moduleNumber = (TextView) view.findViewById(R.id.number);
-		creditPoints = (TextView) view.findViewById(R.id.cp);
-		teacher = (TextView) view.findViewById(R.id.teacher);
-		description = (TextView) view.findViewById(R.id.discription);
-		content = (TextView) view.findViewById(R.id.content);
-		expenditure = (TextView) view.findViewById(R.id.expenditure);
-		requirement =  (TextView) view.findViewById(R.id.requirement);
-		testingMethod = (TextView) view.findViewById(R.id.testingMethod);
-		btnEnter = (Button) view.findViewById(R.id.enter);
-		btnEnter.setOnClickListener(this);
+		mModuleName = (TextView) view.findViewById(R.id.name);
+		mModuleNumber = (TextView) view.findViewById(R.id.number);
+		mCreditPoints = (TextView) view.findViewById(R.id.cp);
+		mTeacher = (TextView) view.findViewById(R.id.teacher);
+		mDescription = (TextView) view.findViewById(R.id.discription);
+		mContent = (TextView) view.findViewById(R.id.content);
+		mExpenditure = (TextView) view.findViewById(R.id.expenditure);
+		mRequirement = (TextView) view.findViewById(R.id.requirement);
+		mTestingMethod = (TextView) view.findViewById(R.id.testingMethod);
+		mBtnEnter = (Button) view.findViewById(R.id.enter);
+		mBtnEnter.setOnClickListener(this);
 
 		Long id = getArguments().getLong("id", -1);
 		Module m = StaticModuleData.findModule(id);
 
-		moduleName.setText(m.getName());
-		moduleNumber.setText(m.getModuleNumber());
-		creditPoints.setText(m.getCreditPoints().toString());
-		//teacher.setText(m.getTeacher());
-		teacher.setText(m.getCourseList().get(0).getTeacher());
-		description.setText(m.getDescription());
-		content.setText("Inhalt"); // Was ist das?
-		expenditure.setText(Integer.toString((m.getCreditPoints()*30)) + " Stunden");
-		requirement.setText("2 anerkannte Hausübungen");
-		testingMethod.setText("Klausur");
-		
+		mModuleName.setText(m.getName());
+		mModuleNumber.setText(m.getModuleNumber());
+		mCreditPoints.setText(m.getCreditPoints().toString());
+		// teacher.setText(m.getTeacher());
+		mTeacher.setText(m.getCourseList().get(0).getTeacher());
+		mDescription.setText(m.getDescription());
+		mContent.setText("Inhalt"); // Was ist das?
+		mExpenditure.setText(Integer.toString((m.getCreditPoints() * 30)) + " Stunden");
+		mRequirement.setText("2 anerkannte Hausübungen");
+		mTestingMethod.setText("Klausur");
+
 		return view;
 	}
 
 	@Override
 	public void onClick(View arg0) {
 		enterModule();
-		if(dialog!=null) {
-			dialog.dismiss();
+		if (mDialog != null) {
+			mDialog.dismiss();
 		}
 	}
 
