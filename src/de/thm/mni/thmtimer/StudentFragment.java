@@ -8,18 +8,11 @@ import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.model.Course;
 import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.model.TimeData;
-import de.thm.mni.thmtimer.model.TimeStatisticData;
 import de.thm.mni.thmtimer.util.ModuleComparator;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -165,5 +157,12 @@ public class StudentFragment extends Fragment {
 		});
 
 		return view;
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_TIMETRACKING) {
+			adapter.notifyDataSetChanged();
+		}
 	}
 }
