@@ -42,6 +42,7 @@
     <!-- TrackTimeActivity -->
     <string name="enter_time_header">Zeit eingeben</string>
     <string name="enter_time_time">Zeit</string>
+    <string name="enter_time_usage_header">Aktivitäten</string>
     <string name="enter_time_usage">Aktivität</string>
     <string name="enter_time">Eintragen</string>
 

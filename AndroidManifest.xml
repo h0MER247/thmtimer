@@ -31,11 +31,11 @@
         </activity>
         <activity
             android:name="de.thm.mni.thmtimer.TimeTrackingActivity"
-            android:label="@string/my_modules" >
+            android:label="@string/enter_time_usage_header" >
         </activity>
         <activity
             android:name="de.thm.mni.thmtimer.TrackTimeActivity"
-            android:label="@string/my_modules" >
+            android:label="@string/enter_time_header" >
         </activity>
         <activity
             android:name="de.thm.mni.thmtimer.TeacherCourseDetailActivity"
