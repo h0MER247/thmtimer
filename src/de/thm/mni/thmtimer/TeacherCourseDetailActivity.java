@@ -118,7 +118,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 					// Ermitteln wieviel Zeit insgesamt in diesen Kurs investiert wurde
 					Integer totalSeconds = m_data.getTimeInvestedTotal(m_courseID).getTimeInSeconds();
 					
-					// Den Text für die Kategorien und investierten Zeiten erstellen
+					// Den Text fï¿½r die Kategorien und investierten Zeiten erstellen
 					String categorysText     = "";
 					String timesInvestedText = "";
 					
@@ -131,7 +131,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 						TimeCategory category = StaticModuleData.findTimeCategory(t.getCategoryID());
 						
 						//
-						// Text für die Kategorien und investierten Zeiten erstellen
+						// Text fï¿½r die Kategorien und investierten Zeiten erstellen
 						//
 						if(categorysText.length() != 0)
 							categorysText += "\n";
@@ -142,7 +142,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 						timesInvestedText += t.getTime() + " " + String.format("(%04.1f%%)", ((100.0 / totalSeconds) * td.getTimeInSeconds()));
 						
 						//
-						// Tortenstück hinzufügen
+						// Tortenstï¿½ck hinzufï¿½gen
 						//
 						pieChart.addValue(td.getTimeInSeconds().floatValue());
 						pieChartLegend.addLabel(category.getDescription());
@@ -152,7 +152,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 					timesInvested.setText(timesInvestedText);
 					break;
 					
-				case 2: // Temporär
+				case 2: // Temporï¿½r
 					TextView tmp = new TextView(m_context);
 					tmp.setText("ToDo");
 					

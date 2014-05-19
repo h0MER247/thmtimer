@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class TeacherData {
 	
-	// ToDo: Mehr Statistikdaten als die Zeitstatistik hinzufügen
+	// ToDo: Mehr Statistikdaten als die Zeitstatistik hinzufï¿½gen
 	private ArrayList<Long> m_courseIDs;
 	private HashMap<Long, ArrayList<TimeStatisticData>> m_timeStatistic;
 	
@@ -73,7 +73,7 @@ public class TeacherData {
 		Integer timeInSeconds = 0;
 		
 		//
-		// Alle erfassten Zeiten zusammenzählen
+		// Alle erfassten Zeiten zusammenzï¿½hlen
 		//
 		if(statisticData != null) {
 

@@ -76,7 +76,7 @@ public class StudentData {
 		Integer timeInSeconds = 0;
 		
 		//
-		// Alle erfassten Zeiten zusammenzählen
+		// Alle erfassten Zeiten zusammenzï¿½hlen
 		//
 		if(trackingData != null) {
 
