@@ -22,22 +22,26 @@ import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.util.ModuleComparator;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 
+
+
 public class ModuleSearchFragment extends Fragment {
 
 	private ModuleListAdapter adapter;
 	private List<Module> data;
-
 	private SearchView search;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 
-		if (data == null) {
-			data = StaticModuleData.data;
+		if(data == null) {
+
+			data = StaticModuleData.getModuleList();
 		}
 		if (adapter == null) {
+
 			adapter = new ModuleListAdapter(savedInstanceState);
 		}
 	}
@@ -70,10 +74,13 @@ public class ModuleSearchFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> aView, View view, int pos, long id) {
+
 				Activity a = getActivity();
 				if (a instanceof EnterModuleActivity) {
+
 					EnterModuleActivity ea = (EnterModuleActivity) a;
-					ea.closeSearch(data.get((int) id).getID());
+
+					ea.closeSearch(adapter.getItem(pos).getID());
 				}
 			}
 		});
@@ -81,6 +88,7 @@ public class ModuleSearchFragment extends Fragment {
 		lv.setAdapter(adapter);
 		return view;
 	}
+
 
 	private class ModuleListAdapter extends ArrayAdapter<Module> {
 
@@ -104,7 +112,7 @@ public class ModuleSearchFragment extends Fragment {
 			TextView name = (TextView) convertView.findViewById(R.id.moduleName);
 			name.setText(module.getName());
 			TextView subtext = (TextView) convertView.findViewById(R.id.subtext);
-			subtext.setText(module.getTeacher());
+			subtext.setText(module.getCourseList().get(0).getTeacher());
 
 			return convertView;
 		}
@@ -148,7 +156,7 @@ public class ModuleSearchFragment extends Fragment {
 			};
 		}
 	}
-	
+
 	public void clearFilter(){
 		adapter.getFilter().filter("");
 	}

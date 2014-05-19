@@ -45,12 +45,13 @@
     <string name="enter_time_usage">Aktivität</string>
     <string name="enter_time">Eintragen</string>
 
-    <string-array name="usage_types">
-        <item>Vorlesung</item>
-        <item>Übung/Praktikum</item>
-        <item>Hausübung</item>
-        <item>Vor-/Nachbereitung</item>
-        <item>Prüfungsvorbereitung</item>
-    </string-array>
+    <!--  TeacherCourseDetailActivity -->
+    <string name="hours">Stunden</string>
+    <string name="courselist">Kursliste</string>
+    <string name="piechart">Tortendiagramm</string>
+    <string name="inscribedstudents">Eingeschriebene Studenten</string>
+	<string name="timedistribution">Zeitverteilung</string>
+	<string name="superfeature">Tolles Feature</string>
+	<string name="course_details">Kurs Details</string>
 
 </resources>

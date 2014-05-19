@@ -37,6 +37,17 @@
             android:name="de.thm.mni.thmtimer.TrackTimeActivity"
             android:label="@string/my_modules" >
         </activity>
+        <activity
+            android:name="de.thm.mni.thmtimer.TeacherCourseDetailActivity"
+            android:label="@string/course_details" >
+        </activity>
+
+        <uses-library android:name="android.test.runner" />
     </application>
+
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:label="THM Timer Test"
+        android:targetPackage="de.thm.mni.thmtimer" />
 
 </manifest>

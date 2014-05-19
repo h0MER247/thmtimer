@@ -1,22 +1,50 @@
 package de.thm.mni.thmtimer.model;
 
+
+
 public class TimeTracking {
-	public String label;
-	public int minutes;
-
-	public TimeTracking(String label, int minutes) {
-		this.label = label;
-		this.minutes = minutes;
+	
+	private Long m_id;
+	private Long m_categoryID;
+	private String m_description;
+	private TimeData m_time;
+	
+	
+	public TimeTracking(Long id, Long categoryID, String description, TimeData time) {
+		
+		m_id = id;
+		m_categoryID = categoryID;
+		m_description = description;
+		m_time = time;
 	}
-
-	/** For example data generation */
-	public TimeTracking(String label) {
-		this.label = label;
-		this.minutes = 30;
+	
+	
+	
+	public Long getID() {
+		
+		return m_id;
 	}
+	
+	public String getDescription() {
+		
+		return m_description;
+	}
+	
+	public Long getCategoryID() {
+		
+		return m_categoryID;
+	}
+	
+	public TimeData getTime() {
+		
+		return m_time;
+	}
+	
+	
 
 	@Override
 	public String toString() {
-		return label + " (" + minutes + "min)";
+		
+		return m_description + " (" + m_time.getTimeInMinutes().toString() + " min)";
 	}
 }
