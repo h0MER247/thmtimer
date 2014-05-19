@@ -55,7 +55,7 @@ public class ModuleDetailFragment extends DialogFragment implements OnClickListe
 		description.setText(m.getDescription());
 		content.setText("Inhalt"); // Was ist das?
 		expenditure.setText(Integer.toString((m.getCreditPoints()*30)) + " Stunden");
-		requirement.setText("2 anerkannte Haus�bungen");
+		requirement.setText("2 anerkannte Hausübungen");
 		testingMethod.setText("Klausur");
 		
 		return view;

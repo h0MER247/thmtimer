@@ -161,8 +161,14 @@ public class StudentFragment extends Fragment {
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == REQUEST_TIMETRACKING) {
-			adapter.notifyDataSetChanged();
+//		if (requestCode == REQUEST_TIMETRACKING) {
+		adapter.clear();
+		this.data = new ArrayList<Module>();
+		for(Long l:StaticModuleData.getStudentData().getCourseIDs()) {
+			this.data.add(StaticModuleData.findModule(StaticModuleData.findCourse(l).getModuleID()));
 		}
+		adapter.addAll(this.data);
+		adapter.notifyDataSetChanged();
+//		}
 	}
 }

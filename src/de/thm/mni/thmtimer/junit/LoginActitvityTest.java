@@ -15,7 +15,7 @@ public class LoginActitvityTest extends ActivityUnitTestCase<LoginActivity> {
 	public LoginActitvityTest(Class<LoginActivity> activityClass) {
 		super(activityClass);
 		// TODO Auto-generated constructor stub
-	}	
+	}
 	
 	protected void setUp() throws Exception {
         super.setUp();
@@ -42,7 +42,3 @@ public class LoginActitvityTest extends ActivityUnitTestCase<LoginActivity> {
 
 
 }
-
-
-
-

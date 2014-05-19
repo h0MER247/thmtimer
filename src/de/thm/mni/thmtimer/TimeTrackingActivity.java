@@ -75,6 +75,7 @@ public class TimeTrackingActivity extends ListActivity {
 			adapter.addAll(this.module.getTimeTracking());
 			*/
 			adapter.notifyDataSetChanged();
+			setResult(Activity.RESULT_OK);
 		}
 	}
 
