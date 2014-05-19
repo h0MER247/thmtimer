@@ -4,55 +4,55 @@
 
     <!-- LoginActivity -->
     <string name="logoDescription">company_logo</string>
-    <string name="user">Benutzerkennung</string>
-    <string name="password">Passwort</string>
-    <string name="login">Anmelden</string>
+    <string name="user">User</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
 
     <!-- ModuleListActivity -->
     <string name="tab1">Student</string>
-    <string name="tab2">Dozent</string>
-    <string name="my_modules">Meine Module</string>
+    <string name="tab2">Teacher</string>
+    <string name="my_modules">My Courses</string>
 
     <!-- TeacherFragment -->
-    <string name="students">Studenten</string>
+    <string name="students">Students</string>
 
     <!-- StudentFragment -->
-    <string name="action_add">Neu</string>
+    <string name="action_add">Add</string>
 
     <!-- ModuleDetailFragment -->
-    <string name="module_details">Modul Detailansicht</string>
-    <string name="enter">Beitreten</string>
-    <string name="moduleNumber">Modulnummer</string>
-    <string name="cp">Creditpoints</string>
-    <string name="teacher">Dozent</string>
-    <string name="content">Inhalte</string>
-    <string name="discription">Beschreibung</string>
-    <string name="expenditure">Aufwand</string>
-    <string name="requirement">Vorleistung</string>
-    <string name="testingMethod">Leistungsnachweis</string>
+    <string name="module_details">Course Detail View</string>
+    <string name="enter">Enter</string>
+    <string name="moduleNumber">Module ID</string>
+    <string name="cp">Credit points</string>
+    <string name="teacher">Teacher</string>
+    <string name="content">Content</string>
+    <string name="discription">Description</string>
+    <string name="expenditure">Workload</string>
+    <string name="requirement">Requirement</string>
+    <string name="testingMethod">Testing Method</string>
 
     <!-- ModuleSearchFragment -->
-    <string name="no_data">Keine Module!</string>
+    <string name="no_data">No courses.</string>
 
     <!-- EnterModuleActivity -->
-    <string name="enter_module">Modul beitreten</string>
-    <string name="action_search">Modulsuche</string>
-    <string name="search_hint">Modul suchen…</string>
+    <string name="enter_module">Enter Course</string>
+    <string name="action_search">Search Courses</string>
+    <string name="search_hint">Search…</string>
 
     <!-- TrackTimeActivity -->
-    <string name="enter_time_header">Zeit eingeben</string>
-    <string name="enter_time_time">Zeit</string>
-    <string name="enter_time_usage_header">Aktivitäten</string>
-    <string name="enter_time_usage">Aktivität</string>
-    <string name="enter_time">Eintragen</string>
+    <string name="enter_time_header">Enter time</string>
+    <string name="enter_time_time">Time</string>
+    <string name="enter_time_usage_header">Activities</string>
+    <string name="enter_time_usage">Activity</string>
+    <string name="enter_time">Enter</string>
 
     <!--  TeacherCourseDetailActivity -->
-    <string name="hours">Stunden</string>
-    <string name="courselist">Kursliste</string>
-    <string name="piechart">Tortendiagramm</string>
-    <string name="inscribedstudents">Eingeschriebene Studenten</string>
-	<string name="timedistribution">Zeitverteilung</string>
-	<string name="superfeature">Tolles Feature</string>
-	<string name="course_details">Kurs Details</string>
+    <string name="hours">Hours</string>
+    <string name="courselist">Course list</string>
+    <string name="piechart">Pie Chart</string>
+    <string name="inscribedstudents">Enrolled Students</string>
+	<string name="timedistribution">Time distribution</string>
+	<string name="superfeature">Awesome new feature</string>
+	<string name="course_details">Course details</string>
 
 </resources>

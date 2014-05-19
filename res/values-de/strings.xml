@@ -1,0 +1,58 @@
+<resources>
+
+    <string name="app_name">THMTimer</string>
+
+    <!-- LoginActivity -->
+    <string name="logoDescription">company_logo</string>
+    <string name="user">Benutzerkennung</string>
+    <string name="password">Passwort</string>
+    <string name="login">Anmelden</string>
+
+    <!-- ModuleListActivity -->
+    <string name="tab1">Student</string>
+    <string name="tab2">Dozent</string>
+    <string name="my_modules">Meine Module</string>
+
+    <!-- TeacherFragment -->
+    <string name="students">Studenten</string>
+
+    <!-- StudentFragment -->
+    <string name="action_add">Neu</string>
+
+    <!-- ModuleDetailFragment -->
+    <string name="module_details">Modul Detailansicht</string>
+    <string name="enter">Beitreten</string>
+    <string name="moduleNumber">Modulnummer</string>
+    <string name="cp">Creditpoints</string>
+    <string name="teacher">Dozent</string>
+    <string name="content">Inhalte</string>
+    <string name="discription">Beschreibung</string>
+    <string name="expenditure">Aufwand</string>
+    <string name="requirement">Vorleistung</string>
+    <string name="testingMethod">Leistungsnachweis</string>
+
+    <!-- ModuleSearchFragment -->
+    <string name="no_data">Keine Module!</string>
+
+    <!-- EnterModuleActivity -->
+    <string name="enter_module">Modul beitreten</string>
+    <string name="action_search">Modulsuche</string>
+    <string name="search_hint">Modul suchen…</string>
+
+    <!-- TrackTimeActivity -->
+    <string name="enter_time_header">Zeit eingeben</string>
+    <string name="enter_time_time">Zeit</string>
+    <string name="enter_time_usage_header">Aktivitäten</string>
+    <string name="enter_time_usage">Aktivität</string>
+    <string name="enter_time">Eintragen</string>
+
+    <!--  TeacherCourseDetailActivity -->
+    <string name="hours">Stunden</string>
+    <string name="courselist">Kursliste</string>
+    <string name="piechart">Tortendiagramm</string>
+    <string name="inscribedstudents">Eingeschriebene Studenten</string>
+	<string name="timedistribution">Zeitverteilung</string>
+	<string name="superfeature">Tolles Feature</string>
+	<string name="course_details">Kurs Details</string>
+
+</resources>
