@@ -12,14 +12,12 @@ public class TimeData implements Comparable<TimeData> {
 	
 	private Integer m_hours;
 	private Integer m_minutes;
-	private Integer m_seconds;
 	
 	
 	public TimeData() {
 		
 		m_hours = 0;
 		m_minutes = 0;
-		m_seconds = 0;
 	}
 	
 	public TimeData(String time) {
@@ -28,15 +26,13 @@ public class TimeData implements Comparable<TimeData> {
 			
 			m_hours = 0;
 			m_minutes = 0;
-			m_seconds = 0;
 		}
 	}
 	
-	public TimeData(Integer hours, Integer minutes, Integer seconds) {
+	public TimeData(Integer hours, Integer minutes) {
 		
 		m_hours = hours;
 		m_minutes = minutes;
-		m_seconds = seconds;
 	}
 	
 	
@@ -49,8 +45,6 @@ public class TimeData implements Comparable<TimeData> {
 			
 			m_hours = Integer.valueOf(m.group(1));
 			m_minutes = Integer.valueOf(m.group(2));
-			m_seconds = m.group(3) == null ? 0 : Integer.valueOf(m.group(3));
-			
 			return true;
 		}
 		
@@ -80,43 +74,28 @@ public class TimeData implements Comparable<TimeData> {
 		return m_minutes;
 	}
 	
-	public void setSeconds(Integer seconds) {
-		
-		m_seconds = seconds;
-	}
-	
-	public Integer getSeconds() {
-		
-		return m_seconds;
-	}
-	
-	
 	
 	public void setTimeInSeconds(Integer seconds) {
 		
 		m_hours = seconds / 3600;
 		m_minutes = (seconds - (m_hours * 3600)) / 60;
-		m_seconds = seconds - ((m_hours * 3600) + (m_minutes * 60));
 	}
 	
 	public Integer getTimeInSeconds() {
 		
-		return m_hours * 3600 + m_minutes * 60 + m_seconds;
+		return m_hours * 3600 + m_minutes * 60;
 	}
 	
 	public void setTimeInMinutes(Integer minutes) {
 		
 		m_hours   = minutes / 60;
 		m_minutes = minutes - (m_hours * 60);
-		m_seconds = 0;
 	}
 	
 	public Integer getTimeInMinutes() {
 		
 		return (m_hours * 60) + m_minutes; 
 	}
-	
-	
 	
 	public String getTimeStringHHMM() {
 		
@@ -125,10 +104,8 @@ public class TimeData implements Comparable<TimeData> {
 	
 	public String getTimeStringHHMMSS() {
 		
-		return String.format("%02d:%02d:%02d", m_hours, m_minutes, m_seconds);
+		return String.format("%02d:%02d", m_hours, m_minutes);
 	}
-	
-	
 	
 	@Override
 	public String toString() {

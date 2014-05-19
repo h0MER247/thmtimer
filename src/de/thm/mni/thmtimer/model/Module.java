@@ -16,7 +16,7 @@ public class Module {
 	private TimeData m_timeToInvestInHours;
 	private Date m_startDate;
 	
-	// ToDo: Mehr Informationen zu einem Modul hinzuf�gen!
+	// ToDo: Mehr Informationen zu einem Modul hinzufügen!
 	
 	
 	public Module(Long id, String name, String moduleNumber, Integer creditPoints, Integer timeToInvestInHours, String description) {
@@ -26,7 +26,7 @@ public class Module {
 		m_moduleNumber = moduleNumber;
 		m_creditPoints = creditPoints;
 		m_description = description;
-		m_timeToInvestInHours = new TimeData(timeToInvestInHours, 0, 0);
+		m_timeToInvestInHours = new TimeData(timeToInvestInHours, 0);
 		GregorianCalendar gc = new GregorianCalendar(2014, 4, 1);
 		setStartDate(new Date(gc.getTimeInMillis()));
 	}
@@ -54,7 +54,6 @@ public class Module {
 	}
 	
 	public String getDescription() {
-		
 		return m_description;
 	}
 

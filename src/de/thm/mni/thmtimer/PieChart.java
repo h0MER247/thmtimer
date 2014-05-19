@@ -97,7 +97,7 @@ public class PieChart extends View {
 		if(m_values.size() != 0) {
 			
 			//
-			// Gr��e des Tortendiagramms bestimmen und sicherstellen, dass es quadratisch wird
+			// Größe des Tortendiagramms bestimmen und sicherstellen, dass es quadratisch wird
 			//
 			Integer w = getWidth()  - (getPaddingLeft() + getPaddingRight());
 			Integer h = getHeight() - (getPaddingTop()  + getPaddingBottom());
@@ -139,7 +139,7 @@ public class PieChart extends View {
 		 		
 					switch(i) {
 					
-						// Tortenst�ck zeichnen
+						// Tortenstück zeichnen
 						case 0:
 							drawPiece(canvas,
 									  angleStart,
@@ -167,7 +167,7 @@ public class PieChart extends View {
 
 		Float angle = -90f + angleStart + (angleSweep / 2f);
 		
-		// Berechnen des Koordinaten Mittelpunkts des Labels, welches der Mitte unseres Tortenst�cks entspricht
+		// Berechnen des Koordinaten Mittelpunkts des Labels, welches der Mitte unseres Tortenstücks entspricht
 		Double x = -Math.sin(Math.toRadians(angle.doubleValue())) * (m_radius / 1.5);
 		Double y =  Math.cos(Math.toRadians(angle.doubleValue())) * (m_radius / 1.5);
 		
@@ -197,7 +197,7 @@ public class PieChart extends View {
 		}
 		else {
 			
-			// Berechnen des Koordinaten Endpunkts f�r den Farbverlauf
+			// Berechnen des Koordinaten Endpunkts für den Farbverlauf
 			Float angle = -90f + angleStart + (angleSweep / 2f);
 			
 			Double x = -Math.sin(Math.toRadians(angle.doubleValue())) * m_radius;
@@ -224,13 +224,13 @@ public class PieChart extends View {
 	
 	private void drawPiece(Canvas canvas, Float angleStart, Float angleSweep, Integer pieceNumber) {
 		
-		// Tortenst�ck zeichnen
+		// Tortenstück zeichnen
 		m_paint.setStyle(Paint.Style.FILL);
 		m_paint.setShader(getGradient(angleStart, angleSweep, pieceNumber));
 		canvas.drawArc(m_pieBounds, angleStart, angleSweep, true, m_paint);
 		m_paint.setShader(null);
 		
-		// Rand des Tortenst�cks zeichnen
+		// Rand des Tortenstücks zeichnen
 		m_paint.setStrokeWidth(2f);
 		m_paint.setStyle(Paint.Style.STROKE);
 		m_paint.setColor(Color.BLACK);

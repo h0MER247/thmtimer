@@ -16,7 +16,6 @@ import android.widget.*;
 public class TrackTimeActivity extends Activity {
 
 	private Long courseID;
-	//private Module module;
 	private EditText timeEdit;
 	private Spinner usageSpinner;
 	
@@ -30,13 +29,12 @@ public class TrackTimeActivity extends Activity {
 
 		Bundle extras = getIntent().getExtras();
 		this.courseID = extras.getLong("course_id");
-		//this.module = StaticModuleData.findModule(moduleID);
 
 		usageSpinner = (Spinner) findViewById(R.id.usageSpinner);
 		usageSpinner.setAdapter(new ArrayAdapter<TimeCategory>(this, android.R.layout.simple_spinner_dropdown_item, StaticModuleData.getTimeCategorys()));
 		
 		timeEdit = (EditText) findViewById(R.id.timeEntry);
-		timeEdit.setHint("HH:MM:SS");
+		timeEdit.setHint("HH:MM");
 		
 		
 		
@@ -60,11 +58,10 @@ public class TrackTimeActivity extends Activity {
 				}
 				else {
 					
-					Toast.makeText(getApplicationContext(), "Zeitangabe in HH:MM oder HH:MM:SS!", Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), "Zeitangabe in HH:MM!", Toast.LENGTH_LONG).show();
 				}
 			}
 		});
-
 	}
 
 	@Override
