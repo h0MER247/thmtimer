@@ -50,9 +50,9 @@ public class StaticModuleData {
 		module.setStartDate(new Date(calendar.getTimeInMillis()));
 		data.add(module);
 		
-		module = new Module(6, "Android-Praktikum", 23, "Prof. Dr. SÃ¼ÃŸ", "Sommersemester 2014", 9);
+		module = new Module(6, "Android-Praktikum", 23, "Prof. Dr. Süß", "Sommersemester 2014", 9);
 		module.addTimeTracking(new TimeTracking("Gecodet"));
-		module.addTimeTracking(new TimeTracking("Von der Android-API getrÃ¤umt"));
+		module.addTimeTracking(new TimeTracking("Von der Android-API geträumt"));
 		module.setStartDate(new Date(calendar.getTimeInMillis()));
 		data.add(module);
 	}

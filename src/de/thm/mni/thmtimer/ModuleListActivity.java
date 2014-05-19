@@ -3,7 +3,7 @@ package de.thm.mni.thmtimer;
 import java.lang.reflect.Field;
 
 import de.thm.mni.thmtimer.util.FixedSpeedScroller;
-import de.thm.mni.thmtimer.util.MyPageTransformer;
+import de.thm.mni.thmtimer.util.ZoomPageTransformer;
 import de.thm.mni.thmtimer.util.TabFactory;
 import de.thm.mni.thmtimer.util.TabPagerAdapter;
 import android.os.Bundle;
@@ -67,7 +67,7 @@ public class ModuleListActivity extends FragmentActivity {
 				}
 			});
 			pager.setAdapter(tabAdapter);
-			pager.setPageTransformer(true, new MyPageTransformer());
+			pager.setPageTransformer(true, new ZoomPageTransformer());
 			try {
 				Field scroller = ViewPager.class.getDeclaredField("mScroller");
 				scroller.setAccessible(true);

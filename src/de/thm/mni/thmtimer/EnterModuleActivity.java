@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 
 import de.thm.mni.thmtimer.util.DepthPageTransformer;
 import de.thm.mni.thmtimer.util.FixedSpeedScroller;
-import de.thm.mni.thmtimer.util.MyPageTransformer;
+import de.thm.mni.thmtimer.util.ZoomPageTransformer;
 import de.thm.mni.thmtimer.util.TabFactory;
 import de.thm.mni.thmtimer.util.TabPagerAdapter;
 import android.os.Bundle;

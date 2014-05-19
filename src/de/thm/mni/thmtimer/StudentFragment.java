@@ -8,7 +8,14 @@ import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.util.ModuleComparator;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -78,12 +85,14 @@ public class StudentFragment extends Fragment {
 				double percentDelta = percentInvested - percentSemester;
 				int red = 255, green = 255;
 				if(percentDelta>0) {
-					red+=10*percentDelta;
+					red=(int) (10*percentDelta);
 				}
 				else if(percentDelta<0) {
-					green+=10*percentDelta;
+					green=(int) (10*percentDelta);
 				}
-				time.setBackgroundColor(Color.rgb(red, green, 0));
+				GradientDrawable shape = (GradientDrawable) getResources().getDrawable(R.drawable.circle);
+				shape.setColor(Color.rgb(red, green, 0));
+				time.setCompoundDrawablesWithIntrinsicBounds(null, null, shape, null);
 			}
 			subtext.setText(module.getTeacher());
 

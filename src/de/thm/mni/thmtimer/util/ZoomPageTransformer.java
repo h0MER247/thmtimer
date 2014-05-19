@@ -3,7 +3,7 @@ package de.thm.mni.thmtimer.util;
 import android.support.v4.view.ViewPager.PageTransformer;
 import android.view.View;
 
-public class MyPageTransformer implements PageTransformer {
+public class ZoomPageTransformer implements PageTransformer {
 
 	private static final float MIN_SCALE = 0.85f;
 	private static final float MIN_ALPHA = 0.5f;
