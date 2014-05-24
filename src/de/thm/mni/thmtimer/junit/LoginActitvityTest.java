@@ -17,7 +17,7 @@ public class LoginActitvityTest extends ActivityUnitTestCase<LoginActivity> {
 		super(LoginActivity.class);
 	}
 	
-
+	
 	protected void setUp() throws Exception {
         super.setUp();
         mLaunchIntent = new Intent(getInstrumentation()
@@ -28,9 +28,12 @@ public class LoginActitvityTest extends ActivityUnitTestCase<LoginActivity> {
         mPassword = (EditText) getActivity().findViewById(R.id.password);
     }
 	
-	public void testNextActivityWasLaunchedWithIntent() {
+	public void testUserPassword(){
 		assertNotNull("No Username", mUser);
 		assertNotNull("No Username", mPassword);
+	}
+	
+	public void testNextActivityWasLaunchedWithIntent() {
 	    mButton.performClick();
 	    final Intent launchIntent = getStartedActivityIntent();
 	    assertNotNull("Intent was null", launchIntent);  
