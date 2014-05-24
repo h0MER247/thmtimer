@@ -5,38 +5,35 @@ import de.thm.mni.thmtimer.R;
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class LoginActitvityTest extends ActivityUnitTestCase<LoginActivity> {
 
-	private LoginActivity mActivity;
 	private Intent mLaunchIntent;
 	private Button mButton;
+	private EditText mUser, mPassword;
 
-	public LoginActitvityTest(Class<LoginActivity> activityClass) {
-		super(activityClass);
-		// TODO Auto-generated constructor stub
+	public LoginActitvityTest() {
+		super(LoginActivity.class);
 	}
 	
+
 	protected void setUp() throws Exception {
         super.setUp();
         mLaunchIntent = new Intent(getInstrumentation()
                 .getTargetContext(), LoginActivity.class);
         startActivity(mLaunchIntent, null, null);
-        final Button launchNextButton =
-                (Button) getActivity()
-                .findViewById(R.id.btn_login);
+        mButton = (Button) getActivity().findViewById(R.id.btn_login);
+        mUser = (EditText) getActivity().findViewById(R.id.user);
+        mPassword = (EditText) getActivity().findViewById(R.id.password);
     }
 	
 	public void testNextActivityWasLaunchedWithIntent() {
-	    startActivity(mLaunchIntent, null, null);
-	    final Button launchNextButton =
-	            (Button) getActivity()
-	            .findViewById(R.id.btn_login);
-	    launchNextButton.performClick();
-
+		assertNotNull("No Username", mUser);
+		assertNotNull("No Username", mPassword);
+	    mButton.performClick();
 	    final Intent launchIntent = getStartedActivityIntent();
-	    assertNotNull("Intent was null", launchIntent);
-	    assertTrue(isFinishCalled());
+	    assertNotNull("Intent was null", launchIntent);  
 
 	}
 
