@@ -40,11 +40,15 @@
     <string name="search_hint">Modul suchen…</string>
 
     <!-- TrackTimeActivity -->
+    <string name="action_stopwatch_start">Starte Stoppuhr</string>
+    <string name="action_stopwatch_stop">Stoppe Stoppuhr</string>
     <string name="enter_time_header">Zeit eingeben</string>
     <string name="enter_time_time">Zeit</string>
     <string name="enter_time_usage_header">Aktivitäten</string>
     <string name="enter_time_usage">Aktivität</string>
     <string name="enter_time">Eintragen</string>
+    <string name="enter_time_error">Zeit im HH:MM Format eingeben!</string>
+    <string name="enter_time_format">HH:MM</string>
 
     <!--  TeacherCourseDetailActivity -->
     <string name="hours">Stunden</string>

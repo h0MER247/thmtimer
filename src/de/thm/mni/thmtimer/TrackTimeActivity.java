@@ -25,13 +25,22 @@ public class TrackTimeActivity extends Activity {
 
 		Bundle extras = getIntent().getExtras();
 		mCourseID = extras.getLong("course_id");
-
+		
 		mUsageSpinner = (Spinner) findViewById(R.id.usageSpinner);
 		mUsageSpinner.setAdapter(new ArrayAdapter<TimeCategory>(this, android.R.layout.simple_spinner_dropdown_item,
 				StaticModuleData.getTimeCategorys()));
 
 		mTimeEdit = (EditText) findViewById(R.id.timeEntry);
-		mTimeEdit.setHint("HH:MM");
+		mTimeEdit.setHint(getString(R.string.enter_time_format));
+		
+		if(extras.containsKey("stopped_time")) {
+			
+			TimeData t = new TimeData();
+			t.setTimeInMinutes(extras.getInt("stopped_time"));
+			
+			mTimeEdit.setText(t.toString());
+			mTimeEdit.setEnabled(false);
+		}
 
 		Button btnEnter = (Button) findViewById(R.id.enterTime);
 		btnEnter.setOnClickListener(new OnClickListener() {
@@ -45,12 +54,11 @@ public class TrackTimeActivity extends Activity {
 
 					TimeTracking data = new TimeTracking(-1l, category.getID(), "Gelernt", time);
 					StaticModuleData.getStudentData().addTimeTracking(mCourseID, data);
-
+					
 					setResult(Activity.RESULT_OK);
 					finish();
 				} else {
-					//FIXME: Put into resources file
-					Toast.makeText(getApplicationContext(), "Zeitangabe in HH:MM!", Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.enter_time_error), Toast.LENGTH_LONG).show();
 				}
 			}
 		});

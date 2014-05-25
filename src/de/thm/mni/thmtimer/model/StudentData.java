@@ -8,11 +8,13 @@ public class StudentData {
 
 	private ArrayList<Long> mCourseIDs;
 	private HashMap<Long, ArrayList<TimeTracking>> mTimeTrackingData;
+	private HashMap<Long, Stopwatch> mStopwatches;
 	
 	
 	public StudentData() {
 		mCourseIDs = new ArrayList<Long>();
 		mTimeTrackingData = new HashMap<Long, ArrayList<TimeTracking>>();
+		mStopwatches = new HashMap<Long, Stopwatch>();
 	}
 	
 	public void addCourse(Long courseID) {
@@ -47,6 +49,22 @@ public class StudentData {
 		return mTimeTrackingData.get(courseID) != null &&
 			   mTimeTrackingData.get(courseID).size() > 0;
 	}
+	
+	public Stopwatch getStopwatch(Long courseID) {
+		
+		Stopwatch stopwatch;
+		
+		if(mStopwatches.get(courseID) != null) {
+			stopwatch = mStopwatches.get(courseID);
+		}
+		else {
+			stopwatch = new Stopwatch();
+			mStopwatches.put(courseID, stopwatch);
+		}
+		
+		return stopwatch;
+	}
+	
 	
 	
 	//
