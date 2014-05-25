@@ -28,6 +28,6 @@ public class TimeTracking {
 
 	@Override
 	public String toString() {
-		return StaticModuleData.findTimeCategory(mCategoryID).toString() + " (" + mTime.getTimeStringHHMM() + ")";
+		return StaticModuleData.findTimeCategory(mCategoryID).toString() + " (" + mTime.toString() + ")";
 	}
 }

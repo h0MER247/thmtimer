@@ -4,9 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TimeData implements Comparable<TimeData> {
-	// Format: HH:MM(:SS) --> Sekunden sind optional !!!
-	private final Pattern m_pattern = Pattern.compile("^(\\d+):([0-5]?\\d)(?>:([0-5]?\\d))?$");
-
+	
+	private final Pattern m_pattern = Pattern.compile("^(\\d+):([0-5]?\\d)$"); // Format HH:MM
+	
 	private Integer mHours;
 	private Integer mMinutes;
 
@@ -54,16 +54,16 @@ public class TimeData implements Comparable<TimeData> {
 	public Integer getMinutes() {
 		return mMinutes;
 	}
-
+	
 	public void setTimeInSeconds(Integer seconds) {
 		mHours = seconds / 3600;
 		mMinutes = (seconds - (mHours * 3600)) / 60;
 	}
-
+	
 	public Integer getTimeInSeconds() {
 		return mHours * 3600 + mMinutes * 60;
 	}
-
+	
 	public void setTimeInMinutes(Integer minutes) {
 		mHours = minutes / 60;
 		mMinutes = minutes - (mHours * 60);
@@ -73,17 +73,9 @@ public class TimeData implements Comparable<TimeData> {
 		return (mHours * 60) + mMinutes;
 	}
 
-	public String getTimeStringHHMM() {
-		return String.format("%02d:%02d", mHours, mMinutes);
-	}
-
-	public String getTimeStringHHMMSS() {
-		return String.format("%02d:%02d", mHours, mMinutes);
-	}
-
 	@Override
 	public String toString() {
-		return getTimeStringHHMM();
+		return String.format("%02d:%02d", mHours, mMinutes);
 	}
 
 	@Override
