@@ -28,32 +28,123 @@ public class StaticModuleData {
 
 		createStudentData();
 		createTeacherData();
-
-		for (Course c : mCourses) {
-			findModule(c.getModuleID()).addCourse(c);
-		}
 	}
 
 	// Modul Metainformationen
 	private static void createModules() {
 		if (mModules == null) {
 			mModules = new ArrayList<Module>();
-
-			mModules.add(new Module(0l, // ModulID (so wie sie in der
-										// Serverdatenbank stehen würde)
-					"Objektorientierte Programmierung", // Modulbezeichnung
-					"MN1007", // Modulnummer
-					6, // Anzahl Creditpoints
-					360, // Zu investierende Zeit in dieses Modul in Stunden
-					"Lorem Ipsum..")); // Modulbeschreibung (laut Modulhandbuch)
-
-			mModules.add(new Module(1l, "Lineare Algebra", "MN1007", 6, 200, "Blubb"));
-			mModules.add(new Module(2l, "Compilerbau", "MN1007", 6, 200, "Abcdefg"));
-			mModules.add(new Module(3l, "Programmieren interaktiver Systeme", "MN1007", 6, 400, "TestBlubb"));
-			mModules.add(new Module(4l, "Rechnernetze und ihre Anwendung", "MN1007", 6, 300, "BlaBlubb"));
-			mModules.add(new Module(5l, "Datenbanken", "MN1007", 6, 150, "Lalelu"));
-			mModules.add(new Module(6l, "Betriebssysteme", "MN1007", 6, 180, "Hier ne tolle Beschreibung"));
-			mModules.add(new Module(7l, "Softwaretechnik Praktikum", "MN1007", 6, 190, "Ganz tolle Beschreibung hier"));
+			Module m = new Module(0l, "Objektorientierte Programmierung", "MN1007");
+			m.setFrequency("Jedes Semester");
+			m.setPrerequisites(null);
+			m.setRequirement("3 Hausübungen");
+			m.setResponsible("Prof. Dr. Franzen");
+			m.setSWS(6);
+			m.setTestingMethod("Klausur");
+			m.setCreditPoints(6);
+			m.setDescription("Dieses Modul führt in die Programmierung interaktiver" +
+					" Desktop-Anwendungen ein, bei denen auf eine Datenbank zugegriffen" +
+					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
+					" werden.");
+			mModules.add(m);
+			
+			m = new Module(1l, "Compilerbau", "MN1007");
+			m.setFrequency("Jedes Semester");
+			m.setPrerequisites(null);
+			m.setRequirement("3 Hausübungen");
+			m.setResponsible("Prof. Dr. Franzen");
+			m.setSWS(6);
+			m.setTestingMethod("Klausur");
+			m.setCreditPoints(6);
+			m.setDescription("Dieses Modul führt in die Programmierung interaktiver" +
+					" Desktop-Anwendungen ein, bei denen auf eine Datenbank zugegriffen" +
+					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
+					" werden.");
+			mModules.add(m);
+			
+			m = new Module(2l, "Lineare Algebra", "MN1007");
+			m.setFrequency("Jedes Semester");
+			m.setPrerequisites(null);
+			m.setRequirement("3 Hausübungen");
+			m.setResponsible("Prof. Dr. Franzen");
+			m.setSWS(6);
+			m.setTestingMethod("Klausur");
+			m.setCreditPoints(6);
+			m.setDescription("Dieses Modul führt in die Programmierung interaktiver" +
+					" Desktop-Anwendungen ein, bei denen auf eine Datenbank zugegriffen" +
+					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
+					" werden.");
+			mModules.add(m);
+			
+			m = new Module(3l, "Programmieren interaktiver Systeme", "MN1007");
+			m.setFrequency("Jedes Semester");
+			m.setPrerequisites(null);
+			m.setRequirement("3 Hausübungen");
+			m.setResponsible("Prof. Dr. Franzen");
+			m.setSWS(6);
+			m.setTestingMethod("Klausur");
+			m.setCreditPoints(6);
+			m.setDescription("Dieses Modul führt in die Programmierung interaktiver" +
+					" Desktop-Anwendungen ein, bei denen auf eine Datenbank zugegriffen" +
+					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
+					" werden.");
+			mModules.add(m);
+			
+			m = new Module(4l, "Rechnernetze und ihre Anwendung", "MN1007");
+			m.setFrequency("Jedes Semester");
+			m.setPrerequisites(null);
+			m.setRequirement("3 Hausübungen");
+			m.setResponsible("Prof. Dr. Franzen");
+			m.setSWS(6);
+			m.setTestingMethod("Klausur");
+			m.setCreditPoints(6);
+			m.setDescription("Dieses Modul führt in die Programmierung interaktiver" +
+					" Desktop-Anwendungen ein, bei denen auf eine Datenbank zugegriffen" +
+					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
+					" werden.");
+			mModules.add(m);
+			
+			m = new Module(5l, "Datenbanken", "MN1007");
+			m.setFrequency("Jedes Semester");
+			m.setPrerequisites(null);
+			m.setRequirement("3 Hausübungen");
+			m.setResponsible("Prof. Dr. Franzen");
+			m.setSWS(6);
+			m.setTestingMethod("Klausur");
+			m.setCreditPoints(6);
+			m.setDescription("Dieses Modul führt in die Programmierung interaktiver" +
+					" Desktop-Anwendungen ein, bei denen auf eine Datenbank zugegriffen" +
+					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
+					" werden.");
+			mModules.add(m);
+			
+			m = new Module(6l, "Betriebssysteme", "MN1007");
+			m.setFrequency("Jedes Semester");
+			m.setPrerequisites(null);
+			m.setRequirement("3 Hausübungen");
+			m.setResponsible("Prof. Dr. Franzen");
+			m.setSWS(6);
+			m.setTestingMethod("Klausur");
+			m.setCreditPoints(6);
+			m.setDescription("Dieses Modul führt in die Programmierung interaktiver" +
+					" Desktop-Anwendungen ein, bei denen auf eine Datenbank zugegriffen" +
+					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
+					" werden.");
+			mModules.add(m);
+			
+			m = new Module(7l, "Softwaretechnik Praktikum", "MN1007");
+			m.setFrequency("Jedes Semester");
+			m.setPrerequisites(null);
+			m.setRequirement("3 Hausübungen");
+			m.setResponsible("Prof. Dr. Franzen");
+			m.setSWS(6);
+			m.setTestingMethod("Klausur");
+			m.setCreditPoints(6);
+			m.setDescription("Dieses Modul führt in die Programmierung interaktiver" +
+					" Desktop-Anwendungen ein, bei denen auf eine Datenbank zugegriffen" +
+					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
+					" werden.");
+			mModules.add(m);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import android.app.Activity;
@@ -19,7 +20,6 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.SearchView.OnQueryTextListener;
 import de.thm.mni.thmtimer.model.Module;
-import de.thm.mni.thmtimer.util.ModuleComparator;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 
 public class ModuleSearchFragment extends Fragment {
@@ -79,7 +79,14 @@ public class ModuleSearchFragment extends Fragment {
 				}
 			}
 		});
-		mAdapter.sort(new ModuleComparator());
+		mAdapter.sort(new Comparator<Module>(){
+
+			@Override
+			public int compare(Module lhs, Module rhs) {
+				return lhs.getName().compareTo(rhs.getName());
+			}
+			
+		});
 		lv.setAdapter(mAdapter);
 		return view;
 	}
@@ -106,7 +113,7 @@ public class ModuleSearchFragment extends Fragment {
 			TextView name = (TextView) convertView.findViewById(R.id.moduleName);
 			name.setText(module.getName());
 			TextView subtext = (TextView) convertView.findViewById(R.id.subtext);
-			subtext.setText(module.getCourseList().get(0).getTeacher());
+			subtext.setText(module.getResponsible());
 
 			return convertView;
 		}

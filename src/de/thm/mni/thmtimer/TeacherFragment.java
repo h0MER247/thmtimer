@@ -1,12 +1,12 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.model.Course;
 import de.thm.mni.thmtimer.model.Module;
-import de.thm.mni.thmtimer.util.ModuleComparator;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,31 +21,40 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class TeacherFragment extends Fragment {
-	private TeacherModuleListAdapter mAdapter;
-	private List<Module> mData;
+	private TeacherCourseListAdapter mAdapter;
+	private List<Long> mData;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		if (mData == null) {
-			mData = new ArrayList<Module>();
-			for (Long l : StaticModuleData.getTeacherData().getCourseIDs()) {
-				mData.add(StaticModuleData.findModule(StaticModuleData.findCourse(l).getModuleID()));
-			}
+			mData = new ArrayList<Long>();
+			mData.addAll(StaticModuleData.getTeacherData().getCourseIDs());
 		}
 		if (mAdapter == null) {
 
-			mAdapter = new TeacherModuleListAdapter(savedInstanceState);
-			mAdapter.sort(new ModuleComparator());
+			mAdapter = new TeacherCourseListAdapter(savedInstanceState);
+			mAdapter.sort(new Comparator<Long>() {
+
+				@Override
+				public int compare(Long arg0, Long arg1) {
+					return StaticModuleData
+							.findCourse(arg0)
+							.getName()
+							.compareTo(
+									StaticModuleData.findCourse(arg1).getName());
+				}
+
+			});
 		}
 	}
 
-	private class TeacherModuleListAdapter extends ArrayAdapter<Module> {
+	private class TeacherCourseListAdapter extends ArrayAdapter<Long> {
 
 		private Bundle bundle;
 
-		public TeacherModuleListAdapter(Bundle bundle) {
+		public TeacherCourseListAdapter(Bundle bundle) {
 
 			super(getActivity(), R.layout.teacherlistitem, mData);
 			this.bundle = bundle;
@@ -56,39 +65,43 @@ public class TeacherFragment extends Fragment {
 
 			if (convertView == null) {
 
-				convertView = getLayoutInflater(bundle).inflate(R.layout.teacherlistitem, parent, false);
+				convertView = getLayoutInflater(bundle).inflate(
+						R.layout.teacherlistitem, parent, false);
 			}
 
-			final Module module = mData.get(position);
+			final Course course = StaticModuleData.findCourse(mData.get(position));
 
-			TextView name = (TextView) convertView.findViewById(R.id.moduleName);
-			TextView subtext = (TextView) convertView.findViewById(R.id.subtext);
+			TextView name = (TextView) convertView
+					.findViewById(R.id.moduleName);
+			TextView subtext = (TextView) convertView
+					.findViewById(R.id.subtext);
 
-			name.setText(module.getName());
-			int studentCount = 0;
-			for (Course c : module.getCourseList()) {
-				studentCount += c.getStudentCount();
-			}
-			subtext.setText(Integer.toString(studentCount) + " " + getString(R.string.students));
+			name.setText(course.getName());
+			subtext.setText(Integer.toString(course.getStudentCount()) + " "
+					+ getString(R.string.students));
 
 			return convertView;
 		}
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.teacherfragment, container, false);
+		View view = inflater
+				.inflate(R.layout.teacherfragment, container, false);
 
 		ListView listView = (ListView) view.findViewById(R.id.teacherModules);
 
-		listView.setAdapter(new TeacherModuleListAdapter(savedInstanceState));
+		listView.setAdapter(new TeacherCourseListAdapter(savedInstanceState));
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent intent = new Intent(getActivity(), TeacherCourseDetailActivity.class);
-				intent.putExtra("course_id", mAdapter.getItem(position).getCourseList().get(0).getID());
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Intent intent = new Intent(getActivity(),
+						TeacherCourseDetailActivity.class);
+				intent.putExtra("course_id", mAdapter.getItem(position));
 				startActivity(intent);
 			}
 		});

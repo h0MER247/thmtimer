@@ -51,7 +51,7 @@ public class ModuleDetailFragment extends DialogFragment implements OnClickListe
 		mModuleNumber.setText(m.getModuleNumber());
 		mCreditPoints.setText(m.getCreditPoints().toString());
 		// teacher.setText(m.getTeacher());
-		mTeacher.setText(m.getCourseList().get(0).getTeacher());
+		mTeacher.setText(m.getResponsible());
 		mDescription.setText(m.getDescription());
 		mContent.setText("Inhalt"); // Was ist das?
 		mExpenditure.setText(Integer.toString((m.getCreditPoints() * 30)) + " Stunden");

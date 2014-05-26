@@ -5,5 +5,6 @@ public enum TimeUsage {
 	PREPARATION,
 	EXAM_PREPARATION,
 	LECTURE,
-	EXERCISE;
+	EXERCISE,
+	OTHER;
 }

@@ -1,6 +1,7 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.model.Course;
 import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.model.TimeData;
-import de.thm.mni.thmtimer.util.ModuleComparator;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,91 +26,99 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
 public class StudentFragment extends Fragment {
-	private StudentModuleListAdapter mAdapter;
-	private List<Module> mData;
+	private StudentCourseListAdapter mAdapter;
+	private List<Long> mData;
 
 	protected static final int REQUEST_NEW = 1;
 	protected static final int REQUEST_TIMETRACKING = 2;
-	
-	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		
-		if(mData == null) {
-			
-			mData = new ArrayList<Module>();
-			for(Long l:StaticModuleData.getStudentData().getCourseIDs()) {
-				mData.add(StaticModuleData.findModule(StaticModuleData.findCourse(l).getModuleID()));
-			}
+
+		if (mData == null) {
+
+			mData = new ArrayList<Long>();
+			mData.addAll(StaticModuleData.getStudentData().getCourseIDs());
 		}
-		if(mAdapter == null) {
-			
-			mAdapter = new StudentModuleListAdapter(savedInstanceState);
-			mAdapter.sort(new ModuleComparator());
+		if (mAdapter == null) {
+
+			mAdapter = new StudentCourseListAdapter(savedInstanceState);
+			mAdapter.sort(new Comparator<Long>() {
+
+				@Override
+				public int compare(Long lhs, Long rhs) {
+					return StaticModuleData
+							.findCourse(lhs)
+							.getName()
+							.compareTo(
+									StaticModuleData.findCourse(rhs).getName());
+				}
+
+			});
 		}
 	}
 
-	
-	
-	private class StudentModuleListAdapter extends ArrayAdapter<Module> {
-		
+	private class StudentCourseListAdapter extends ArrayAdapter<Long> {
+
 		private Bundle bundle;
 		private final long FOUR_MONTHS = 10368000000l;
 
-		public StudentModuleListAdapter(Bundle bundle) {
-			
+		public StudentCourseListAdapter(Bundle bundle) {
+
 			super(getActivity(), R.layout.studentlistitem, mData);
 			this.bundle = bundle;
 		}
-		
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 
 			if (convertView == null) {
 
-				convertView = getLayoutInflater(bundle).inflate(R.layout.studentlistitem, parent, false);
+				convertView = getLayoutInflater(bundle).inflate(
+						R.layout.studentlistitem, parent, false);
 			}
-			
-			final Module module = mData.get(position);
 
-			TextView name = (TextView) convertView.findViewById(R.id.moduleName);
-			TextView time = (TextView) convertView.findViewById(R.id.timeInvested);
-			TextView subtext = (TextView) convertView.findViewById(R.id.subtext);
+			final Course course = StaticModuleData.findCourse(mData
+					.get(position));
 
-			name.setText(module.getName());
-			int timeInvested = 0;
-			for(Course c:module.getCourseList()) {
-				timeInvested += StaticModuleData.getStudentData().getTimeInvestedTotal(c.getID()).getTimeInMinutes();
-			}
-			TimeData td = new TimeData();
-			td.setTimeInMinutes(timeInvested);
-			time.setText(td.toString());
-			Date d = module.getStartDate();
-			if(d!=null) {
-				//Time of the current semester
-				long delta = new Date().getTime()-d.getTime();
-				double percentSemester = delta/(FOUR_MONTHS/100.0);
-				double percentInvested = timeInvested/60
-						/(module.getCreditPoints()*30.0/100);
+			TextView name = (TextView) convertView
+					.findViewById(R.id.moduleName);
+			TextView time = (TextView) convertView
+					.findViewById(R.id.timeInvested);
+			TextView subtext = (TextView) convertView
+					.findViewById(R.id.subtext);
+
+			name.setText(course.getName());
+			TimeData timeInvested = StaticModuleData.getStudentData()
+					.getTimeInvestedTotal((long) position);
+			time.setText(timeInvested.toString());
+			Date d = course.getStartDate();
+			if (d != null) {
+				// Time of the current semester
+				long delta = new Date().getTime() - d.getTime();
+				double percentSemester = delta / (FOUR_MONTHS / 100.0);
+				double percentInvested = timeInvested.getTimeInMinutes()
+						/ 60
+						/ (StaticModuleData.findModule(course.getModuleID())
+								.getCreditPoints() * 30.0 / 100);
 				double percentDelta = percentInvested - percentSemester;
 				int red = 255, green = 255;
-				if(percentDelta>0) {
-					red=(int) (10*percentDelta);
+				if (percentDelta > 0) {
+					red = (int) (10 * percentDelta);
+				} else if (percentDelta < 0) {
+					green = (int) (10 * percentDelta);
 				}
-				else if(percentDelta<0) {
-					green=(int) (10*percentDelta);
-				}
-				GradientDrawable shape = (GradientDrawable) getResources().getDrawable(R.drawable.circle);
+				GradientDrawable shape = (GradientDrawable) getResources()
+						.getDrawable(R.drawable.circle);
 				shape.setColor(Color.rgb(red, green, 0));
-				time.setCompoundDrawablesWithIntrinsicBounds(null, null, shape, null);
+				time.setCompoundDrawablesWithIntrinsicBounds(null, null, shape,
+						null);
 			}
-			subtext.setText(module.getCourseList().get(0).getTeacher());
+			subtext.setText(course.getTeacher());
 
 			return convertView;
 		}
@@ -135,39 +143,40 @@ public class StudentFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		
-		View view = inflater.inflate(R.layout.studentfragment, container, false);
-		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		View view = inflater
+				.inflate(R.layout.studentfragment, container, false);
 
 		ListView listView = (ListView) view.findViewById(R.id.studentModules);
-		
-		listView.setAdapter(new StudentModuleListAdapter(savedInstanceState));
+
+		listView.setAdapter(new StudentCourseListAdapter(savedInstanceState));
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				
-				Intent intent = new Intent(getActivity(), TimeTrackingActivity.class);
-				
-				intent.putExtra("course_id", mAdapter.getItem(position).getCourseList().get(0).getID()); //  (int) ((Module) adapter.getItem(position)).getID());
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				Intent intent = new Intent(getActivity(),
+						TimeTrackingActivity.class);
+
+				intent.putExtra("course_id", mAdapter.getItem(position));
 				startActivityForResult(intent, REQUEST_TIMETRACKING);
 			}
 		});
 
 		return view;
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		if (requestCode == REQUEST_TIMETRACKING) {
+		// if (requestCode == REQUEST_TIMETRACKING) {
 		mAdapter.clear();
-		this.mData = new ArrayList<Module>();
-		for(Long l:StaticModuleData.getStudentData().getCourseIDs()) {
-			this.mData.add(StaticModuleData.findModule(StaticModuleData.findCourse(l).getModuleID()));
-		}
+		mData = new ArrayList<Long>();
+		mData.addAll(StaticModuleData.getStudentData().getCourseIDs());
 		mAdapter.addAll(this.mData);
 		mAdapter.notifyDataSetChanged();
-//		}
+		// }
 	}
 }
