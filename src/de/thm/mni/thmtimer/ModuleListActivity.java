@@ -113,6 +113,10 @@ public class ModuleListActivity extends FragmentActivity {
 		}
 
 	}
+	
+	public void refresh() {
+		mTabAdapter.notifyDataSetChanged();
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

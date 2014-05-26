@@ -7,7 +7,6 @@ import java.util.List;
 
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.model.Course;
-import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Intent;
@@ -73,6 +72,7 @@ public class StudentFragment extends Fragment {
 			this.bundle = bundle;
 		}
 
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -94,7 +94,7 @@ public class StudentFragment extends Fragment {
 
 			name.setText(course.getName());
 			TimeData timeInvested = StaticModuleData.getStudentData()
-					.getTimeInvestedTotal((long) position);
+					.getTimeInvestedTotal(course.getID());
 			time.setText(timeInvested.toString());
 			Date d = course.getStartDate();
 			if (d != null) {
@@ -122,6 +122,7 @@ public class StudentFragment extends Fragment {
 
 			return convertView;
 		}
+
 	}
 
 	@Override
@@ -171,12 +172,9 @@ public class StudentFragment extends Fragment {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// if (requestCode == REQUEST_TIMETRACKING) {
-		mAdapter.clear();
-		mData = new ArrayList<Long>();
-		mData.addAll(StaticModuleData.getStudentData().getCourseIDs());
-		mAdapter.addAll(this.mData);
-		mAdapter.notifyDataSetChanged();
-		// }
+		if (requestCode == REQUEST_TIMETRACKING) {
+			mAdapter.notifyDataSetChanged();
+			((ModuleListActivity)getActivity()).refresh();
+		}
 	}
 }
