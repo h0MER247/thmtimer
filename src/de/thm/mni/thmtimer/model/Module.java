@@ -91,6 +91,7 @@ public class Module {
 
 	public void setPrerequisites(List<Module> mPrerequisites) {
 		this.mPrerequisites = mPrerequisites;
+
 	}
 
 	public String getResponsible() {
