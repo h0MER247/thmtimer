@@ -60,7 +60,8 @@ public class Module {
 	}
 
 	public void addCourse(Course course) {
-		mCourseList.add(course);
+		if (!mCourseList.contains(course))
+			mCourseList.add(course);
 	}
 
 	public Date getStartDate() {
