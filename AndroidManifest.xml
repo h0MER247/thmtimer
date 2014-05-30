@@ -41,6 +41,10 @@
             android:name="de.thm.mni.thmtimer.TeacherCourseDetailActivity"
             android:label="@string/course_details" >
         </activity>
+        <activity
+            android:name="de.thm.mni.thmtimer.TeacherCreateCourseActivity"
+            android:label="@string/course_details" >
+        </activity>
 
         <uses-library android:name="android.test.runner" />
     </application>

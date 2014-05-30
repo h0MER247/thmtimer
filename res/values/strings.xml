@@ -26,7 +26,7 @@
     <string name="cp">Credit points</string>
     <string name="teacher">Teacher</string>
     <string name="content">Content</string>
-    <string name="discription">Description</string>
+    <string name="description">Description</string>
     <string name="expenditure">Workload</string>
     <string name="requirement">Requirement</string>
     <string name="testingMethod">Testing Method</string>
@@ -58,5 +58,10 @@
 	<string name="timedistribution">Time distribution</string>
 	<string name="superfeature">Awesome new feature</string>
 	<string name="course_details">Course details</string>
+	
+	<!-- TeacherCreateCourse -->
+	<string name="create">create</string>
+	<string name="moduleName">Modulename</string>
+	<string name="frequency">Frequency</string>
 
 </resources>

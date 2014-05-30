@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragmentmoduledetail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+  
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:stretchColumns="1" >        
+        
+        
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/moduleName"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/moduleName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/moduleNumber"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textFilter" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/cp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/cp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+        </TableRow>
+        
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/description"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/discription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/content"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/expenditure"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/expenditure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text" >
+            </EditText>
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/requirement"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/requirement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/testingMethod"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/testingMethod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text" />
+        </TableRow>
+        
+         <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/frequency"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/frequency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text" />
+        </TableRow>
+    </TableLayout>
+
+    <Button
+        android:id="@+id/crate"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/create" />
+
+</LinearLayout>

@@ -24,6 +24,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class TeacherFragment extends Fragment {
+	private static final int REQUEST_NEW = 1;
+	private static final int REQUEST_CREATECOURSE = 2;
 	private TeacherCourseListAdapter mAdapter;
 	private List<Long> mData;
 	
@@ -31,6 +33,7 @@ public class TeacherFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 
 		if (mData == null) {
 			mData = new ArrayList<Long>();
@@ -124,10 +127,18 @@ public class TeacherFragment extends Fragment {
 		switch (item.getItemId()) {
 		case R.id.action_add:
 			Intent intent = new Intent(getActivity(), TeacherCreateCourseActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent, REQUEST_NEW);
 			return true;
 		default:
 			return false;
+		}
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_CREATECOURSE) {
+			mAdapter.notifyDataSetChanged();
+			((ModuleListActivity)getActivity()).refresh();
 		}
 	}
 }
