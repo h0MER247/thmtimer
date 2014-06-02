@@ -145,6 +145,7 @@ public class ModuleSearchFragment extends Fragment {
 
 				}
 
+				@SuppressWarnings("unchecked")
 				@Override
 				protected void publishResults(CharSequence constraint, FilterResults results) {
 					clear();

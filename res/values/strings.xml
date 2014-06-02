@@ -18,18 +18,20 @@
 
     <!-- StudentFragment -->
     <string name="action_add">Add</string>
-    
+
     <!-- ModuleDetailFragment -->
     <string name="module_details">Course Detail View</string>
     <string name="enter">Enter</string>
     <string name="moduleNumber">Module ID</string>
     <string name="cp">Credit points</string>
-    <string name="teacher">Teacher</string>
-    <string name="content">Content</string>
+    <string name="responsible">Responsible</string>
     <string name="description">Description</string>
     <string name="expenditure">Workload</string>
     <string name="requirement">Requirement</string>
     <string name="testingMethod">Testing Method</string>
+    <string name="sws">Semester Hours</string>
+    <string name="frequency">Frequency</string>
+    <string name="prerequisites">Prerequisites</string>
 
     <!-- ModuleSearchFragment -->
     <string name="no_data">No courses.</string>
@@ -50,18 +52,18 @@
     <string name="enter_time_error">Enter a time in HH:MM format!</string>
     <string name="enter_time_format">HH:MM</string>
 
-    <!--  TeacherCourseDetailActivity -->
+    <!-- TeacherCourseDetailActivity -->
     <string name="hours">Hours</string>
     <string name="courselist">Course list</string>
     <string name="piechart">Pie Chart</string>
     <string name="inscribedstudents">Enrolled Students</string>
-	<string name="timedistribution">Time distribution</string>
-	<string name="superfeature">Awesome new feature</string>
-	<string name="course_details">Course details</string>
-	
-	<!-- TeacherCreateCourse -->
-	<string name="create">create</string>
-	<string name="moduleName">Modulename</string>
-	<string name="frequency">Frequency</string>
+    <string name="timedistribution">Time distribution</string>
+    <string name="superfeature">Awesome new feature</string>
+    <string name="course_details">Course details</string>
+
+    <!-- TeacherCreateCourse -->
+    <string name="create">create</string>
+    <string name="moduleName">Modulename</string>
+    <string name="content">Content</string>
 
 </resources>

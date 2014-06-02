@@ -33,10 +33,11 @@ public class StaticModuleData {
 	// Modul Metainformationen
 	private static void createModules() {
 		if (mModules == null) {
+			ArrayList<Module> prereq = new ArrayList<Module>();
 			mModules = new ArrayList<Module>();
 			Module m = new Module(0l, "Objektorientierte Programmierung", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -47,10 +48,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(1l, "Compilerbau", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -61,10 +63,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(2l, "Lineare Algebra", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -75,10 +78,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(3l, "Programmieren interaktiver Systeme", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -89,10 +93,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(4l, "Rechnernetze und ihre Anwendung", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -103,10 +108,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(5l, "Datenbanken", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -117,10 +123,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(6l, "Betriebssysteme", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -131,10 +138,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(7l, "Softwaretechnik Praktikum", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
