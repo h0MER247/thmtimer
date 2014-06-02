@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/stopwatch_txtTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="48sp" />
+
+    <Button
+        android:id="@+id/stopwatch_btnAbort"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/stopwatch_txtTime"
+        android:layout_below="@+id/stopwatch_txtTime"
+        android:layout_marginTop="10dp"
+        android:text="@string/stopwatch_action_abort" />
+
+    <Button
+        android:id="@+id/stopwatch_btnStart"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/stopwatch_btnStop"
+        android:layout_alignBottom="@+id/stopwatch_btnStop"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/stopwatch_btnStop"
+        android:text="@string/stopwatch_action_start" />
+    
+    <Button
+        android:id="@+id/stopwatch_btnStop"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/stopwatch_btnAbort"
+        android:layout_alignBottom="@+id/stopwatch_btnAbort"
+        android:layout_alignParentRight="true"
+        android:text="@string/stopwatch_action_stop" />
+    
+</RelativeLayout>

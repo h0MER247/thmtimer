@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 public class TeacherCreateCourseActivity extends FragmentActivity{
 
-	private EditText mModuleName, mModuleNumber, mCreditPoints, mContent, mDescription, mExpenditure,
+	private EditText mModuleName, mModuleNumber, mCreditPoints, mDescription, mExpenditure,
 	mRequirement, mTestingMethod, mFrequency;
 
 
@@ -30,7 +30,6 @@ public class TeacherCreateCourseActivity extends FragmentActivity{
 		mModuleNumber = (EditText)findViewById(R.id.number);
 		mCreditPoints = (EditText) findViewById(R.id.cp);		
 		mDescription = (EditText) findViewById(R.id.discription);
-		mContent = (EditText)findViewById(R.id.content);
 		mExpenditure = (EditText)findViewById(R.id.expenditure);
 		mRequirement = (EditText)findViewById(R.id.requirement);
 		mTestingMethod = (EditText)findViewById(R.id.testingMethod);
