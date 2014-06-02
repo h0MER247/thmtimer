@@ -43,12 +43,13 @@
     <string name="action_stopwatch_start">Starte Stoppuhr</string>
     <string name="action_stopwatch_stop">Stoppe Stoppuhr</string>
     <string name="enter_time_header">Zeit eingeben</string>
-    <string name="enter_time_time">Zeit</string>
     <string name="enter_time_usage_header">Aktivitäten</string>
     <string name="enter_time_usage">Aktivität</string>
     <string name="enter_time">Eintragen</string>
     <string name="enter_time_error">Zeit im HH:MM Format eingeben!</string>
     <string name="enter_time_format">HH:MM</string>
+    <string name="enter_time_choose">Wählen</string>
+    <string name="enter_time_choose_header">Zeit wählen</string>
 
     <!--  TeacherCourseDetailActivity -->
     <string name="hours">Stunden</string>
@@ -58,5 +59,18 @@
 	<string name="timedistribution">Zeitverteilung</string>
 	<string name="superfeature">Tolles Feature</string>
 	<string name="course_details">Kurs Details</string>
-
+	
+    <!-- Stopwatch -->
+    <string name="stopwatch_header">Stoppuhr</string>
+    <string name="stopwatch_zerotime">00:00:00</string>
+    <string name="stopwatch_action_abort">Abbruch</string>
+    <string name="stopwatch_action_start">Start</string>
+    <string name="stopwatch_action_pause">Pause</string>
+    <string name="stopwatch_action_resume">Fortsetzen</string>
+    <string name="stopwatch_action_stop">Stopp</string>
+    <string name="stopwatch_abort_header">Achtung</string>
+    <string name="stopwatch_abort_message">Möchten Sie die Zeiterfassung wirklich abbrechen?</string>
+    <string name="stopwatch_abort_positive">Ja</string>
+    <string name="stopwatch_abort_negative">Nein</string>
+    
 </resources>
