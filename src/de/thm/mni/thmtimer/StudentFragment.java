@@ -72,7 +72,6 @@ public class StudentFragment extends Fragment {
 			this.bundle = bundle;
 		}
 
-
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -95,28 +94,40 @@ public class StudentFragment extends Fragment {
 			name.setText(course.getName());
 			TimeData timeInvested = StaticModuleData.getStudentData()
 					.getTimeInvestedTotal(course.getID());
-			time.setText(timeInvested.toString());
-			Date d = course.getStartDate();
-			if (d != null) {
+
+			Date startDate = course.getStartDate();
+			if (startDate != null) {
 				// Time of the current semester
-				long delta = new Date().getTime() - d.getTime();
-				double percentSemester = delta / (FOUR_MONTHS / 100.0);
-				double percentInvested = timeInvested.getTimeInMinutes()
-						/ 60
-						/ (StaticModuleData.findModule(course.getModuleID())
-								.getCreditPoints() * 30.0 / 100);
-				double percentDelta = percentInvested - percentSemester;
+				long deltaDate = new Date().getTime() - startDate.getTime();
+				double percentSemester = (deltaDate / (FOUR_MONTHS / 100.0)) / 100.0;
+				int cp = StaticModuleData.findModule(course.getModuleID())
+						.getCreditPoints();
+				double thresholdMinutes = cp * 180.0 * percentSemester;
+				double deltaMinutes = timeInvested.getTimeInMinutes()
+						- thresholdMinutes;
 				int red = 255, green = 255;
-				if (percentDelta > 0) {
-					red = (int) (10 * percentDelta);
-				} else if (percentDelta < 0) {
-					green = (int) (10 * percentDelta);
+				if (deltaMinutes < 0) {
+					green = (int) (255 + deltaMinutes);
+					green = green < 0 ? 0 : green;
+				} else {
+					red = (int) (255 - deltaMinutes);
+					red = red < 0 ? 0 : red;
 				}
 				GradientDrawable shape = (GradientDrawable) getResources()
 						.getDrawable(R.drawable.circle);
 				shape.setColor(Color.rgb(red, green, 0));
 				time.setCompoundDrawablesWithIntrinsicBounds(null, null, shape,
 						null);
+				String op = "";
+				if(deltaMinutes<0) {
+					op = "-";
+				}
+				else {
+					op = "+";
+				}
+				TimeData delta = new TimeData();
+				delta.setTimeInMinutes(Math.abs((int)deltaMinutes));
+				time.setText(op+delta.toString());
 			}
 			subtext.setText(course.getTeacher());
 
@@ -174,7 +185,7 @@ public class StudentFragment extends Fragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_TIMETRACKING) {
 			mAdapter.notifyDataSetChanged();
-			((ModuleListActivity)getActivity()).refresh();
+			((ModuleListActivity) getActivity()).refresh();
 		}
 	}
 }
