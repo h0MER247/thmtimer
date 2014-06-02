@@ -201,12 +201,7 @@ public class StaticModuleData {
 
 			mTimeCategorys = new ArrayList<TimeCategory>();
 
-			mTimeCategorys.add(new TimeCategory(0l, // KategorieID (so wie sie
-													// in der
-													// Serverdatenbank
-													// stehen würde)
-					"Vorlesung")); // Bezeichnung f�r diese Kategorie
-
+			mTimeCategorys.add(new TimeCategory(0l, "Vorlesung"));
 			mTimeCategorys.add(new TimeCategory(1l, "Praktikum"));
 			mTimeCategorys.add(new TimeCategory(2l, "Hausarbeit"));
 			mTimeCategorys.add(new TimeCategory(3l, "Vorbereitung"));

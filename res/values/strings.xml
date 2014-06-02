@@ -50,6 +50,13 @@
     <string name="enter_time_format">HH:MM</string>
     <string name="enter_time_choose">Choose</string>
     <string name="enter_time_choose_header">Choose a Time</string>
+    
+    <!-- TimeTracking Types -->
+    <string name="timetype_lecture">Lecture</string>
+    <string name="timetype_practice">Practice</string>
+    <string name="timetype_homework">Homework</string>
+    <string name="timetype_preparation">Preparation</string>
+    <string name="timetype_other">Other</string>
 
     <!--  TeacherCourseDetailActivity -->
     <string name="hours">Hours</string>
