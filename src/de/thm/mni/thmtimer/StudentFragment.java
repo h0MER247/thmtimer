@@ -102,7 +102,7 @@ public class StudentFragment extends Fragment {
 				double percentSemester = (deltaDate / (FOUR_MONTHS / 100.0)) / 100.0;
 				int cp = StaticModuleData.findModule(course.getModuleID())
 						.getCreditPoints();
-				double thresholdMinutes = cp * 180.0 * percentSemester;
+				double thresholdMinutes = cp * 1800.0 * percentSemester;
 				double deltaMinutes = timeInvested.getTimeInMinutes()
 						- thresholdMinutes;
 				int red = 255, green = 255;

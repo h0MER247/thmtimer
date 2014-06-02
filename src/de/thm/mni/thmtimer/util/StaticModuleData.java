@@ -202,7 +202,7 @@ public class StaticModuleData {
 		}
 	}
 
-	// Kategorien f�r Zeiterfassungen
+	// Kategorien für Zeiterfassungen
 	private static void createTimeCategorys() {
 
 		if (mTimeCategorys == null) {
@@ -252,7 +252,8 @@ public class StaticModuleData {
 					"0:46")));
 			mStudentData.addTimeTracking(0l, new TimeTracking(3l, 2l, "Hausübung 1 fertig", new TimeData("2:12")));
 			mStudentData.addTimeTracking(0l, new TimeTracking(4l, 4l, "Geträumt von Android", new TimeData("7:42")));
-
+			mStudentData.addTimeTracking(0l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("100:00")));
+			
 			// Compilerbau
 			mStudentData.addTimeTracking(2l, new TimeTracking(5l, 0l, "War in der Vorlesung, Compilerbau ist top...",
 					new TimeData("1:31")));
@@ -261,6 +262,7 @@ public class StaticModuleData {
 			mStudentData.addTimeTracking(2l, new TimeTracking(7l, 2l, "Hausübung 1 angefangen", new TimeData("1:12")));
 			mStudentData.addTimeTracking(2l, new TimeTracking(8l, 2l, "Hausübung 1 fertiggestellt",
 					new TimeData("2:51")));
+			mStudentData.addTimeTracking(2l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("87:00")));
 
 			// Rechnernetze
 			mStudentData.addTimeTracking(5l, new TimeTracking(9l, 0l, "Vorlesung gut, Prof. Dr. Müller ist super",
@@ -271,15 +273,19 @@ public class StaticModuleData {
 			mStudentData.addTimeTracking(5l, new TimeTracking(12l, 2l, "Hausübung 1 fertiggestellt", new TimeData(
 					"2:51")));
 			mStudentData.addTimeTracking(5l, new TimeTracking(13l, 4l, "In der Mensa gegessen", new TimeData("0:12")));
+			mStudentData.addTimeTracking(5l, new TimeTracking(14l, 4l, "Semester verpennt", new TimeData("80:00")));
 
+			
 			// Datenbanken
 			mStudentData.addTimeTracking(6l, new TimeTracking(14l, 0l, "Vorlesung gehabt", new TimeData("1:30")));
 			mStudentData.addTimeTracking(6l, new TimeTracking(15l, 2l, "Hausübung 1 ist endlich fertig", new TimeData(
 					"4:22")));
+			mStudentData.addTimeTracking(6l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("80:00")));
 
 			// SWT-P (Kurs Volkmer)
 			mStudentData.addTimeTracking(9l, new TimeTracking(16l, 1l, "Praktika Stunde gehabt", new TimeData("3:00")));
 			mStudentData.addTimeTracking(9l, new TimeTracking(17l, 4l, "Besprechung", new TimeData("1:22")));
+			mStudentData.addTimeTracking(9l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("91:00")));
 		}
 	}
 
