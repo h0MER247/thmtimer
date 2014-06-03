@@ -48,7 +48,8 @@
     <string name="enter_time_usage_header">Aktivitäten</string>
     <string name="enter_time_usage">Aktivität</string>
     <string name="enter_time">Eintragen</string>
-    <string name="enter_time_error">Zeit im HH:MM Format eingeben!</string>
+    <string name="enter_time_error_format">Zeit im HH:MM Format eingeben!</string>
+    <string name="enter_time_error_zerotime">Zeit größer als 00:00 eingeben!</string>
     <string name="enter_time_format">HH:MM</string>
     <string name="enter_time_choose">Wählen</string>
     <string name="enter_time_choose_header">Zeit wählen</string>

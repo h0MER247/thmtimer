@@ -49,19 +49,31 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 				
 				TimeData time = new TimeData();
 				
-				if(time.parseString(mTimeEntry.getText().toString())) {
+				Boolean validFormat = time.parseString(mTimeEntry.getText().toString());
+				Boolean validTime   = time.getTimeInMinutes() > 0;
+				
+				
+				if(!validFormat) {
+					
+					Toast.makeText(getApplicationContext(),
+							       getString(R.string.enter_time_error_format),
+							       Toast.LENGTH_LONG).show();
+				}
+				else if(!validTime) {
+					
+					Toast.makeText(getApplicationContext(),
+							       getString(R.string.enter_time_error_zerotime),
+							       Toast.LENGTH_LONG).show();
+				}
+				else {
 					
 					TimeCategory category = (TimeCategory)mUsageSpinner.getSelectedItem();
-					
+						
 					TimeTracking data = new TimeTracking(-1l, category.getID(), "Gelernt", time);
 					StaticModuleData.getStudentData().addTimeTracking(mCourseID, data);
 					
 					setResult(Activity.RESULT_OK);
 					finish();
-				}
-				else {
-					
-					Toast.makeText(getApplicationContext(), getString(R.string.enter_time_error), Toast.LENGTH_LONG).show();
 				}
 			}
 		});
