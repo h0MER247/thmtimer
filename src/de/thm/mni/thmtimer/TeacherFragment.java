@@ -6,7 +6,6 @@ import java.util.List;
 
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.model.Course;
-import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 

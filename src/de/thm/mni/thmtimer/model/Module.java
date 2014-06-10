@@ -1,7 +1,5 @@
 package de.thm.mni.thmtimer.model;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Module {

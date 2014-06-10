@@ -18,18 +18,20 @@
 
     <!-- StudentFragment -->
     <string name="action_add">Add</string>
-    
+
     <!-- ModuleDetailFragment -->
     <string name="module_details">Course Detail View</string>
     <string name="enter">Enter</string>
     <string name="moduleNumber">Module ID</string>
     <string name="cp">Credit points</string>
-    <string name="teacher">Teacher</string>
-    <string name="content">Content</string>
+    <string name="responsible">Responsible</string>
     <string name="description">Description</string>
     <string name="expenditure">Workload</string>
     <string name="requirement">Requirement</string>
     <string name="testingMethod">Testing Method</string>
+    <string name="sws">Semester Hours</string>
+    <string name="frequency">Frequency</string>
+    <string name="prerequisites">Prerequisites</string>
 
     <!-- ModuleSearchFragment -->
     <string name="no_data">No courses.</string>
@@ -43,14 +45,23 @@
     <string name="action_stopwatch_start">Start Stopwatch</string>
     <string name="action_stopwatch_stop">Stop Stopwatch</string>
     <string name="enter_time_header">Enter time</string>
-    <string name="enter_time_time">Time</string>
     <string name="enter_time_usage_header">Activities</string>
     <string name="enter_time_usage">Activity</string>
     <string name="enter_time">Enter</string>
-    <string name="enter_time_error">Enter a time in HH:MM format!</string>
+    <string name="enter_time_error_format">Enter a time in HH:MM format!</string>
+    <string name="enter_time_error_zerotime">Enter a time greater than 00:00!</string>
     <string name="enter_time_format">HH:MM</string>
+    <string name="enter_time_choose">Choose</string>
+    <string name="enter_time_choose_header">Choose a Time</string>
+    
+    <!-- TimeTracking Types -->
+    <string name="timetype_lecture">Lecture</string>
+    <string name="timetype_practice">Practice</string>
+    <string name="timetype_homework">Homework</string>
+    <string name="timetype_preparation">Preparation</string>
+    <string name="timetype_other">Other</string>
 
-    <!--  TeacherCourseDetailActivity -->
+    <!-- TeacherCourseDetailActivity -->
     <string name="hours">Hours</string>
     <string name="courselist">Course list</string>
     <string name="piechart">Pie Chart</string>
@@ -62,6 +73,18 @@
 	<!-- TeacherCreateCourse -->
 	<string name="create">create</string>
 	<string name="moduleName">Modulename</string>
-	<string name="frequency">Frequency</string>
-
+	
+    <!-- Stopwatch -->
+    <string name="stopwatch_header">Stopwatch</string>
+    <string name="stopwatch_zerotime">00:00:00</string>
+    <string name="stopwatch_action_abort">Abort</string>
+    <string name="stopwatch_action_start">Start</string>
+    <string name="stopwatch_action_pause">Pause</string>
+    <string name="stopwatch_action_resume">Resume</string>
+    <string name="stopwatch_action_stop">Stop</string>
+    <string name="stopwatch_abort_header">Attention</string>
+    <string name="stopwatch_abort_message">Do you really want to abort the time measurement?</string>
+    <string name="stopwatch_abort_positive">Yes</string>
+    <string name="stopwatch_abort_negative">No</string>
+    
 </resources>

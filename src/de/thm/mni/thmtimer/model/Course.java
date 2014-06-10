@@ -20,7 +20,7 @@ public class Course {
 		mStudentCount = studentCount;
 		
 		//Später entfernen
-		GregorianCalendar gc = new GregorianCalendar(2014, 4, 1);
+		GregorianCalendar gc = new GregorianCalendar(2014, 3, 1);
 		setStartDate(new Date(gc.getTimeInMillis()));
 	}
 

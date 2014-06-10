@@ -5,14 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-  
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:stretchColumns="1" >        
-        
-        
+        android:stretchColumns="1" >
+
         <TableRow>
 
             <TextView
@@ -57,7 +55,6 @@
                 android:ems="10"
                 android:inputType="number" />
         </TableRow>
-        
 
         <TableRow>
 
@@ -68,21 +65,6 @@
 
             <EditText
                 android:id="@+id/discription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textMultiLine" />
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                android:padding="3dip"
-                android:text="@string/content"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -134,8 +116,8 @@
                 android:ems="10"
                 android:inputType="text" />
         </TableRow>
-        
-         <TableRow>
+
+        <TableRow>
 
             <TextView
                 android:padding="3dip"

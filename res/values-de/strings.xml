@@ -24,12 +24,14 @@
     <string name="enter">Beitreten</string>
     <string name="moduleNumber">Modulnummer</string>
     <string name="cp">Creditpoints</string>
-    <string name="teacher">Dozent</string>
-    <string name="content">Inhalte</string>
-    <string name="discription">Beschreibung</string>
+    <string name="responsible">Verantwortlich</string>
+    <string name="description">Beschreibung</string>
     <string name="expenditure">Aufwand</string>
     <string name="requirement">Vorleistung</string>
     <string name="testingMethod">Leistungsnachweis</string>
+    <string name="sws">SWS</string>
+    <string name="frequency">Turnus</string>
+    <string name="prerequisites">Voraussetzungen</string>
 
     <!-- ModuleSearchFragment -->
     <string name="no_data">Keine Module!</string>
@@ -43,20 +45,42 @@
     <string name="action_stopwatch_start">Starte Stoppuhr</string>
     <string name="action_stopwatch_stop">Stoppe Stoppuhr</string>
     <string name="enter_time_header">Zeit eingeben</string>
-    <string name="enter_time_time">Zeit</string>
     <string name="enter_time_usage_header">Aktivitäten</string>
     <string name="enter_time_usage">Aktivität</string>
     <string name="enter_time">Eintragen</string>
-    <string name="enter_time_error">Zeit im HH:MM Format eingeben!</string>
+    <string name="enter_time_error_format">Zeit im HH:MM Format eingeben!</string>
+    <string name="enter_time_error_zerotime">Zeit größer als 00:00 eingeben!</string>
     <string name="enter_time_format">HH:MM</string>
+    <string name="enter_time_choose">Wählen</string>
+    <string name="enter_time_choose_header">Zeit wählen</string>
 
-    <!--  TeacherCourseDetailActivity -->
+    <!-- TimeTracking Types -->
+    <string name="timetype_lecture">Vorlesung</string>
+    <string name="timetype_practice">Praktikum</string>
+    <string name="timetype_homework">Hausarbeit</string>
+    <string name="timetype_preparation">Vorbereitung</string>
+    <string name="timetype_other">Sonstiges</string>
+
+    <!-- TeacherCourseDetailActivity -->
     <string name="hours">Stunden</string>
     <string name="courselist">Kursliste</string>
     <string name="piechart">Tortendiagramm</string>
     <string name="inscribedstudents">Eingeschriebene Studenten</string>
-	<string name="timedistribution">Zeitverteilung</string>
-	<string name="superfeature">Tolles Feature</string>
-	<string name="course_details">Kurs Details</string>
+    <string name="timedistribution">Zeitverteilung</string>
+    <string name="superfeature">Tolles Feature</string>
+    <string name="course_details">Kurs Details</string>
+
+    <!-- Stopwatch -->
+    <string name="stopwatch_header">Stoppuhr</string>
+    <string name="stopwatch_zerotime">00:00:00</string>
+    <string name="stopwatch_action_abort">Abbruch</string>
+    <string name="stopwatch_action_start">Start</string>
+    <string name="stopwatch_action_pause">Pause</string>
+    <string name="stopwatch_action_resume">Fortsetzen</string>
+    <string name="stopwatch_action_stop">Stopp</string>
+    <string name="stopwatch_abort_header">Achtung</string>
+    <string name="stopwatch_abort_message">Möchten Sie die Zeiterfassung wirklich abbrechen?</string>
+    <string name="stopwatch_abort_positive">Ja</string>
+    <string name="stopwatch_abort_negative">Nein</string>
 
 </resources>

@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/action_stopwatch"
-        android:icon="@drawable/ic_action_start"
+        android:icon="@drawable/ic_action_time"
         android:showAsAction="ifRoom"
         android:title="@string/action_stopwatch_start" />
     

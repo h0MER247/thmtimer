@@ -33,10 +33,11 @@ public class StaticModuleData {
 	// Modul Metainformationen
 	private static void createModules() {
 		if (mModules == null) {
+			ArrayList<Module> prereq = new ArrayList<Module>();
 			mModules = new ArrayList<Module>();
 			Module m = new Module(0l, "Objektorientierte Programmierung", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -47,10 +48,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(1l, "Compilerbau", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -61,10 +63,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(2l, "Lineare Algebra", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -75,10 +78,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(3l, "Programmieren interaktiver Systeme", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -89,10 +93,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(4l, "Rechnernetze und ihre Anwendung", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -103,10 +108,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(5l, "Datenbanken", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -117,10 +123,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(6l, "Betriebssysteme", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -131,10 +138,11 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
+			prereq.add(m);
 			
 			m = new Module(7l, "Softwaretechnik Praktikum", "MN1007");
 			m.setFrequency("Jedes Semester");
-			m.setPrerequisites(null);
+			m.setPrerequisites(prereq);
 			m.setRequirement("3 Hausübungen");
 			m.setResponsible("Prof. Dr. Franzen");
 			m.setSWS(6);
@@ -194,19 +202,14 @@ public class StaticModuleData {
 		}
 	}
 
-	// Kategorien f�r Zeiterfassungen
+	// Kategorien für Zeiterfassungen
 	private static void createTimeCategorys() {
 
 		if (mTimeCategorys == null) {
 
 			mTimeCategorys = new ArrayList<TimeCategory>();
 
-			mTimeCategorys.add(new TimeCategory(0l, // KategorieID (so wie sie
-													// in der
-													// Serverdatenbank
-													// stehen würde)
-					"Vorlesung")); // Bezeichnung f�r diese Kategorie
-
+			mTimeCategorys.add(new TimeCategory(0l, "Vorlesung"));
 			mTimeCategorys.add(new TimeCategory(1l, "Praktikum"));
 			mTimeCategorys.add(new TimeCategory(2l, "Hausarbeit"));
 			mTimeCategorys.add(new TimeCategory(3l, "Vorbereitung"));
@@ -249,7 +252,8 @@ public class StaticModuleData {
 					"0:46")));
 			mStudentData.addTimeTracking(0l, new TimeTracking(3l, 2l, "Hausübung 1 fertig", new TimeData("2:12")));
 			mStudentData.addTimeTracking(0l, new TimeTracking(4l, 4l, "Geträumt von Android", new TimeData("7:42")));
-
+			mStudentData.addTimeTracking(0l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("100:00")));
+			
 			// Compilerbau
 			mStudentData.addTimeTracking(2l, new TimeTracking(5l, 0l, "War in der Vorlesung, Compilerbau ist top...",
 					new TimeData("1:31")));
@@ -258,6 +262,7 @@ public class StaticModuleData {
 			mStudentData.addTimeTracking(2l, new TimeTracking(7l, 2l, "Hausübung 1 angefangen", new TimeData("1:12")));
 			mStudentData.addTimeTracking(2l, new TimeTracking(8l, 2l, "Hausübung 1 fertiggestellt",
 					new TimeData("2:51")));
+			mStudentData.addTimeTracking(2l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("87:00")));
 
 			// Rechnernetze
 			mStudentData.addTimeTracking(5l, new TimeTracking(9l, 0l, "Vorlesung gut, Prof. Dr. Müller ist super",
@@ -268,15 +273,19 @@ public class StaticModuleData {
 			mStudentData.addTimeTracking(5l, new TimeTracking(12l, 2l, "Hausübung 1 fertiggestellt", new TimeData(
 					"2:51")));
 			mStudentData.addTimeTracking(5l, new TimeTracking(13l, 4l, "In der Mensa gegessen", new TimeData("0:12")));
+			mStudentData.addTimeTracking(5l, new TimeTracking(14l, 4l, "Semester verpennt", new TimeData("80:00")));
 
+			
 			// Datenbanken
 			mStudentData.addTimeTracking(6l, new TimeTracking(14l, 0l, "Vorlesung gehabt", new TimeData("1:30")));
 			mStudentData.addTimeTracking(6l, new TimeTracking(15l, 2l, "Hausübung 1 ist endlich fertig", new TimeData(
 					"4:22")));
+			mStudentData.addTimeTracking(6l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("80:00")));
 
 			// SWT-P (Kurs Volkmer)
 			mStudentData.addTimeTracking(9l, new TimeTracking(16l, 1l, "Praktika Stunde gehabt", new TimeData("3:00")));
 			mStudentData.addTimeTracking(9l, new TimeTracking(17l, 4l, "Besprechung", new TimeData("1:22")));
+			mStudentData.addTimeTracking(9l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("91:00")));
 		}
 	}
 
