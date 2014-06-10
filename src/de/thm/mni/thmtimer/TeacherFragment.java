@@ -124,7 +124,8 @@ public class TeacherFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_add:
-			Intent intent = new Intent(getActivity(), TeacherCreateCourseActivity.class);
+			Intent intent = new Intent(getActivity(), EnterModuleActivity.class);
+			intent.putExtra("fragment", "teacher");
 			startActivityForResult(intent, REQUEST_NEW);
 			return true;
 		default:

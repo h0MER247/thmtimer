@@ -147,6 +147,7 @@ public class StudentFragment extends Fragment {
 		switch (item.getItemId()) {
 		case R.id.action_add:
 			Intent intent = new Intent(getActivity(), EnterModuleActivity.class);
+			intent.putExtra("fragment", "student");
 			startActivityForResult(intent, REQUEST_NEW);
 			return true;
 		default:

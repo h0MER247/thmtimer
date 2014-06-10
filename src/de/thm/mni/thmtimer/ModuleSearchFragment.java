@@ -77,6 +77,7 @@ public class ModuleSearchFragment extends Fragment {
 
 					ea.closeSearch(mAdapter.getItem(pos).getID());
 				}
+				
 			}
 		});
 		mAdapter.sort(new Comparator<Module>(){

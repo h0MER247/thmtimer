@@ -72,7 +72,9 @@
 	
 	<!-- TeacherCreateCourse -->
 	<string name="create">create</string>
-	<string name="moduleName">Modulename</string>
+	<string name="courseName">Coursename</string>
+	<string name="teacher">Teacher</string>
+	<string name="startDate">Start date</string>
 	
     <!-- Stopwatch -->
     <string name="stopwatch_header">Stopwatch</string>

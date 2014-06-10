@@ -83,7 +83,6 @@ public class ModuleDetailFragment extends DialogFragment implements
 		if (mDialog != null) {
 			mDialog.dismiss();
 		}
-		mDialog.dismiss();
 	}
 
 	private void enterModule() {

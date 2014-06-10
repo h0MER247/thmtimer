@@ -15,21 +15,27 @@ import android.view.MenuItem;
 
 public class EnterModuleActivity extends FragmentActivity {
 
-	private Fragment mModuleDetail;
+	private Fragment mModuleDetail, mTeacherCreateCourse;
 	private ModuleSearchFragment mModuleSearch;
 	private FragmentManager mFragmentManager;
 	private ViewPager mPager;
 	private TabPagerAdapter mPagerAdapter;
+	private String fragment;
+	private Bundle extras;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		extras = getIntent().getExtras();
+		fragment = extras.getString("fragment");
+
 		if (mFragmentManager == null) {
 			mFragmentManager = getSupportFragmentManager();
 		}
 		if (savedInstanceState != null) {
 			mModuleSearch = (ModuleSearchFragment) mFragmentManager.getFragment(savedInstanceState, "moduleSearch");
 			mModuleDetail = mFragmentManager.getFragment(savedInstanceState, "moduleDetail");
+			mTeacherCreateCourse = mFragmentManager.getFragment(savedInstanceState, "teacherCreateCourse");
 		}
 
 		setContentView(R.layout.entermoduleactivity);
@@ -85,13 +91,30 @@ public class EnterModuleActivity extends FragmentActivity {
 
 	public void closeSearch(long id) {
 
-		mModuleDetail = new ModuleDetailFragment();
-		Bundle b = new Bundle();
-		b.putLong("id", id); // id ist jetzt ne kursid!!!
-		mModuleDetail.setArguments(b);
-		mPagerAdapter.notifyDataSetChanged();
+		/* 
+		 * funktioniert noch nicht :-(
+		 * 
+		 * 
+		if(fragment.equals("teacher")){
+			mTeacherCreateCourse = new TeacherCreateCourseFragment();
+			Bundle b = new Bundle();
+			b.putLong("id", id); // id ist jetzt ne kursid!!!
+			mTeacherCreateCourse.setArguments(b);
+			mPagerAdapter.notifyDataSetChanged();
 
-		mPager.setCurrentItem(1);
+			mPager.setCurrentItem(1);
+	
+		} */
+		if(fragment.equals("student")){
+			mModuleDetail = new ModuleDetailFragment();
+			Bundle b = new Bundle();
+			b.putLong("id", id); // id ist jetzt ne kursid!!!
+			mModuleDetail.setArguments(b);
+			mPagerAdapter.notifyDataSetChanged();
+
+			mPager.setCurrentItem(1);
+		}
+		
 	}
 
 	@Override
@@ -101,6 +124,9 @@ public class EnterModuleActivity extends FragmentActivity {
 		if (mModuleDetail != null) {
 			mFragmentManager.putFragment(outState, "moduleDetail", mModuleDetail);
 		}
+		if (mTeacherCreateCourse != null) {
+			mFragmentManager.putFragment(outState, "teacherCreateCourse", mTeacherCreateCourse);
+		} 
 	}
 
 	@Override
