@@ -47,6 +47,7 @@ public class TeacherCreateCourseActivity extends FragmentActivity{
 		Module module = new Module(id, name, number);
 		module.setCreditPoints((Integer.parseInt(mCreditPoints.getText().toString())));
 		module.setDescription(mDescription.getText().toString());
+		//module.setContent
 		module.setSWS(Integer.parseInt(mExpenditure.getText().toString()));
 		module.setRequirement(mRequirement.getText().toString());
 		module.setTestingMethod(mTestingMethod.getText().toString());
