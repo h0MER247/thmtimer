@@ -11,7 +11,7 @@ public class TimeDataTest {
 	@Test
 	public void testConstructor() {
 		TimeData t = new TimeData();
-		assertEquals(0, t.getHours());
+		assertEquals(0, t.getTimeInHours());
 		assertEquals(0, t.getTimeInMinutes());
 	}
 
@@ -30,19 +30,8 @@ public class TimeDataTest {
 		TimeData t = new TimeData();
 		t.setTimeInMinutes(950);
 
-		assertEquals(15, t.getHours());
-		assertEquals(50, t.getTimeInMinutes());
-	}
-
-	@Test
-	public void testSetTimeInSeconds() {
-		TimeData t = new TimeData();
-		t.setTimeInSeconds(123456);
-
-		// Wird auf Minuten gerundet
-		assertEquals(123420, t.getTimeInSeconds());
-		assertEquals(34, t.getHours());
-		assertEquals(17, t.getTimeInMinutes());
+		assertEquals(15, t.getTimeInHours());
+		assertEquals(950, t.getTimeInMinutes());
 	}
 
 	@Test

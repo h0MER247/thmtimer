@@ -105,7 +105,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 
 				// Ermitteln wieviel Zeit insgesamt in diesen Kurs investiert
 				// wurde
-				Integer totalSeconds = mData.getTimeInvestedTotal(mCourseID).getTimeInSeconds();
+				Integer totalMinutes = mData.getTimeInvestedTotal(mCourseID).getTimeInMinutes();
 
 				// Den Text f�r die Kategorien und investierten Zeiten erstellen
 				String categorysText = "";
@@ -127,12 +127,12 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 					if (timesInvestedText.length() != 0)
 						timesInvestedText += "\n";
 					timesInvestedText += t.getTime() + " "
-							+ String.format("(%04.1f%%)", ((100.0 / totalSeconds) * td.getTimeInSeconds()));
+							+ String.format("(%04.1f%%)", ((100.0 / totalMinutes) * td.getTimeInMinutes()));
 
 					//
 					// Tortenst�ck hinzuf�gen
 					//
-					pieChart.addValue((float) td.getTimeInSeconds());
+					pieChart.addValue((float) td.getTimeInMinutes());
 					pieChartLegend.addLabel(category.getDescription());
 				}
 

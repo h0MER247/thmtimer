@@ -46,17 +46,17 @@ public class TeacherData {
 	//
 	public TimeData getTimeInvestedTotal(Long courseID) {
 		ArrayList<TimeStatisticData> statisticData = mTimeStatistic.get(courseID);
-		Integer timeInSeconds = 0;
+		Integer timeInMinutes = 0;
 		//
 		// Alle erfassten Zeiten zusammenzählen
 		//
 		if (statisticData != null) {
 			for (TimeStatisticData t : statisticData) {
-				timeInSeconds += t.getTime().getTimeInSeconds();
+				timeInMinutes += t.getTime().getTimeInMinutes();
 			}
 		}
 		TimeData data = new TimeData();
-		data.setTimeInSeconds(timeInSeconds);
+		data.setTimeInMinutes(timeInMinutes);
 
 		return data;
 	}

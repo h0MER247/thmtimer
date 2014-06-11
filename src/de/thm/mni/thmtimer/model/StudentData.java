@@ -55,19 +55,19 @@ public class StudentData {
 	//
 	public TimeData getTimeInvestedTotal(Long courseID) {
 		ArrayList<TimeTracking> trackingData = mTimeTrackingData.get(courseID);
-		Integer timeInSeconds = 0;
+		Integer timeInMinutes = 0;
 		
 		//
 		// Alle erfassten Zeiten zusammenzählen
 		//
 		if(trackingData != null) {
 			for(TimeTracking t : trackingData) {
-				timeInSeconds += t.getTime().getTimeInSeconds();
+				timeInMinutes += t.getTime().getTimeInMinutes();
 			}
 		}
 		
 		TimeData data = new TimeData();
-		data.setTimeInSeconds(timeInSeconds);
+		data.setTimeInMinutes(timeInMinutes);
 		
 		return data;
 	}

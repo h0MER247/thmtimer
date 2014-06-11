@@ -90,7 +90,7 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 				
 				TimePickerDialog picker = new TimePickerDialog(TrackTimeActivity.this,
 						                                       TrackTimeActivity.this,
-						                                       Math.min(time.getHours(), 23),
+						                                       Math.min(time.getTimeInHours(), 23),
 						                                       Math.min(time.getTimeInMinutes(), 59),
 						                                       true);
 				
@@ -127,7 +127,7 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 		
 		TimeData time = new TimeData();
-		time.setHours(hourOfDay);
+		time.setTimeInHours(hourOfDay);
 		time.setTimeInMinutes(minute);
 		
 		mTimeEntry.setText(time.toString());		
