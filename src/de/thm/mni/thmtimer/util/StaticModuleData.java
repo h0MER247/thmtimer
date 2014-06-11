@@ -244,49 +244,55 @@ public class StaticModuleData {
 								// Vorlesung, etc...)
 							"War heute in der Vorlesung", // Eigener Text f�r
 															// dieses Tracking
-							new TimeData("1:30"))); // Zeitangabe (hier 1 Stunde
+							parseTimeData("1:30"))); // Zeitangabe (hier 1 Stunde
 													// 30 Minuten)
 
-			mStudentData.addTimeTracking(0l, new TimeTracking(1l, 0l, "War in der Vorlesung", new TimeData("1:31")));
-			mStudentData.addTimeTracking(0l, new TimeTracking(2l, 1l, "War im Praktikum... War ganz gut", new TimeData(
+			mStudentData.addTimeTracking(0l, new TimeTracking(1l, 0l, "War in der Vorlesung", parseTimeData("1:31")));
+			mStudentData.addTimeTracking(0l, new TimeTracking(2l, 1l, "War im Praktikum... War ganz gut", parseTimeData(
 					"0:46")));
-			mStudentData.addTimeTracking(0l, new TimeTracking(3l, 2l, "Hausübung 1 fertig", new TimeData("2:12")));
-			mStudentData.addTimeTracking(0l, new TimeTracking(4l, 4l, "Geträumt von Android", new TimeData("7:42")));
-			mStudentData.addTimeTracking(0l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("100:00")));
+			mStudentData.addTimeTracking(0l, new TimeTracking(3l, 2l, "Hausübung 1 fertig", parseTimeData("2:12")));
+			mStudentData.addTimeTracking(0l, new TimeTracking(4l, 4l, "Geträumt von Android", parseTimeData("7:42")));
+			mStudentData.addTimeTracking(0l, new TimeTracking(13l, 4l, "Semester verpennt", parseTimeData("100:00")));
 			
 			// Compilerbau
 			mStudentData.addTimeTracking(2l, new TimeTracking(5l, 0l, "War in der Vorlesung, Compilerbau ist top...",
-					new TimeData("1:31")));
-			mStudentData.addTimeTracking(2l, new TimeTracking(6l, 1l, "War im Praktikum... Es l�uft...", new TimeData(
+					parseTimeData("1:31")));
+			mStudentData.addTimeTracking(2l, new TimeTracking(6l, 1l, "War im Praktikum... Es l�uft...", parseTimeData(
 					"1:36")));
-			mStudentData.addTimeTracking(2l, new TimeTracking(7l, 2l, "Hausübung 1 angefangen", new TimeData("1:12")));
+			mStudentData.addTimeTracking(2l, new TimeTracking(7l, 2l, "Hausübung 1 angefangen", parseTimeData("1:12")));
 			mStudentData.addTimeTracking(2l, new TimeTracking(8l, 2l, "Hausübung 1 fertiggestellt",
-					new TimeData("2:51")));
-			mStudentData.addTimeTracking(2l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("87:00")));
+					parseTimeData("2:51")));
+			mStudentData.addTimeTracking(2l, new TimeTracking(13l, 4l, "Semester verpennt", parseTimeData("87:00")));
 
 			// Rechnernetze
 			mStudentData.addTimeTracking(5l, new TimeTracking(9l, 0l, "Vorlesung gut, Prof. Dr. Müller ist super",
-					new TimeData("1:33")));
-			mStudentData.addTimeTracking(5l, new TimeTracking(10l, 1l, "War im Praktikum... Es läuft...", new TimeData(
+					parseTimeData("1:33")));
+			mStudentData.addTimeTracking(5l, new TimeTracking(10l, 1l, "War im Praktikum... Es läuft...", parseTimeData(
 					"1:36")));
-			mStudentData.addTimeTracking(5l, new TimeTracking(11l, 2l, "Hausübung 1 angefangen", new TimeData("1:12")));
-			mStudentData.addTimeTracking(5l, new TimeTracking(12l, 2l, "Hausübung 1 fertiggestellt", new TimeData(
+			mStudentData.addTimeTracking(5l, new TimeTracking(11l, 2l, "Hausübung 1 angefangen", parseTimeData("1:12")));
+			mStudentData.addTimeTracking(5l, new TimeTracking(12l, 2l, "Hausübung 1 fertiggestellt", parseTimeData(
 					"2:51")));
-			mStudentData.addTimeTracking(5l, new TimeTracking(13l, 4l, "In der Mensa gegessen", new TimeData("0:12")));
-			mStudentData.addTimeTracking(5l, new TimeTracking(14l, 4l, "Semester verpennt", new TimeData("80:00")));
+			mStudentData.addTimeTracking(5l, new TimeTracking(13l, 4l, "In der Mensa gegessen", parseTimeData("0:12")));
+			mStudentData.addTimeTracking(5l, new TimeTracking(14l, 4l, "Semester verpennt", parseTimeData("80:00")));
 
 			
 			// Datenbanken
-			mStudentData.addTimeTracking(6l, new TimeTracking(14l, 0l, "Vorlesung gehabt", new TimeData("1:30")));
-			mStudentData.addTimeTracking(6l, new TimeTracking(15l, 2l, "Hausübung 1 ist endlich fertig", new TimeData(
+			mStudentData.addTimeTracking(6l, new TimeTracking(14l, 0l, "Vorlesung gehabt", parseTimeData("1:30")));
+			mStudentData.addTimeTracking(6l, new TimeTracking(15l, 2l, "Hausübung 1 ist endlich fertig", parseTimeData(
 					"4:22")));
-			mStudentData.addTimeTracking(6l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("80:00")));
+			mStudentData.addTimeTracking(6l, new TimeTracking(13l, 4l, "Semester verpennt", parseTimeData("80:00")));
 
 			// SWT-P (Kurs Volkmer)
-			mStudentData.addTimeTracking(9l, new TimeTracking(16l, 1l, "Praktika Stunde gehabt", new TimeData("3:00")));
-			mStudentData.addTimeTracking(9l, new TimeTracking(17l, 4l, "Besprechung", new TimeData("1:22")));
-			mStudentData.addTimeTracking(9l, new TimeTracking(13l, 4l, "Semester verpennt", new TimeData("91:00")));
+			mStudentData.addTimeTracking(9l, new TimeTracking(16l, 1l, "Praktika Stunde gehabt", parseTimeData("3:00")));
+			mStudentData.addTimeTracking(9l, new TimeTracking(17l, 4l, "Besprechung", parseTimeData("1:22")));
+			mStudentData.addTimeTracking(9l, new TimeTracking(13l, 4l, "Semester verpennt", parseTimeData("91:00")));
 		}
+	}
+	
+	private static TimeData parseTimeData(String time){
+		TimeData t = new TimeData();
+		t.parseString(time);
+		return t;
 	}
 
 	private static void createTeacherData() {
@@ -303,21 +309,21 @@ public class StaticModuleData {
 												// Datenbank stehen w�rde)
 					new TimeStatisticData(0l, // KategorieID (so wie sie in der
 												// Datenbank stehen w�rde)
-							new TimeData("14:13"))); // Gesamtzeit aller
+							parseTimeData("14:13"))); // Gesamtzeit aller
 														// Studenten innerhalb
 														// dieser Kategorie
 
-			mTeacherData.addTimeStatistic(2l, new TimeStatisticData(1l, new TimeData("3:12")));
-			mTeacherData.addTimeStatistic(2l, new TimeStatisticData(2l, new TimeData("1:12")));
-			mTeacherData.addTimeStatistic(2l, new TimeStatisticData(3l, new TimeData("2:12")));
-			mTeacherData.addTimeStatistic(2l, new TimeStatisticData(4l, new TimeData("4:12")));
+			mTeacherData.addTimeStatistic(2l, new TimeStatisticData(1l, parseTimeData("3:12")));
+			mTeacherData.addTimeStatistic(2l, new TimeStatisticData(2l, parseTimeData("1:12")));
+			mTeacherData.addTimeStatistic(2l, new TimeStatisticData(3l, parseTimeData("2:12")));
+			mTeacherData.addTimeStatistic(2l, new TimeStatisticData(4l, parseTimeData("4:12")));
 
 			// Betriebssysteme
-			mTeacherData.addTimeStatistic(7l, new TimeStatisticData(0l, new TimeData("12:12")));
-			mTeacherData.addTimeStatistic(7l, new TimeStatisticData(1l, new TimeData("4:42")));
-			mTeacherData.addTimeStatistic(7l, new TimeStatisticData(2l, new TimeData("5:32")));
-			mTeacherData.addTimeStatistic(7l, new TimeStatisticData(3l, new TimeData("7:22")));
-			mTeacherData.addTimeStatistic(7l, new TimeStatisticData(4l, new TimeData("8:12")));
+			mTeacherData.addTimeStatistic(7l, new TimeStatisticData(0l, parseTimeData("12:12")));
+			mTeacherData.addTimeStatistic(7l, new TimeStatisticData(1l, parseTimeData("4:42")));
+			mTeacherData.addTimeStatistic(7l, new TimeStatisticData(2l, parseTimeData("5:32")));
+			mTeacherData.addTimeStatistic(7l, new TimeStatisticData(3l, parseTimeData("7:22")));
+			mTeacherData.addTimeStatistic(7l, new TimeStatisticData(4l, parseTimeData("8:12")));
 		}
 	}
 

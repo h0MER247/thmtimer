@@ -64,6 +64,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 
 	private class MyExpandableListAdapter extends BaseExpandableListAdapter {
 		private Context mContext;
+
 		public MyExpandableListAdapter(Context context) {
 			mContext = context;
 		}
@@ -83,13 +84,12 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 
 			// Anzahl Studenten in diesem Kurs
 			case 0:
-				v = LayoutInflater.from(mContext).inflate(R.layout.listitem_teachercoursedetail_students, parent,
-						false);
+				v = LayoutInflater.from(mContext)
+						.inflate(R.layout.listitem_teachercoursedetail_students, parent, false);
 
 				TextView studentCount = (TextView) v.findViewById(R.id.teachercoursedetail_txtStudentCount);
 
-				studentCount.setText(mContext.getText(R.string.students) + ": "
-						+ mCourse.getStudentCount().toString());
+				studentCount.setText(mContext.getText(R.string.students) + ": " + mCourse.getStudentCount().toString());
 				break;
 
 			// Zeitverteilung und PieChart
@@ -132,7 +132,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 					//
 					// Tortenst�ck hinzuf�gen
 					//
-					pieChart.addValue(td.getTimeInSeconds().floatValue());
+					pieChart.addValue((float) td.getTimeInSeconds());
 					pieChartLegend.addLabel(category.getDescription());
 				}
 
@@ -158,8 +158,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 
 		@Override
 		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-			View v = LayoutInflater.from(mContext)
-					.inflate(R.layout.listitem_teachercoursedetail_header, parent, false);
+			View v = LayoutInflater.from(mContext).inflate(R.layout.listitem_teachercoursedetail_header, parent, false);
 
 			TextView header = (TextView) v.findViewById(R.id.teachercoursedetail_txtParentHeader);
 

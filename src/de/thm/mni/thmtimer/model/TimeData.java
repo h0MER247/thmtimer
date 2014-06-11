@@ -4,26 +4,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TimeData implements Comparable<TimeData> {
-
-	private final Pattern m_pattern = Pattern.compile("^(\\d+):([0-5]?\\d)$"); // Format
-																				// HH:MM
-
-	private Integer mHours;
-	private Integer mMinutes;
+	
+	// Format HH:MM
+	private final Pattern m_pattern = Pattern.compile("^(\\d+):([0-5]?\\d)$");
+	
+	private int mHours;
+	private int mMinutes;
 
 	public TimeData() {
 		mHours = 0;
 		mMinutes = 0;
 	}
 
-	public TimeData(String time) {
-		if (!parseString(time)) {
-			mHours = 0;
-			mMinutes = 0;
-		}
-	}
-
-	public TimeData(Integer hours, Integer minutes) {
+	public TimeData(int hours, int minutes) {
 		mHours = hours;
 		mMinutes = minutes;
 	}
@@ -40,37 +33,29 @@ public class TimeData implements Comparable<TimeData> {
 		return false;
 	}
 
-	public void setHours(Integer hours) {
+	public void setHours(int hours) {
 		mHours = hours;
 	}
 
-	public Integer getHours() {
+	public int getHours() {
 		return mHours;
 	}
 
-	public void setMinutes(Integer minutes) {
-		mMinutes = minutes;
-	}
-
-	public Integer getMinutes() {
-		return mMinutes;
-	}
-
-	public void setTimeInSeconds(Integer seconds) {
+	public void setTimeInSeconds(int seconds) {
 		mHours = seconds / 3600;
 		mMinutes = (seconds - (mHours * 3600)) / 60;
 	}
 
-	public Integer getTimeInSeconds() {
+	public int getTimeInSeconds() {
 		return mHours * 3600 + mMinutes * 60;
 	}
 
-	public void setTimeInMinutes(Integer minutes) {
+	public void setTimeInMinutes(int minutes) {
 		mHours = minutes / 60;
 		mMinutes = minutes - (mHours * 60);
 	}
 
-	public Integer getTimeInMinutes() {
+	public int getTimeInMinutes() {
 		return (mHours * 60) + mMinutes;
 	}
 

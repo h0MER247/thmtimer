@@ -85,12 +85,13 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 			@Override
 			public void onClick(View view) {
 				
-				TimeData time = new TimeData(mTimeEntry.getText().toString());
+				TimeData time = new TimeData();
+				time.parseString(mTimeEntry.getText().toString());
 				
 				TimePickerDialog picker = new TimePickerDialog(TrackTimeActivity.this,
 						                                       TrackTimeActivity.this,
 						                                       Math.min(time.getHours(), 23),
-						                                       Math.min(time.getMinutes(), 59),
+						                                       Math.min(time.getTimeInMinutes(), 59),
 						                                       true);
 				
 				picker.setTitle(R.string.enter_time_choose_header);
@@ -127,7 +128,7 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		
 		TimeData time = new TimeData();
 		time.setHours(hourOfDay);
-		time.setMinutes(minute);
+		time.setTimeInMinutes(minute);
 		
 		mTimeEntry.setText(time.toString());		
 	}
