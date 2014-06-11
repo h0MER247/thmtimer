@@ -18,11 +18,22 @@ public class TimeDataTest {
 	@Test
 	public void testParseString() {
 		TimeData t = new TimeData();
-		boolean result = t.parseString("xzy");
-		assertFalse(result);
+		try {
+			t.parseString("xzy");
+			assert (false);
+		} catch (IllegalArgumentException e) {
+			// This must fail
+			assert (true);
+		}
 
-		result = t.parseString("1:30");
-		assertTrue(result);
+		try {
+			t.parseString("1:30");
+			assert (true);
+		} catch (IllegalArgumentException e) {
+			// This shouldn't fail
+			assert (false);
+		}
+
 	}
 
 	@Test

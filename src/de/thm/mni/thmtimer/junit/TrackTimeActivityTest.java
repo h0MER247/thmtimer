@@ -18,7 +18,6 @@ import android.widget.Spinner;
 public class TrackTimeActivityTest extends ActivityUnitTestCase<TrackTimeActivity> {
 	
 	private Intent mLaunchIntent;
-	private EditText mTimeEdit;
 	private Spinner mUsageSpinner;
 	private Button mButton;
 	TimeData time = new TimeData();
@@ -36,13 +35,7 @@ public class TrackTimeActivityTest extends ActivityUnitTestCase<TrackTimeActivit
                 .getTargetContext(), TrackTimeActivity.class);
         startActivity(mLaunchIntent, null, null);
         mUsageSpinner = (Spinner) getActivity().findViewById(R.id.usageSpinner);
-        mTimeEdit = (EditText) getActivity().findViewById(R.id.enterTime);   
         mButton = (Button) getActivity().findViewById(R.id.enterTime);  
-	}
-
-	public void testTimeEdit(){
-		assertNotNull("No Time input", mTimeEdit);
-		assertTrue(time.parseString(mTimeEdit.getText().toString()));
 	}
 	
 	public void testSpinner(){

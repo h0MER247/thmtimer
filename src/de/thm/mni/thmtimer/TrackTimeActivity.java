@@ -13,98 +13,85 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 
 public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTimeSetListener {
-	
+
 	private Long mCourseID;
 	private EditText mTimeEntry;
 	private Spinner mUsageSpinner;
 	private Button mChooseButton;
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.tracktimeactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		Bundle extras = getIntent().getExtras();
 		mCourseID = extras.getLong("course_id");
-		
-		// Kategorie 
-		mUsageSpinner = (Spinner)findViewById(R.id.usageSpinner);
-		mUsageSpinner.setAdapter(new ArrayAdapter<TimeCategory>(this,
-				                                                android.R.layout.simple_spinner_dropdown_item,
-				                                                StaticModuleData.getTimeCategorys()));
-		
+
+		// Kategorie
+		mUsageSpinner = (Spinner) findViewById(R.id.usageSpinner);
+		mUsageSpinner.setAdapter(new ArrayAdapter<TimeCategory>(this, android.R.layout.simple_spinner_dropdown_item,
+				StaticModuleData.getTimeCategorys()));
+
 		// Textfeld für den Zeiteintrag
-		mTimeEntry = (EditText)findViewById(R.id.timeEntry);
-		
+		mTimeEntry = (EditText) findViewById(R.id.timeEntry);
+
 		// Button zum Eintragen in die Liste
-		Button btnEnter = (Button)findViewById(R.id.enterTime);
+		Button btnEnter = (Button) findViewById(R.id.enterTime);
 		btnEnter.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View view) {
-				
 				TimeData time = new TimeData();
-				
-				Boolean validFormat = time.parseString(mTimeEntry.getText().toString());
-				Boolean validTime   = time.getTimeInMinutes() > 0;
-				
-				
-				if(!validFormat) {
-					
-					Toast.makeText(getApplicationContext(),
-							       getString(R.string.enter_time_error_format),
-							       Toast.LENGTH_LONG).show();
+
+				try {
+					time.parseString(mTimeEntry.getText().toString());
+				} catch (IllegalArgumentException e) {
+					Toast.makeText(getApplicationContext(), getString(R.string.enter_time_error_format),
+							Toast.LENGTH_LONG).show();
+					return;
 				}
-				else if(!validTime) {
-					
-					Toast.makeText(getApplicationContext(),
-							       getString(R.string.enter_time_error_zerotime),
-							       Toast.LENGTH_LONG).show();
+				if (time.getTimeInMinutes() <= 0) {
+					Toast.makeText(getApplicationContext(), getString(R.string.enter_time_error_zerotime),
+							Toast.LENGTH_LONG).show();
+					return;
 				}
-				else {
-					
-					TimeCategory category = (TimeCategory)mUsageSpinner.getSelectedItem();
-						
-					TimeTracking data = new TimeTracking(-1l, category.getID(), "Gelernt", time);
-					StaticModuleData.getStudentData().addTimeTracking(mCourseID, data);
-					
-					setResult(Activity.RESULT_OK);
-					finish();
-				}
+				TimeCategory category = (TimeCategory) mUsageSpinner.getSelectedItem();
+
+				TimeTracking data = new TimeTracking(-1l, category.getID(), "Gelernt", time);
+				StaticModuleData.getStudentData().addTimeTracking(mCourseID, data);
+
+				setResult(Activity.RESULT_OK);
+				finish();
 			}
 		});
-		
+
 		// Button zum Wählen der Zeit
-		mChooseButton = (Button)findViewById(R.id.chooseTime);
+		mChooseButton = (Button) findViewById(R.id.chooseTime);
 		mChooseButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View view) {
-				
+
 				TimeData time = new TimeData();
 				time.parseString(mTimeEntry.getText().toString());
-				
-				TimePickerDialog picker = new TimePickerDialog(TrackTimeActivity.this,
-						                                       TrackTimeActivity.this,
-						                                       Math.min(time.getTimeInHours(), 23),
-						                                       Math.min(time.getTimeInMinutes(), 59),
-						                                       true);
-				
+
+				TimePickerDialog picker = new TimePickerDialog(TrackTimeActivity.this, TrackTimeActivity.this, Math
+						.min(time.getTimeInHours(), 23), Math.min(time.getTimeInMinutes(), 59), true);
+
 				picker.setTitle(R.string.enter_time_choose_header);
 				picker.show();
 			}
 		});
-		
+
 		// Zeitdaten von der Stoppuhr
-		if(extras.containsKey("stopped_time")) {
-			
+		if (extras.containsKey("stopped_time")) {
+
 			TimeData t = new TimeData();
 			t.setTimeInMinutes(extras.getInt("stopped_time"));
-			
+
 			mTimeEntry.setText(t.toString());
 			mTimeEntry.setEnabled(false);
 			mChooseButton.setEnabled(false);
@@ -113,7 +100,7 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
+
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			finish();
@@ -125,11 +112,11 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 
 	@Override
 	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-		
+
 		TimeData time = new TimeData();
 		time.setTimeInHours(hourOfDay);
 		time.setTimeInMinutes(minute);
-		
-		mTimeEntry.setText(time.toString());		
+
+		mTimeEntry.setText(time.toString());
 	}
 }
