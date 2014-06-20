@@ -3,7 +3,7 @@ package de.thm.mni.thmtimer.model;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.activity.InvalidActivityException;
+//import javax.activity.InvalidActivityException;
 
 public class TimeData implements Comparable<TimeData> {
 

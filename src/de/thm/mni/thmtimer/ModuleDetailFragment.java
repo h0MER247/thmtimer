@@ -5,6 +5,7 @@ import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.app.Dialog;
 import android.support.v4.app.DialogFragment;
 import android.text.Html;
+import android.util.Log;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ public class ModuleDetailFragment extends DialogFragment implements
 			mDescription, mExpenditure, mRequirement, mTestingMethod, mSWS,
 			mFrequency, mPrereq;
 	private Button mBtnEnter;
+	private Long id;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class ModuleDetailFragment extends DialogFragment implements
 		mBtnEnter = (Button) view.findViewById(R.id.enter);
 		mBtnEnter.setOnClickListener(this);
 
-		Long id = getArguments().getLong("id", -1);
+		id = getArguments().getLong("id", -1);
 		Module m = StaticModuleData.findModule(id);
 
 		mModuleName.setText(m.getName());
@@ -83,11 +85,13 @@ public class ModuleDetailFragment extends DialogFragment implements
 		if (mDialog != null) {
 			mDialog.dismiss();
 		}
+		dismiss();
 	}
 
 	private void enterModule() {
 		// send Information to Server
-
+		//Log.i("", id.toString());
+		StaticModuleData.getStudentData().addCourse(id);
 	}
 
 }
