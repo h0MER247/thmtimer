@@ -70,7 +70,7 @@ public class TimeData implements Comparable<TimeData> {
 
 	@Override
 	public String toString() {
-		return String.format("%02d:%02d", mMinutes / 60, mMinutes % 60);
+		return String.format("%02dh", getTimeInHours());
 	}
 
 	@Override
