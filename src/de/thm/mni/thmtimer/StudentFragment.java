@@ -127,7 +127,7 @@ public class StudentFragment extends Fragment {
 				}
 				TimeData delta = new TimeData();
 				delta.setTimeInMinutes(Math.abs((int)deltaMinutes));
-				time.setText(op+delta.toString());
+				time.setText(op+delta.getTimeInHours()+"h");
 			}
 			subtext.setText(course.getTeacher());
 
