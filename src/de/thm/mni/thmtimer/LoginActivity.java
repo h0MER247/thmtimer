@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import de.thm.thmtimer.entities.User;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,11 +37,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 
 			@Override
 			public void onClick(View view) {
-
 				new FetchSecuredResourceTask().execute();
-				// Intent intent = new Intent(LoginActivity.this,
-				// ModuleListActivity.class);
-				// startActivity(intent);
 			}
 		});
 	}
@@ -86,7 +83,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 			restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
 
 			try {
-				// Make the network requesst
+				// Make the network request
 				Log.d(TAG, url);
 				ResponseEntity<User> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, User.class);
 			    return response.getBody();
@@ -102,7 +99,11 @@ public class LoginActivity extends AbstractAsyncActivity {
 		@Override
 		protected void onPostExecute(User result) {
 			dismissProgressDialog();
-			displayResponse(result);
+			if (result != null){
+				displayResponse(result);
+				Intent intent = new Intent(LoginActivity.this, ModuleListActivity.class);
+				startActivity(intent);
+			}
 		}
 
 	}
