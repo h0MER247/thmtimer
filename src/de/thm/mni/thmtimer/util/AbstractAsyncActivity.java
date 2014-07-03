@@ -16,6 +16,7 @@
 
 package de.thm.mni.thmtimer.util;
 
+import de.thm.mni.thmtimer.R;
 import android.app.Activity;
 import android.app.ProgressDialog;
 
@@ -44,7 +45,7 @@ public abstract class AbstractAsyncActivity extends Activity {
 	// Public methods
 	// ***************************************
 	public void showLoadingProgressDialog() {
-		this.showProgressDialog("Loading. Please wait...");
+		this.showProgressDialog(getString(R.string.connection_loading));
 	}
 
 	public void showProgressDialog(CharSequence message) {

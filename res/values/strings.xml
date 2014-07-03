@@ -93,4 +93,5 @@
     
     <!-- Connection -->
     <string name="connection_unreachable">Server unreachable</string>
+    <string name="connection_loading">Loading. Please wait...</string>
 </resources>

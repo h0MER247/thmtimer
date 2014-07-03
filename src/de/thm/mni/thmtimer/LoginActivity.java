@@ -8,7 +8,9 @@ import de.thm.mni.thmtimer.util.Connection;
 import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import de.thm.thmtimer.entities.User;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,13 +22,25 @@ import android.widget.Toast;
 
 public class LoginActivity extends AbstractAsyncActivity {
 
+	private SharedPreferences sharedPref;
+	private static String username_key = "lastUserName";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.loginactivity);
+		this.sharedPref = getPreferences(Context.MODE_PRIVATE);
 
 		// ONLY FOR STATIC DATA
 		StaticModuleData.fillData();
+
+		// Restore last username
+		EditText editText = (EditText) findViewById(R.id.user);
+		String lastUserName = sharedPref.getString(username_key, "");
+		if (!lastUserName.isEmpty()){
+			editText.setText(lastUserName);
+			findViewById(R.id.password).requestFocus();
+		}
 
 		Button btnLogin = (Button) findViewById(R.id.btn_login);
 		btnLogin.setOnClickListener(new OnClickListener() {
@@ -39,6 +53,12 @@ public class LoginActivity extends AbstractAsyncActivity {
 
 	private void displayResponse(String message) {
 		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+	}
+
+	private void saveUserName(String username) {
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putString(username_key, username);
+		editor.commit();
 	}
 
 	private class FetchSecuredResourceTask extends AsyncTask<Void, Void, User> {
@@ -76,6 +96,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 		protected void onPostExecute(User result) {
 			dismissProgressDialog();
 			if (result != null) {
+				saveUserName(result.getThmUsername());
 				displayResponse(String.format(getString(R.string.login_greeting), result.getFirstName()));
 				Intent intent = new Intent(LoginActivity.this, ModuleListActivity.class);
 				startActivity(intent);

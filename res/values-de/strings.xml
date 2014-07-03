@@ -87,5 +87,6 @@
     
     <!-- Connection -->
     <string name="connection_unreachable">Server nicht erreichbar</string>
+    <string name="connection_loading">Lade. Bitte warten...</string>
 
 </resources>
