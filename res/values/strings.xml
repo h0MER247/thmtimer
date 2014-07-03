@@ -7,6 +7,8 @@
     <string name="user">User</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string name="login_failed">Wrong username or password.</string>
+    <string name="login_greeting">Hi %s!</string>
 
     <!-- ModuleListActivity -->
     <string name="tab1">Student</string>

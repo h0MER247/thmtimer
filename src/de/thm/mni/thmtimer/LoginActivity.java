@@ -1,6 +1,5 @@
 package de.thm.mni.thmtimer;
 
-import java.util.Collections;
 
 import org.springframework.http.*;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
@@ -26,7 +25,6 @@ public class LoginActivity extends AbstractAsyncActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		this.setContentView(R.layout.loginactivity);
 
 		// ONLY FOR STATIC DATA
@@ -42,8 +40,8 @@ public class LoginActivity extends AbstractAsyncActivity {
 		});
 	}
 
-	private void displayResponse(User response) {
-		Toast.makeText(this, "Hallo " + response.getFirstName()	, Toast.LENGTH_LONG).show();
+	private void displayResponse(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 	}
 
 	private class FetchSecuredResourceTask extends AsyncTask<Void, Void, User> {
@@ -66,7 +64,6 @@ public class LoginActivity extends AbstractAsyncActivity {
 
 		@Override
 		protected User doInBackground(Void... params) {
-			
 			final String url = getString(R.string.base_uri) + "/users/" + username;
 
 			// Populate the HTTP Basic Authentitcation header with the username
@@ -100,9 +97,11 @@ public class LoginActivity extends AbstractAsyncActivity {
 		protected void onPostExecute(User result) {
 			dismissProgressDialog();
 			if (result != null){
-				displayResponse(result);
+				displayResponse(String.format(getString(R.string.login_greeting), result.getFirstName()));
 				Intent intent = new Intent(LoginActivity.this, ModuleListActivity.class);
 				startActivity(intent);
+			} else {
+				displayResponse(getString(R.string.login_failed));
 			}
 		}
 

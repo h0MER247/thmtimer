@@ -7,6 +7,8 @@
     <string name="user">Benutzerkennung</string>
     <string name="password">Passwort</string>
     <string name="login">Anmelden</string>
+    <string name="login_failed">Falsche Benutzerkennung oder Passwort.</string>
+    <string name="login_greeting">Hallo %s!</string>
 
     <!-- ModuleListActivity -->
     <string name="tab1">Student</string>
