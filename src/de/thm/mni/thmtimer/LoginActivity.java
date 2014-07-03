@@ -11,10 +11,14 @@ import org.springframework.web.client.RestTemplate;
 import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import de.thm.thmtimer.entities.User;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -44,6 +48,25 @@ public class LoginActivity extends AbstractAsyncActivity {
 
 	private void displayResponse(User response) {
 		Toast.makeText(this, "Hallo " + response.getFirstName()	, Toast.LENGTH_LONG).show();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.loginactivity, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			new SettingsFragment().show(ft, "settingsDialog");
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	private class FetchSecuredResourceTask extends AsyncTask<Void, Void, User> {
@@ -81,7 +104,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 
 			// Add the String message converter
 			restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
-
+			
 			try {
 				// Make the network request
 				Log.d(TAG, url);

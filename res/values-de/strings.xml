@@ -4,6 +4,7 @@
 
     <!-- LoginActivity -->
     <string name="logoDescription">company_logo</string>
+    <string name="settings">Einstellungen</string>
     <string name="user">Benutzerkennung</string>
     <string name="password">Passwort</string>
     <string name="login">Anmelden</string>
@@ -82,5 +83,9 @@
     <string name="stopwatch_abort_message">Möchten Sie die Zeiterfassung wirklich abbrechen?</string>
     <string name="stopwatch_abort_positive">Ja</string>
     <string name="stopwatch_abort_negative">Nein</string>
+    
+    <!-- SettingsFragment -->
+    <string name="settingUsername">Benutzername merken</string>
+        <string name="confirm">Bestätigen</string>
 
 </resources>
