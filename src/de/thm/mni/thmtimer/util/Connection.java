@@ -7,40 +7,53 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
 import android.util.Log;
 
-
 public class Connection {
 	private static String base_uri = "http://thmtimer.mni.thm.de:80";
 	public static String username;
 	public static String password;
-	
+
 	protected static final String TAG = AbstractAsyncActivity.class.getSimpleName();
 
 	/**
 	 * Make a server request.
-	 * @param url	 The REST url. Domain name will be prepended. Must begin with a slash.
-	 * @param method GET, POST, PUT, DELETE
-	 * @param clazz  The type of the return value
-	 * @return 
+	 * 
+	 * @param url
+	 *            The REST url. Domain name will be prepended. Must begin with a
+	 *            slash.
+	 * @param method
+	 *            GET, POST, PUT, DELETE
+	 * @param responseType
+	 *            The type of the return value
+	 * @throws HttpClientErrorException
+	 *             When access is not allowed (4xx code)
+	 * @throws ResourceAccessException
+	 *             When an I/O Error occurs
+	 * 
+	 * @return The response body
 	 */
-	public static <T> T request(String url, HttpMethod method, Class<T> responseType){
-		if (username == null || password == null){
+	public static <T> T request(String url, HttpMethod method, Class<T> responseType) throws ResourceAccessException,
+			HttpClientErrorException {
+		if (username == null || password == null) {
 			throw new IllegalStateException("Username and/or password not set");
 		}
-		if (!url.startsWith("/")){
+		if (!url.startsWith("/")) {
 			throw new IllegalArgumentException("url must start with a forward slash!");
 		}
 		url = base_uri + url;
-		
+
 		Log.d(TAG, "URL:" + url);
 		Log.d(TAG, "Method: " + method.toString());
 		Log.d(TAG, "Response type: " + responseType.toString());
-		
-		// Populate the HTTP Basic Authentitcation header with the username and password
+
+		// Populate the HTTP Basic Authentitcation header with the username and
+		// password
 		HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
 		HttpHeaders requestHeaders = new HttpHeaders();
 		requestHeaders.setAuthorization(authHeader);
@@ -51,7 +64,7 @@ public class Connection {
 
 		// Add the String message converter
 		restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
-		
+
 		// Send the request
 		ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, responseType);
 		return response.getBody();

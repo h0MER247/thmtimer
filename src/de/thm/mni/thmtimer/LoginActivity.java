@@ -1,6 +1,5 @@
 package de.thm.mni.thmtimer;
 
-
 import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
@@ -31,7 +30,6 @@ public class LoginActivity extends AbstractAsyncActivity {
 
 		Button btnLogin = (Button) findViewById(R.id.btn_login);
 		btnLogin.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View view) {
 				new FetchSecuredResourceTask().execute();
@@ -44,7 +42,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 	}
 
 	private class FetchSecuredResourceTask extends AsyncTask<Void, Void, User> {
-		
+
 		private String errormessage;
 
 		@Override
@@ -61,8 +59,8 @@ public class LoginActivity extends AbstractAsyncActivity {
 
 		@Override
 		protected User doInBackground(Void... params) {
-			try{
-				return Connection.request("/users/" + Connection.username, HttpMethod.GET, User.class);	
+			try {
+				return Connection.request("/users/" + Connection.username, HttpMethod.GET, User.class);
 			} catch (HttpClientErrorException e) {
 				this.errormessage = getString(R.string.login_failed);
 				Log.e(TAG, e.getLocalizedMessage(), e);
@@ -77,7 +75,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 		@Override
 		protected void onPostExecute(User result) {
 			dismissProgressDialog();
-			if (result != null){
+			if (result != null) {
 				displayResponse(String.format(getString(R.string.login_greeting), result.getFirstName()));
 				Intent intent = new Intent(LoginActivity.this, ModuleListActivity.class);
 				startActivity(intent);
