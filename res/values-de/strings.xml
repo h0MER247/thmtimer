@@ -84,5 +84,8 @@
     <string name="stopwatch_abort_message">Möchten Sie die Zeiterfassung wirklich abbrechen?</string>
     <string name="stopwatch_abort_positive">Ja</string>
     <string name="stopwatch_abort_negative">Nein</string>
+    
+    <!-- Connection -->
+    <string name="connection_unreachable">Server nicht erreichbar</string>
 
 </resources>

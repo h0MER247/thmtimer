@@ -91,4 +91,6 @@
     <string name="stopwatch_abort_positive">Yes</string>
     <string name="stopwatch_abort_negative">No</string>
     
+    <!-- Connection -->
+    <string name="connection_unreachable">Server unreachable</string>
 </resources>

@@ -2,11 +2,10 @@ package de.thm.mni.thmtimer;
 
 
 import org.springframework.http.*;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
 
+import de.thm.mni.thmtimer.util.Connection;
 import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import de.thm.thmtimer.entities.User;
@@ -45,10 +44,8 @@ public class LoginActivity extends AbstractAsyncActivity {
 	}
 
 	private class FetchSecuredResourceTask extends AsyncTask<Void, Void, User> {
-
-		private String username;
-
-		private String password;
+		
+		private String errormessage;
 
 		@Override
 		protected void onPreExecute() {
@@ -56,38 +53,22 @@ public class LoginActivity extends AbstractAsyncActivity {
 
 			// build the message object
 			EditText editText = (EditText) findViewById(R.id.user);
-			this.username = editText.getText().toString();
+			Connection.username = editText.getText().toString();
 
 			editText = (EditText) findViewById(R.id.password);
-			this.password = editText.getText().toString();
+			Connection.password = editText.getText().toString();
 		}
 
 		@Override
 		protected User doInBackground(Void... params) {
-			final String url = getString(R.string.base_uri) + "/users/" + username;
-
-			// Populate the HTTP Basic Authentitcation header with the username
-			// and password
-			HttpAuthentication authHeader = new HttpBasicAuthentication(username, password);
-			HttpHeaders requestHeaders = new HttpHeaders();
-			requestHeaders.setAuthorization(authHeader);
-			HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
-
-			// Create a new RestTemplate instance
-			RestTemplate restTemplate = new RestTemplate();
-
-			// Add the String message converter
-			restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
-
-			try {
-				// Make the network request
-				Log.d(TAG, url);
-				ResponseEntity<User> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, User.class);
-			    return response.getBody();
+			try{
+				return Connection.request("/users/" + Connection.username, HttpMethod.GET, User.class);	
 			} catch (HttpClientErrorException e) {
+				this.errormessage = getString(R.string.login_failed);
 				Log.e(TAG, e.getLocalizedMessage(), e);
 				return null;
 			} catch (ResourceAccessException e) {
+				this.errormessage = getString(R.string.connection_unreachable);
 				Log.e(TAG, e.getLocalizedMessage(), e);
 				return null;
 			}
@@ -101,7 +82,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 				Intent intent = new Intent(LoginActivity.this, ModuleListActivity.class);
 				startActivity(intent);
 			} else {
-				displayResponse(getString(R.string.login_failed));
+				displayResponse(this.errormessage);
 			}
 		}
 
