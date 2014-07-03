@@ -13,7 +13,8 @@ import android.widget.CheckBox;
 
 public class SettingsFragment extends DialogFragment implements OnClickListener {
 
-	private static final String FILE_NAME = "SETTINGS";
+	public static final String FILE_NAME = "SETTINGS";
+	public static final String BOOL_USER = "settingUsername";
 	private static Dialog dialog;
 	private SharedPreferences settings;
 
@@ -37,7 +38,7 @@ public class SettingsFragment extends DialogFragment implements OnClickListener 
 
 		// get views
 		check = (CheckBox) view.findViewById(R.id.settingUsername);
-		check.setChecked(settings.getBoolean("settingUsername", false));
+		check.setChecked(settings.getBoolean(BOOL_USER, false));
 		
 		Button but = (Button) view.findViewById(R.id.saveSettings);
 		but.setOnClickListener(this);
@@ -48,7 +49,7 @@ public class SettingsFragment extends DialogFragment implements OnClickListener 
 	@Override
 	public void onClick(View v) {
 		//save settings
-		settings.edit().putBoolean("settingUsername", check.isChecked()).commit();
+		settings.edit().putBoolean(BOOL_USER, check.isChecked()).commit();
 		dialog.dismiss();
 	}
 }

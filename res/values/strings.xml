@@ -8,6 +8,8 @@
     <string name="user">User</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string name="login_failed">Wrong username or password.</string>
+    <string name="login_greeting">Hi %s!</string>
 
     <!-- ModuleListActivity -->
     <string name="tab1">Student</string>
@@ -94,4 +96,7 @@
     <string name="settingUsername">Remember Username</string>
     <string name="confirm">Confirm</string>
     
+    <!-- Connection -->
+    <string name="connection_unreachable">Server unreachable</string>
+    <string name="connection_loading">Loading. Please wait...</string>
 </resources>

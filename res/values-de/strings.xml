@@ -8,6 +8,8 @@
     <string name="user">Benutzerkennung</string>
     <string name="password">Passwort</string>
     <string name="login">Anmelden</string>
+    <string name="login_failed">Falsche Benutzerkennung oder Passwort.</string>
+    <string name="login_greeting">Hallo %s!</string>
 
     <!-- ModuleListActivity -->
     <string name="tab1">Student</string>
@@ -87,5 +89,9 @@
     <!-- SettingsFragment -->
     <string name="settingUsername">Benutzername merken</string>
         <string name="confirm">Bestätigen</string>
+        
+    <!-- Connection -->
+    <string name="connection_unreachable">Server nicht erreichbar</string>
+    <string name="connection_loading">Lade. Bitte warten...</string>
 
 </resources>
