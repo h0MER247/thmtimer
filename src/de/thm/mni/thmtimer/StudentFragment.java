@@ -10,6 +10,7 @@ import de.thm.mni.thmtimer.model.Course;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -102,15 +103,34 @@ public class StudentFragment extends Fragment {
 				double percentSemester = (deltaDate / (FOUR_MONTHS / 100.0)) / 100.0;
 				int cp = StaticModuleData.findModule(course.getModuleID())
 						.getCreditPoints();
+				SharedPreferences settings = getActivity()
+						.getSharedPreferences(SettingsFragment.FILE_NAME, 0);
+				int minutesYellow = 60 * settings.getInt(
+						SettingsFragment.HOURS_YELLOW,
+						SettingsFragment.VAL_HOURS_YELLOW);
 				double thresholdMinutes = cp * 1800.0 * percentSemester;
 				double deltaMinutes = timeInvested.getTimeInMinutes()
 						- thresholdMinutes;
 				int red = 255, green = 255;
-				if (deltaMinutes < 0) {
-					green = (int) (255 + deltaMinutes);
+				int minutesGreen = 60 * settings.getInt(
+						SettingsFragment.HOURS_GREEN,
+						SettingsFragment.VAL_HOURS_GREEN);
+				int minutesRed = 60 * settings.getInt(
+						SettingsFragment.HOURS_RED,
+						SettingsFragment.VAL_HOURS_RED);
+				if (deltaMinutes < minutesYellow) {
+					double percentGreen = (minutesYellow-deltaMinutes) / (minutesYellow-minutesRed);
+					percentGreen = Math.abs(percentGreen);
+					percentGreen = percentGreen > 1.0 ? 0.0
+							: 1.0 - percentGreen;
+					green = (int) (255 * percentGreen);
 					green = green < 0 ? 0 : green;
 				} else {
-					red = (int) (255 - deltaMinutes);
+					double percentRed = (deltaMinutes-minutesYellow) / (minutesGreen-minutesYellow);
+					percentRed = Math.abs(percentRed);
+					percentRed = percentRed > 1.0 ? 0.0
+							: 1.0 - percentRed;
+					red = (int) (255 * percentRed);
 					red = red < 0 ? 0 : red;
 				}
 				GradientDrawable shape = (GradientDrawable) getResources()
@@ -119,15 +139,14 @@ public class StudentFragment extends Fragment {
 				time.setCompoundDrawablesWithIntrinsicBounds(null, null, shape,
 						null);
 				String op = "";
-				if(deltaMinutes<0) {
+				if (deltaMinutes < 0) {
 					op = "-";
-				}
-				else {
+				} else {
 					op = "+";
 				}
 				TimeData delta = new TimeData();
-				delta.setTimeInMinutes(Math.abs((int)deltaMinutes));
-				time.setText(op+delta.getTimeInHours()+"h");
+				delta.setTimeInMinutes(Math.abs((int) deltaMinutes));
+				time.setText(op + delta.getTimeInHours() + "h");
 			}
 			subtext.setText(course.getTeacher());
 

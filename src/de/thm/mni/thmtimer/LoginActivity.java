@@ -32,14 +32,14 @@ public class LoginActivity extends AbstractAsyncActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.loginactivity);
-		this.sharedPref = getPreferences(Context.MODE_PRIVATE);
+		this.sharedPref = getSharedPreferences(SettingsFragment.FILE_NAME,
+				Context.MODE_PRIVATE);
 
 		// ONLY FOR STATIC DATA
 		StaticModuleData.fillData();
 
 		// Restore last username
-		if (getSharedPreferences(SettingsFragment.FILE_NAME, 0).getBoolean(
-				SettingsFragment.BOOL_USER, false)) {
+		if (sharedPref.getBoolean(SettingsFragment.BOOL_USER, false)) {
 			EditText editText = (EditText) findViewById(R.id.user);
 			String lastUserName = sharedPref.getString(username_key, "");
 			if (!lastUserName.isEmpty()) {

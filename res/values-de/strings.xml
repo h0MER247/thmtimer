@@ -85,11 +85,14 @@
     <string name="stopwatch_abort_message">Möchten Sie die Zeiterfassung wirklich abbrechen?</string>
     <string name="stopwatch_abort_positive">Ja</string>
     <string name="stopwatch_abort_negative">Nein</string>
-    
+
     <!-- SettingsFragment -->
     <string name="settingUsername">Benutzername merken</string>
-        <string name="confirm">Bestätigen</string>
-        
+    <string name="at">bei</string>
+    <string name="color">Farbe</string>
+    <string name="colorAlert">GRÜN > GELB > ROT</string>
+    <string name="confirm">Bestätigen</string>
+
     <!-- Connection -->
     <string name="connection_unreachable">Server nicht erreichbar</string>
     <string name="connection_loading">Lade. Bitte warten...</string>

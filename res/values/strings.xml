@@ -94,6 +94,9 @@
     
     <!-- SettingsFragment -->
     <string name="settingUsername">Remember Username</string>
+    <string name="at">at</string>
+    <string name="colorAlert">GREEN > YELLOW > RED</string>
+    <string name="color">Color</string>
     <string name="confirm">Confirm</string>
     
     <!-- Connection -->
