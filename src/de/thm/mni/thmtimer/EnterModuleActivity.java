@@ -94,7 +94,7 @@ public class EnterModuleActivity extends FragmentActivity {
 		/* 
 		 * funktioniert noch nicht :-(
 		 * 
-		 * 
+		 */
 		if(fragment.equals("teacher")){
 			mTeacherCreateCourse = new TeacherCreateCourseFragment();
 			Bundle b = new Bundle();
@@ -104,7 +104,7 @@ public class EnterModuleActivity extends FragmentActivity {
 
 			mPager.setCurrentItem(1);
 	
-		} */
+		} 
 		if(fragment.equals("student")){
 			mModuleDetail = new ModuleDetailFragment();
 			Bundle b = new Bundle();

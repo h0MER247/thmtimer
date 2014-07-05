@@ -6,8 +6,8 @@ import de.thm.mni.thmtimer.model.Course;
 import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +60,6 @@ public class TeacherCreateCourseFragment extends Fragment{
 				try {
 					date = sdfToDate.parse(sdate);
 				} catch (java.text.ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
