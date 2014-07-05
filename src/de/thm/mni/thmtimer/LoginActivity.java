@@ -20,13 +20,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class LoginActivity extends AbstractAsyncActivity {
 
 	private SharedPreferences sharedPref;
-	private static String username_key = "lastUserName";
+	private static final String SETTINGS_USERNAME = "lastUserName";
+	private static final String SETTINGS_PASSWORD = "lastPassword";
+	private static final String SETTINGS_REMEMBERME = "rememberMe";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,24 +38,37 @@ public class LoginActivity extends AbstractAsyncActivity {
 		this.sharedPref = getSharedPreferences(SettingsFragment.FILE_NAME,
 				Context.MODE_PRIVATE);
 
+		Button btnLogin = (Button) findViewById(R.id.btn_login);
+		EditText editUser = (EditText) findViewById(R.id.user);
+		EditText editPassword = (EditText) findViewById(R.id.password);
+		CheckBox rememberMe = (CheckBox) findViewById(R.id.remember_me);
+
 		// ONLY FOR STATIC DATA
 		StaticModuleData.fillData();
 
+		rememberMe.setChecked(sharedPref.getBoolean(SETTINGS_REMEMBERME, false));
+
 		// Restore last username
-		if (sharedPref.getBoolean(SettingsFragment.BOOL_USER, false)) {
-			EditText editText = (EditText) findViewById(R.id.user);
-			String lastUserName = sharedPref.getString(username_key, "");
+		if (sharedPref.getBoolean(SettingsFragment.BOOL_USER, false) ||
+				sharedPref.getBoolean(SETTINGS_REMEMBERME, false)) {
+			String lastUserName = sharedPref.getString(SETTINGS_USERNAME, "");
 			if (!lastUserName.isEmpty()) {
-				editText.setText(lastUserName);
+				editUser.setText(lastUserName);
 				findViewById(R.id.password).requestFocus();
 			}
 		}
 
-		Button btnLogin = (Button) findViewById(R.id.btn_login);
+		// Remember login
+		String password = sharedPref.getString(SETTINGS_PASSWORD, "");
+		if (sharedPref.getBoolean(SETTINGS_REMEMBERME, false) && !password.isEmpty()) {
+			editPassword.setText(password);
+			new LoginTask().execute();
+		}
+
 		btnLogin.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new FetchSecuredResourceTask().execute();
+				new LoginTask().execute();
 			}
 		});
 	}
@@ -80,13 +96,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 		}
 	}
 
-	private void saveUserName(String username) {
-		SharedPreferences.Editor editor = sharedPref.edit();
-		editor.putString(username_key, username);
-		editor.commit();
-	}
-
-	private class FetchSecuredResourceTask extends AsyncTask<Void, Void, User> {
+	private class LoginTask extends AsyncTask<Void, Void, User> {
 
 		private String errormessage;
 
@@ -94,10 +104,8 @@ public class LoginActivity extends AbstractAsyncActivity {
 		protected void onPreExecute() {
 			showLoadingProgressDialog();
 
-			// build the message object
 			EditText editText = (EditText) findViewById(R.id.user);
 			Connection.username = editText.getText().toString();
-
 			editText = (EditText) findViewById(R.id.password);
 			Connection.password = editText.getText().toString();
 		}
@@ -122,7 +130,16 @@ public class LoginActivity extends AbstractAsyncActivity {
 		protected void onPostExecute(User result) {
 			dismissProgressDialog();
 			if (result != null) {
-				saveUserName(result.getThmUsername());
+				// Save username & password
+				EditText pw = (EditText) findViewById(R.id.password);
+				CheckBox rememberme = (CheckBox) findViewById(R.id.remember_me);
+				SharedPreferences.Editor editor = sharedPref.edit();
+				editor.putBoolean(SETTINGS_REMEMBERME, rememberme.isChecked());
+				editor.putString(SETTINGS_USERNAME, result.getThmUsername());
+				if (rememberme.isChecked())
+					editor.putString(SETTINGS_PASSWORD, pw.getText().toString());
+				editor.commit();
+
 				displayResponse(String.format(
 						getString(R.string.login_greeting),
 						result.getFirstName()));
@@ -133,7 +150,5 @@ public class LoginActivity extends AbstractAsyncActivity {
 				displayResponse(this.errormessage);
 			}
 		}
-
 	}
-
 }
