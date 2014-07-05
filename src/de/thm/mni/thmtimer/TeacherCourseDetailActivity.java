@@ -139,13 +139,6 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 				categorys.setText(categorysText);
 				timesInvested.setText(timesInvestedText);
 				break;
-
-			case 2: // Tempor�r
-				TextView tmp = new TextView(mContext);
-				tmp.setText("ToDo");
-
-				v = tmp;
-				break;
 			}
 
 			return v;
@@ -153,7 +146,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 
 		@Override
 		public int getGroupCount() {
-			return 3;
+			return 2;
 		}
 
 		@Override
@@ -170,10 +163,6 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 
 			case 1:
 				header.setText(mContext.getText(R.string.timedistribution));
-				break;
-
-			case 2:
-				header.setText(mContext.getText(R.string.superfeature));
 				break;
 			}
 

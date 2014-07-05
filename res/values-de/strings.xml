@@ -4,9 +4,13 @@
 
     <!-- LoginActivity -->
     <string name="logoDescription">company_logo</string>
-    <string name="user">Benutzerkennung</string>
+    <string name="settings">Einstellungen</string>
+    <string name="user">THM-Benutzerkennung</string>
     <string name="password">Passwort</string>
     <string name="login">Anmelden</string>
+    <string name="login_failed">Falsche Benutzerkennung oder Passwort.</string>
+    <string name="login_greeting">Hallo %s!</string>
+    <string name="login_remember_me">Eingeloggt bleiben</string>
 
     <!-- ModuleListActivity -->
     <string name="tab1">Student</string>
@@ -82,5 +86,16 @@
     <string name="stopwatch_abort_message">Möchten Sie die Zeiterfassung wirklich abbrechen?</string>
     <string name="stopwatch_abort_positive">Ja</string>
     <string name="stopwatch_abort_negative">Nein</string>
+
+    <!-- SettingsFragment -->
+    <string name="settingUsername">Benutzername merken</string>
+    <string name="at">bei</string>
+    <string name="color">Farbe</string>
+    <string name="colorAlert">GRÜN > GELB > ROT</string>
+    <string name="confirm">Bestätigen</string>
+
+    <!-- Connection -->
+    <string name="connection_unreachable">Server nicht erreichbar</string>
+    <string name="connection_loading">Lade. Bitte warten...</string>
 
 </resources>

@@ -4,9 +4,13 @@
 
     <!-- LoginActivity -->
     <string name="logoDescription">company_logo</string>
-    <string name="user">User</string>
+    <string name="settings">Settings</string>
+    <string name="user">THM Username</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string name="login_failed">Wrong username or password.</string>
+    <string name="login_greeting">Hi %s!</string>
+    <string name="login_remember_me">Remember me</string>
 
     <!-- ModuleListActivity -->
     <string name="tab1">Student</string>
@@ -89,4 +93,14 @@
     <string name="stopwatch_abort_positive">Yes</string>
     <string name="stopwatch_abort_negative">No</string>
     
+    <!-- SettingsFragment -->
+    <string name="settingUsername">Remember Username</string>
+    <string name="at">at</string>
+    <string name="colorAlert">GREEN > YELLOW > RED</string>
+    <string name="color">Color</string>
+    <string name="confirm">Confirm</string>
+    
+    <!-- Connection -->
+    <string name="connection_unreachable">Server unreachable</string>
+    <string name="connection_loading">Loading. Please wait...</string>
 </resources>

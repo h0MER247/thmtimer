@@ -2,23 +2,17 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android" >
      <item android:state_pressed="true" >
          <shape android:shape="rectangle"  >
-             <corners android:radius="7dip" />
-             <stroke android:width="1dip" android:color="#888888" />
-             <gradient  android:angle="-90"  android:startColor="#989898" android:endColor="#cbcbcb"  />            
+             <solid android:color="#71a521"/>
          </shape>
      </item>
     <item android:state_focused="true">
          <shape android:shape="rectangle"  >
-             <corners android:radius="7dip" />
-             <stroke android:width="1dip" android:color="#b7b9ac" />
-             <solid  android:color="#cbcbcb"/>       
+             <solid android:color="#71a521"/>
          </shape>
      </item>	
-    <item >
-        <shape android:shape="rectangle"  >
-             <corners android:radius="7dip" />
-             <stroke android:width="1dip" android:color="#DDDDDD" />
-             <gradient  android:angle="-90"  android:startColor="#fefefe" android:endColor="#cbcbcb" />            
+    <item>
+        <shape android:shape="rectangle" >
+             <solid android:color="#80bb25" />
          </shape>
      </item>
 </selector> 

@@ -54,7 +54,11 @@ public class EnterModuleActivity extends FragmentActivity {
 
 			@Override
 			public Fragment secondTab() {
-				return mModuleDetail;
+				if(fragment.equals("teacher"))
+					return mTeacherCreateCourse;
+				else if(fragment.equals("student"))
+					return mModuleDetail;
+				return null;
 			}
 
 			@Override
@@ -91,10 +95,6 @@ public class EnterModuleActivity extends FragmentActivity {
 
 	public void closeSearch(long id) {
 
-		/* 
-		 * funktioniert noch nicht :-(
-		 * 
-		 */
 		if(fragment.equals("teacher")){
 			mTeacherCreateCourse = new TeacherCreateCourseFragment();
 			Bundle b = new Bundle();
