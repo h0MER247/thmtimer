@@ -42,7 +42,7 @@
             android:label="@string/course_details" >
         </activity>
         <activity
-            android:name="de.thm.mni.thmtimer.TeacherCreateCourseActivity"
+            android:name="de.thm.mni.thmtimer.TeacherCreateCourseFragment"
             android:label="@string/course_details" >
         </activity>
 
