@@ -19,11 +19,13 @@ public class TimeData implements Comparable<TimeData> {
 	 * Parses a time string in the and sets the time accordingly
 	 * 
 	 * @param time
-	 *            String (Format HH:MM)
+	 *            String (Format HH:MM) or empty
 	 * @throws IllegalArgumentException
 	 *             When `time` has an invalid format
 	 */
 	public void parseString(String time) throws IllegalArgumentException {
+		if (time.isEmpty())
+			return;
 		Matcher m = m_pattern.matcher(time);
 		if (!m.matches())
 			throw new IllegalArgumentException("Could not parse the given string: " + time);
