@@ -71,8 +71,10 @@
     <string name="piechart">Tortendiagramm</string>
     <string name="inscribedstudents">Eingeschriebene Studenten</string>
     <string name="timedistribution">Zeitverteilung</string>
-    <string name="superfeature">Tolles Feature</string>
     <string name="course_details">Kurs Details</string>
+    <string name="history">Historie</string>
+    <string name="timeframe">Zeitraum</string>
+    <string name="category_toggle">Kategorien ein/ausblenden</string>
 
     <!-- Stopwatch -->
     <string name="stopwatch_header">Stoppuhr</string>
