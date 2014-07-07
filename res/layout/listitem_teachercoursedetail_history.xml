@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:activatedBackgroundIndicator"
+    android:minHeight="?android:listPreferredItemHeight"
+    android:orientation="vertical" >
+
+    <de.thm.mni.thmtimer.HistoryChart
+        android:id="@+id/teachercoursedetail_historyChart"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+
+    <Button
+        android:id="@+id/teachercoursedetail_btnTimeframe"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/teachercoursedetail_btnCategoryToggle"
+        android:layout_alignBottom="@+id/teachercoursedetail_btnCategoryToggle"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/teachercoursedetail_btnCategoryToggle"
+        android:text="@string/timeframe" />
+
+    <Button
+        android:id="@+id/teachercoursedetail_btnCategoryToggle"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/teachercoursedetail_historyChart"
+        android:layout_marginTop="15dp"
+        android:text="@string/category_toggle" />
+    
+</RelativeLayout>

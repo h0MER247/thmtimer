@@ -1,6 +1,7 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import de.thm.mni.thmtimer.model.Course;
 import de.thm.mni.thmtimer.model.TeacherData;
@@ -11,13 +12,16 @@ import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TeacherCourseDetailActivity extends FragmentActivity {
 	private Long mCourseID;
@@ -107,7 +111,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 				// wurde
 				Integer totalMinutes = mData.getTimeInvestedTotal(mCourseID).getTimeInMinutes();
 
-				// Den Text f�r die Kategorien und investierten Zeiten erstellen
+				// Den Text für die Kategorien und investierten Zeiten erstellen
 				String categorysText = "";
 				String timesInvestedText = "";
 
@@ -118,7 +122,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 					TimeCategory category = StaticModuleData.findTimeCategory(t.getCategoryID());
 
 					//
-					// Text f�r die Kategorien und investierten Zeiten erstellen
+					// Text für die Kategorien und investierten Zeiten erstellen
 					//
 					if (categorysText.length() != 0)
 						categorysText += "\n";
@@ -130,7 +134,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 							+ String.format("(%04.1f%%)", ((100.0 / totalMinutes) * td.getTimeInMinutes()));
 
 					//
-					// Tortenst�ck hinzuf�gen
+					// Tortenstück hinzufügen
 					//
 					pieChart.addValue((float) td.getTimeInMinutes());
 					pieChartLegend.addLabel(category.getDescription());
@@ -139,6 +143,70 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 				categorys.setText(categorysText);
 				timesInvested.setText(timesInvestedText);
 				break;
+				
+			// Historie und Diagramm
+			case 2:
+				v = LayoutInflater.from(mContext).inflate(R.layout.listitem_teachercoursedetail_history, parent, false);
+				
+				HistoryChart historyChart = (HistoryChart) v.findViewById(R.id.teachercoursedetail_historyChart);
+				Button timeframe = (Button) v.findViewById(R.id.teachercoursedetail_btnTimeframe);
+				Button categoryToggle = (Button) v.findViewById(R.id.teachercoursedetail_btnCategoryToggle);
+				
+				timeframe.setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View arg0) {
+						
+						Toast.makeText(mContext, "ToDo: Zeitraum des Graphen auswählbar", Toast.LENGTH_LONG).show();
+					}
+				});
+				categoryToggle.setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View arg0) {
+						
+						Toast.makeText(mContext, "ToDo: Möglichkeit einzelne Kategorien ein-/auszublenden", Toast.LENGTH_LONG).show();
+					}
+				});
+				
+				
+				//
+				// Im Moment einfach random Daten erzeugen
+				//
+				Random rnd = new Random();
+				
+				String[] labelsX = new String[31];
+				String[] labelsY = new String[9];
+				
+				for(int i = 0; i < 31; i++)
+					labelsX[i] = String.format("%02d.07", i + 1);
+				for(int i = 0; i < 9; i++)
+					labelsY[i] = String.format("%dh", i);
+				
+				historyChart.setLabels(labelsX, labelsY);
+				
+				
+				ArrayList<Float> data;
+				
+				for(int category = 0;
+						category < 5;
+						category++) {
+					
+					data = new ArrayList<Float>();
+					
+					for(int i = 0;
+							i < 31;
+							i++) {
+
+						data.add(rnd.nextFloat() * 8f);
+					}
+					
+					historyChart.addData(data);
+				}
+				
+				historyChart.setPaddings(70, 70, 30, 10);
+				historyChart.setVisibleSize(7, 9);
+				break;
 			}
 
 			return v;
@@ -146,7 +214,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 
 		@Override
 		public int getGroupCount() {
-			return 2;
+			return 3;
 		}
 
 		@Override
@@ -164,6 +232,9 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 			case 1:
 				header.setText(mContext.getText(R.string.timedistribution));
 				break;
+				
+			case 2:
+				header.setText(mContext.getText(R.string.history));
 			}
 
 			return v;
