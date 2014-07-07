@@ -14,7 +14,7 @@ import android.view.View;
 
 
 //
-// Erste Version... Noch einiges zu tun...
+// Erste Version... Noch einiges zu tun... Test
 //
 public class HistoryChart extends View {
 	
