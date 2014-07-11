@@ -3,21 +3,17 @@ package de.thm.mni.thmtimer.util;
 import java.util.List;
 
 import org.springframework.http.HttpMethod;
-import de.thm.mni.thmtimer.model.Course;
-import de.thm.mni.thmtimer.model.Module;
+import de.thm.thmtimer.entities.Course;
+import de.thm.thmtimer.entities.Module;
 import de.thm.mni.thmtimer.model.StudentData;
 import de.thm.mni.thmtimer.model.TeacherData;
-import de.thm.mni.thmtimer.model.TimeCategory;
 import de.thm.thmtimer.entities.Category;
 import de.thm.thmtimer.entities.Expenditure;
 
 public class ModuleDAO {
-	
-	private static Module mModule;
-	private static Course mCourse;
 	private static List<Module> mModules;
 	private static List<Course> mCourses;
-	private static List<TimeCategory> mTimeCategorys;
+	private static List<Category> mTimeCategorys;
 	private static StudentData mStudentData;
 	private static TeacherData mTeacherData;
 	
@@ -29,7 +25,7 @@ public class ModuleDAO {
 		return mTeacherData;
 	}
 
-	public static List<TimeCategory> getTimeCategorys() {
+	public static List<Category> getTimeCategorys() {
 		return mTimeCategorys;
 	}
 
@@ -71,18 +67,17 @@ public class ModuleDAO {
 	
 	//Fetch one course by id. Id must be passed by URL.
 	public static Course getCoursesById(int id){
-		mCourse = Connection.request("/courses/id?" + id, HttpMethod.GET , Course.class);		
-		return mCourse;
+		return Connection.request("/courses/id?" + id, HttpMethod.GET , Course.class);
 	}
 	
 	//Add a user to the course with id in URL.
 	public static void addUserToCourse(int id, String username){
-		Connection.request("/courses/" + id +"/user/" + username,HttpMethod.POST, null);
+		Connection.request("/courses/" + id +"/user/" + username, HttpMethod.POST, null);
 	}
 	
 	//Delete a user from the course with id in URL.
 	public static void deleteUserFromCourse(int id, String username){
-		Connection.request("/courses/" + id +"/user/" + username,HttpMethod.DELETE, null);
+		Connection.request("/courses/" + id +"/user/" + username, HttpMethod.DELETE, null);
 	}
 	
 	/*
