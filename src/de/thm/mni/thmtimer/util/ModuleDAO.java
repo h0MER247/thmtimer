@@ -2,7 +2,6 @@ package de.thm.mni.thmtimer.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.http.HttpMethod;
