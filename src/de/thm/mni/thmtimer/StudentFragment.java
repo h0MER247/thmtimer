@@ -1,22 +1,15 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import de.thm.mni.thmtimer.R;
-import de.thm.mni.thmtimer.model.CourseModel;
-import de.thm.mni.thmtimer.model.TimeData;
-import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.StaticModuleData;
-import de.thm.thmtimer.entities.Course;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,8 +20,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import de.thm.mni.thmtimer.model.CourseModel;
+import de.thm.mni.thmtimer.model.TimeData;
+import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.StaticModuleData;
 
-public class StudentFragment extends Fragment {
+public class StudentFragment extends AbstractAsyncFragment {
 	private StudentCourseListAdapter mAdapter;
 	private List<Long> mData;
 
@@ -43,10 +41,8 @@ public class StudentFragment extends Fragment {
 
 		if (mData == null) {
 			mData = new ArrayList<Long>();
-			mData.addAll(ModuleDAO.getStudentCourseIDs());
 		}
 		if (mAdapter == null) {
-
 			mAdapter = new StudentCourseListAdapter(savedInstanceState);
 			/*mAdapter.sort(new Comparator<Long>() {
 
@@ -61,6 +57,7 @@ public class StudentFragment extends Fragment {
 
 			});*/
 		}
+		new StudentCoursesTask().execute();
 	}
 
 	private class StudentCourseListAdapter extends ArrayAdapter<Long> {
@@ -78,7 +75,6 @@ public class StudentFragment extends Fragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 
 			if (convertView == null) {
-
 				convertView = getLayoutInflater(bundle).inflate(
 						R.layout.studentlistitem, parent, false);
 			}
@@ -206,6 +202,31 @@ public class StudentFragment extends Fragment {
 		if (requestCode == REQUEST_TIMETRACKING) {
 			mAdapter.notifyDataSetChanged();
 			((ModuleListActivity) getActivity()).refresh();
+		}
+	}
+	
+	protected void displayResponse() {
+		mData.addAll(ModuleDAO.getStudentCourseIDs());
+		mAdapter.notifyDataSetChanged();
+		//((ModuleListActivity) getActivity()).refresh();
+	}
+	
+	private class StudentCoursesTask extends AsyncTask<Void, Void, List<CourseModel>> {
+
+		@Override
+		protected void onPreExecute() {
+			showLoadingProgressDialog();
+		}
+		
+		@Override
+		protected List<CourseModel> doInBackground(Void... params) {
+			return ModuleDAO.getStudentCourseList();
+		}
+		
+		@Override
+		protected void onPostExecute(List<CourseModel> result) {
+			dismissProgressDialog();
+			displayResponse();
 		}
 	}
 }

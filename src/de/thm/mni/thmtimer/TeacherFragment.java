@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.thm.mni.thmtimer.R;
+import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.model.CourseModel;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,7 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class TeacherFragment extends Fragment {
+public class TeacherFragment extends AbstractAsyncFragment {
 	private static final int REQUEST_NEW = 1;
 	private static final int REQUEST_CREATECOURSE = 2;
 	private TeacherCourseListAdapter mAdapter;
@@ -34,7 +36,6 @@ public class TeacherFragment extends Fragment {
 
 		if (mData == null) {
 			mData = new ArrayList<Long>();
-			mData.addAll(ModuleDAO.getTeacherCourseIDs());
 		}
 		if (mAdapter == null) {
 
@@ -52,6 +53,7 @@ public class TeacherFragment extends Fragment {
 
 			});*/
 		}
+		new TeacherCoursesTask().execute();
 	}
 
 	private class TeacherCourseListAdapter extends ArrayAdapter<Long> {
@@ -137,6 +139,31 @@ public class TeacherFragment extends Fragment {
 		if (requestCode == REQUEST_CREATECOURSE) {
 			mAdapter.notifyDataSetChanged();
 			((ModuleListActivity)getActivity()).refresh();
+		}
+	}
+	
+	protected void displayResponse() {
+		mData.addAll(ModuleDAO.getStudentCourseIDs());
+		mAdapter.notifyDataSetChanged();
+		//((ModuleListActivity) getActivity()).refresh();
+	}
+	
+	private class TeacherCoursesTask extends AsyncTask<Void, Void, List<CourseModel>> {
+
+		@Override
+		protected void onPreExecute() {
+			showLoadingProgressDialog();
+		}
+		
+		@Override
+		protected List<CourseModel> doInBackground(Void... params) {
+			return ModuleDAO.getTeacherCourseList();
+		}
+		
+		@Override
+		protected void onPostExecute(List<CourseModel> result) {
+			dismissProgressDialog();
+			displayResponse();
 		}
 	}
 }

@@ -80,6 +80,19 @@ public class ModuleDAO {
 		throw new IllegalArgumentException("Course with ID " + courseID + " not found");
 	}
 	
+	public static List<CourseModel> getTeacherCourseList() {
+		if (mTeacherCourses == null) {
+			CourseModel[] c = Connection.request("/courses/user/" + Connection.username, HttpMethod.GET,
+					CourseModel[].class);
+			mTeacherCourses = Arrays.asList(c);
+		}
+		return mStudentCourses;
+	}
+
+	public static void invalidateTeacherCourseList() {
+		mTeacherCourses = null;
+	}
+	
 	public static List<Long> getTeacherCourseIDs() {
 		if(mTeacherCourses == null)
 			throw new IllegalStateException("Teachercourses not yet loaded.");

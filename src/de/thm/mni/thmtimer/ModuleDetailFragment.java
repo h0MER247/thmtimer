@@ -1,18 +1,17 @@
 package de.thm.mni.thmtimer;
 
-import de.thm.mni.thmtimer.model.Module;
-import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.app.Dialog;
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Html;
-import android.util.Log;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import de.thm.mni.thmtimer.model.Module;
+import de.thm.mni.thmtimer.util.StaticModuleData;
 
 public class ModuleDetailFragment extends DialogFragment implements
 		OnClickListener {
