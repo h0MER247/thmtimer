@@ -1,20 +1,24 @@
 package de.thm.mni.thmtimer;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
+import de.thm.mni.thmtimer.model.CourseModel;
+import de.thm.mni.thmtimer.util.AbstractAsyncFragmentActivity;
 import de.thm.mni.thmtimer.util.FixedSpeedScroller;
+import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.util.ZoomPageTransformer;
 import de.thm.mni.thmtimer.util.TabFactory;
 import de.thm.mni.thmtimer.util.TabPagerAdapter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
-public class ModuleListActivity extends FragmentActivity {
+public class ModuleListActivity extends AbstractAsyncFragmentActivity {
 	private ViewPager mPager;
 	private TabPagerAdapter mTabAdapter;
 	private ActionBar mActionBar;
@@ -25,26 +29,6 @@ public class ModuleListActivity extends FragmentActivity {
 
 		setContentView(R.layout.modulelistactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-
-		if (mTabAdapter == null) {
-			mTabAdapter = new TabPagerAdapter(getSupportFragmentManager(), new TabFactory() {
-
-				@Override
-				public Fragment firstTab() {
-					return new StudentFragment();
-				}
-
-				@Override
-				public Fragment secondTab() {
-					return new TeacherFragment();
-				}
-
-				@Override
-				public int getNumberOfTabs() {
-					return 2;
-				}
-			});
-		}
 
 		if (mPager == null) {
 			mPager = (ViewPager) findViewById(R.id.pager);
@@ -112,6 +96,29 @@ public class ModuleListActivity extends FragmentActivity {
 			mActionBar.addTab(mActionBar.newTab().setText(getString(R.string.tab2)).setTabListener(tabListener));
 		}
 
+		new ModuleListTask().execute();
+	}
+	
+	private void loadResponse() {
+		if (mTabAdapter == null) {
+			mTabAdapter = new TabPagerAdapter(getSupportFragmentManager(), new TabFactory() {
+
+				@Override
+				public Fragment firstTab() {
+					return new StudentFragment();
+				}
+
+				@Override
+				public Fragment secondTab() {
+					return new TeacherFragment();
+				}
+
+				@Override
+				public int getNumberOfTabs() {
+					return 2;
+				}
+			});
+		}
 	}
 	
 	public void refresh() {
@@ -126,5 +133,25 @@ public class ModuleListActivity extends FragmentActivity {
 			return true;
 		}
 		return false;
+	}
+	
+	private class ModuleListTask extends AsyncTask<Void, Void, List<CourseModel>> {
+
+		@Override
+		protected void onPreExecute() {
+			showLoadingProgressDialog();
+		}
+		
+		@Override
+		protected List<CourseModel> doInBackground(Void... params) {
+			return ModuleDAO.getStudentCourseList();
+		}
+		
+		@Override
+		protected void onPostExecute(List<CourseModel> result) {
+			dismissProgressDialog();
+			loadResponse();
+		}
+		
 	}
 }

@@ -3,7 +3,6 @@ package de.thm.mni.thmtimer.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.thm.mni.thmtimer.model.Course;
 import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.model.StudentData;
 import de.thm.mni.thmtimer.model.TeacherData;
@@ -15,7 +14,6 @@ import de.thm.mni.thmtimer.model.TimeTracking;
 public class StaticModuleData {
 
 	private static List<Module> mModules;
-	private static List<Course> mCourses;
 	private static List<TimeCategory> mTimeCategorys;
 
 	private static StudentData mStudentData;
@@ -23,7 +21,6 @@ public class StaticModuleData {
 
 	public static void fillData() {
 		createModules();
-		createCourseList();
 		createTimeCategorys();
 
 		createStudentData();
@@ -153,52 +150,6 @@ public class StaticModuleData {
 					" wird und die entsprechend softwareergonomischer Standards gestaltet" +
 					" werden.");
 			mModules.add(m);
-		}
-	}
-
-	// Liste aller Kurse die in diesem Semester stattfinden
-	private static void createCourseList() {
-		if (mCourses == null) {
-
-			mCourses = new ArrayList<Course>();
-
-			// OOP
-			mCourses.add(new Course(0l, // KursID (so wie sie in der
-										// Serverdatenbank stehen würde)
-					0l, // ModulID (so wie sie in der Serverdatenbank stehen
-						// würde) -> "Verbindet" den Kurs mit dem dazugeh�rigen
-						// Modul
-					"Objektorientierte Programmierung", // Kursbezeichnung (Der
-														// Server sollte uns die
-														// Modulbezeichnung
-														// geben, wenn nur ein
-														// Kurs vorhanden ist)
-					"Prof. Dr. Letschert", // Dozent dieses Kurses
-					131)); // Eingeschriebene Studenten
-
-			// Lineare Algebra
-			mCourses.add(new Course(1l, 1l, "Lineare Algebra", "Prof. Dr. Just", 85));
-
-			// Compilerbau
-			mCourses.add(new Course(2l, 2l, "Compilerbau", "Prof. Dr. Geisse", 32));
-
-			// Programmieren interaktiver Systeme
-			mCourses.add(new Course(3l, 3l, "Programmieren interaktiver Systeme - Kurs A", "Prof. Dr. Franzen", 60));
-			mCourses.add(new Course(4l, 3l, "Programmieren interaktiver Systeme - Kurs B", "Prof. Dr. Lauwerth", 60));
-
-			// Rechnernetze und ihre Anwendung
-			mCourses.add(new Course(5l, 4l, "Rechnernetze und ihre Anwendung", "Prof. Dr. Müller", 61));
-
-			// Datenbanken
-			mCourses.add(new Course(6l, 5l, "Datenbanken", "Prof. Dr. Renz", 53));
-
-			// Betriebssysteme
-			mCourses.add(new Course(7l, 6l, "Betriebssysteme", "Prof. Dr. Geisse", 44));
-
-			// Softwaretechnik Praktikum
-			mCourses.add(new Course(9l, 7l, "Softwaretechnik Praktikum - THMTimer Projekt", "Herr Volkmer", 20));
-			mCourses.add(new Course(10l, 7l, "Softwaretechnik Praktikum - Patientenverwaltung", "Herr Mustermann", 24));
-			mCourses.add(new Course(11l, 7l, "Softwaretechnik Praktikum - Rezeptdatenbank", "Frau Musterfrau", 16));
 		}
 	}
 
@@ -339,9 +290,6 @@ public class StaticModuleData {
 		return mTimeCategorys;
 	}
 
-	public static List<Course> getCourseList() {
-		return mCourses;
-	}
 
 	public static List<Module> getModuleList() {
 		return mModules;
@@ -350,15 +298,6 @@ public class StaticModuleData {
 	public static Module findModule(Long moduleID) {
 		for (Module x : mModules) {
 			if (x.getID() == moduleID) {
-				return x;
-			}
-		}
-		return null;
-	}
-
-	public static Course findCourse(Long courseID) {
-		for (Course x : mCourses) {
-			if (x.getID() == courseID) {
 				return x;
 			}
 		}

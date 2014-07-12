@@ -2,7 +2,6 @@ package de.thm.mni.thmtimer;
 
 import java.text.SimpleDateFormat;
 
-import de.thm.mni.thmtimer.model.Course;
 import de.thm.mni.thmtimer.model.Module;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.annotation.SuppressLint;
@@ -63,9 +62,10 @@ public class TeacherCreateCourseFragment extends Fragment{
 					e.printStackTrace();
 				}
 
-				Course course = new Course(100l, id, courseName, teacher, 0);
+				// TODO: Add server callback
+				/*Course course = new Course(100l, id, courseName, teacher, 0);
 				course.setStartDate(date);
-				StaticModuleData.getCourseList().add(course);
+				StaticModuleData.getCourseList().add(course);*/
 			}
 		});
 

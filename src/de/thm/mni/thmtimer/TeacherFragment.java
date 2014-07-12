@@ -1,12 +1,11 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import de.thm.mni.thmtimer.R;
-import de.thm.mni.thmtimer.model.Course;
-import de.thm.mni.thmtimer.util.StaticModuleData;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.model.CourseModel;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,12 +34,12 @@ public class TeacherFragment extends Fragment {
 
 		if (mData == null) {
 			mData = new ArrayList<Long>();
-			mData.addAll(StaticModuleData.getTeacherData().getCourseIDs());
+			mData.addAll(ModuleDAO.getTeacherCourseIDs());
 		}
 		if (mAdapter == null) {
 
 			mAdapter = new TeacherCourseListAdapter(savedInstanceState);
-			mAdapter.sort(new Comparator<Long>() {
+			/*mAdapter.sort(new Comparator<Long>() {
 
 				@Override
 				public int compare(Long arg0, Long arg1) {
@@ -51,7 +50,7 @@ public class TeacherFragment extends Fragment {
 									StaticModuleData.findCourse(arg1).getName());
 				}
 
-			});
+			});*/
 		}
 	}
 
@@ -74,7 +73,7 @@ public class TeacherFragment extends Fragment {
 						R.layout.teacherlistitem, parent, false);
 			}
 
-			final Course course = StaticModuleData.findCourse(mData.get(position));
+			final CourseModel course = ModuleDAO.findTeacherCourse(mData.get(position));
 
 			TextView name = (TextView) convertView
 					.findViewById(R.id.moduleName);

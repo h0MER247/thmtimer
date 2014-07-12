@@ -3,16 +3,16 @@ package de.thm.mni.thmtimer;
 import java.util.ArrayList;
 import java.util.Random;
 
-import de.thm.mni.thmtimer.model.Course;
+import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.model.TeacherData;
 import de.thm.mni.thmtimer.model.TimeCategory;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.model.TimeStatisticData;
+import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +27,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 	private Long mCourseID;
 	private TeacherData mData;
 	private ArrayList<TimeStatisticData> mTimeStatistics;
-	private Course mCourse;
+	private CourseModel mCourse;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 		mCourseID = getIntent().getExtras().getLong("course_id");
 
 		mData = StaticModuleData.getTeacherData();
-		mCourse = StaticModuleData.findCourse(mCourseID);
+		mCourse = ModuleDAO.findTeacherCourse(mCourseID);
 		mTimeStatistics = mData.getTimeStatistic(mCourseID);
 
 		// GUI Items belegen
@@ -93,7 +93,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 
 				TextView studentCount = (TextView) v.findViewById(R.id.teachercoursedetail_txtStudentCount);
 
-				studentCount.setText(mContext.getText(R.string.students) + ": " + mCourse.getStudentCount().toString());
+				studentCount.setText(mContext.getText(R.string.students) + ": " + mCourse.getStudentCount());
 				break;
 
 			// Zeitverteilung und PieChart

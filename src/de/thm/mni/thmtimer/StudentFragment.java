@@ -6,9 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 import de.thm.mni.thmtimer.R;
-import de.thm.mni.thmtimer.model.Course;
+import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.model.TimeData;
+import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.util.StaticModuleData;
+import de.thm.thmtimer.entities.Course;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -40,14 +42,13 @@ public class StudentFragment extends Fragment {
 		setHasOptionsMenu(true);
 
 		if (mData == null) {
-
 			mData = new ArrayList<Long>();
-			mData.addAll(StaticModuleData.getStudentData().getCourseIDs());
+			mData.addAll(ModuleDAO.getStudentCourseIDs());
 		}
 		if (mAdapter == null) {
 
 			mAdapter = new StudentCourseListAdapter(savedInstanceState);
-			mAdapter.sort(new Comparator<Long>() {
+			/*mAdapter.sort(new Comparator<Long>() {
 
 				@Override
 				public int compare(Long lhs, Long rhs) {
@@ -58,7 +59,7 @@ public class StudentFragment extends Fragment {
 									StaticModuleData.findCourse(rhs).getName());
 				}
 
-			});
+			});*/
 		}
 	}
 
@@ -82,8 +83,7 @@ public class StudentFragment extends Fragment {
 						R.layout.studentlistitem, parent, false);
 			}
 
-			final Course course = StaticModuleData.findCourse(mData
-					.get(position));
+			final CourseModel course = ModuleDAO.findStudentCourse(mData.get(position));
 
 			TextView name = (TextView) convertView
 					.findViewById(R.id.moduleName);
@@ -94,7 +94,7 @@ public class StudentFragment extends Fragment {
 
 			name.setText(course.getName());
 			TimeData timeInvested = StaticModuleData.getStudentData()
-					.getTimeInvestedTotal(course.getID());
+					.getTimeInvestedTotal(course.getId());
 
 			Date startDate = course.getStartDate();
 			if (startDate != null) {
