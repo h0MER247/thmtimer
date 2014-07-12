@@ -215,7 +215,7 @@ public class StudentFragment extends AbstractAsyncFragment {
 
 		@Override
 		protected void onPreExecute() {
-			showLoadingProgressDialog();
+			showProgressDialog(getString(R.string.connection_loading_courses));
 		}
 		
 		@Override

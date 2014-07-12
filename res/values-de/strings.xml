@@ -99,5 +99,5 @@
     <!-- Connection -->
     <string name="connection_unreachable">Server nicht erreichbar</string>
     <string name="connection_loading">Lade. Bitte warten...</string>
-
+	<string name="connection_loading_courses">Kurse werden geladen…</string>
 </resources>
