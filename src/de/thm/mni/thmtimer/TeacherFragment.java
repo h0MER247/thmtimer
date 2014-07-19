@@ -3,6 +3,8 @@ package de.thm.mni.thmtimer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.client.HttpClientErrorException;
+
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
@@ -157,7 +159,12 @@ public class TeacherFragment extends AbstractAsyncFragment {
 		
 		@Override
 		protected List<CourseModel> doInBackground(Void... params) {
-			return ModuleDAO.getTeacherCourseList();
+			try {
+				return ModuleDAO.getTeacherCourseList();
+			} catch (HttpClientErrorException e) {
+				// Forbidden
+				return null;
+			}
 		}
 		
 		@Override

@@ -6,6 +6,7 @@ import org.springframework.web.client.ResourceAccessException;
 
 import de.thm.mni.thmtimer.util.Connection;
 import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
+import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 import de.thm.thmtimer.entities.User;
 import android.app.FragmentTransaction;
@@ -113,8 +114,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 		@Override
 		protected User doInBackground(Void... params) {
 			try {
-				return Connection.request("/users/" + Connection.username,
-						HttpMethod.GET, User.class);
+				return ModuleDAO.getUser();
 			} catch (HttpClientErrorException e) {
 				this.errormessage = getString(R.string.login_failed);
 				Log.e(TAG, e.getLocalizedMessage(), e);

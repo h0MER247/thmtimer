@@ -19,7 +19,7 @@ public class Connection {
 	public static String username;
 	public static String password;
 
-	protected static final String TAG = AbstractAsyncActivity.class.getSimpleName();
+	protected static final String TAG = Connection.class.getSimpleName();
 
 	/**
 	 * Make a server request.

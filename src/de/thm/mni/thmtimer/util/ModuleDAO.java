@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 
 import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Module;
+import de.thm.thmtimer.entities.User;
 import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.model.StudentData;
 import de.thm.mni.thmtimer.model.TeacherData;
@@ -15,12 +16,21 @@ import de.thm.thmtimer.entities.Category;
 import de.thm.thmtimer.entities.Expenditure;
 
 public class ModuleDAO {
+	private static User mUser;
 	private static List<Module> mModules;
 	private static List<CourseModel> mStudentCourses;
 	private static List<CourseModel> mTeacherCourses;
 	private static List<Category> mTimeCategorys;
 	private static StudentData mStudentData;
 	private static TeacherData mTeacherData;
+	
+	public static User getUser() {
+		if (mUser == null) {
+			mUser = Connection.request("/users/" + Connection.username, HttpMethod.GET, User.class);
+		}
+		return mUser;
+		
+	}
 
 	public static StudentData getStudentData() {
 		return mStudentData;
@@ -81,7 +91,7 @@ public class ModuleDAO {
 	
 	public static List<CourseModel> getTeacherCourseList() {
 		if (mTeacherCourses == null) {
-			CourseModel[] c = Connection.request("/courses/user/" + Connection.username, HttpMethod.GET,
+			CourseModel[] c = Connection.request("/courses/lecture/" + Connection.username, HttpMethod.GET,
 					CourseModel[].class);
 			mTeacherCourses = Arrays.asList(c);
 		}

@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MenuItem;
 import de.thm.mni.thmtimer.util.FixedSpeedScroller;
+import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.util.TabFactory;
 import de.thm.mni.thmtimer.util.TabPagerAdapter;
 import de.thm.mni.thmtimer.util.ZoomPageTransformer;
@@ -18,6 +20,8 @@ public class ModuleListActivity extends FragmentActivity {
 	private ViewPager mPager;
 	private TabPagerAdapter mTabAdapter;
 	private ActionBar mActionBar;
+	
+	protected static final String TAG = ModuleListActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +40,19 @@ public class ModuleListActivity extends FragmentActivity {
 
 				@Override
 				public Fragment secondTab() {
-					return new TeacherFragment();
+					if (ModuleDAO.getUser().isLecteur())
+						return new TeacherFragment();
+					return null;
 				}
 
 				@Override
 				public int getNumberOfTabs() {
-					return 2;
+					if (ModuleDAO.getUser().isLecteur()) {
+						Log.d(TAG, "User is a Teacher, give him two tabs");
+						return 2;
+					}
+					Log.d(TAG, "User is only a student, give him one tab");
+					return 1;
 				}
 			});
 		}
