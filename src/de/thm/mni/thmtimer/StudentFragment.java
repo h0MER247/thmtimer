@@ -24,7 +24,6 @@ import android.widget.TextView;
 import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
-import de.thm.mni.thmtimer.util.Connection;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 

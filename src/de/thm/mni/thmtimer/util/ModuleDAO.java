@@ -159,12 +159,14 @@ public class ModuleDAO {
 	}
 
 	// Fetch all expenditure entries by course id belongs to the active user
-	public static Expenditure getExpendituresByCourse(int id) {
-		return Connection.request("/expenditures/course/" + id, HttpMethod.GET, Expenditure.class);
+	public static List<Expenditure> getExpendituresByCourse(long id) {
+		Expenditure[] expenditures =  Connection.request("/expenditures/course/" + id, 
+				HttpMethod.GET, Expenditure[].class);
+		return Arrays.asList(expenditures);
 	}
 
 	// Delete a expenditure entry by id
-	public static void deleteExpenditure(int id) {
+	public static void deleteExpenditure(long id) {
 		Connection.request("/expenditures/course/" + id, HttpMethod.DELETE, null);
 	}
 }

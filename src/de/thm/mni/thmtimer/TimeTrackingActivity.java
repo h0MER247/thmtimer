@@ -1,24 +1,36 @@
 package de.thm.mni.thmtimer;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
+
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import de.thm.mni.thmtimer.StopwatchDialog.StopwatchListener;
-import de.thm.mni.thmtimer.model.*;
+import de.thm.mni.thmtimer.util.AbstractAsyncListActivity;
+import de.thm.mni.thmtimer.util.Connection;
+import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.util.StaticModuleData;
+import de.thm.thmtimer.entities.Expenditure;
+import de.thm.thmtimer.entities.User;
 
-public class TimeTrackingActivity extends ListActivity implements StopwatchListener {
+public class TimeTrackingActivity extends AbstractAsyncListActivity implements StopwatchListener {
 	
 	private final int REQUEST_NEW = 1;
 	
-	private ArrayAdapter<TimeTracking> mAdapter;
-	private List<TimeTracking> mTimeTrackingList;
+	private ArrayAdapter<Expenditure> mAdapter;
+	private List<Expenditure> mTimeTrackingList;
 	private Long mCourseID;
 	
 	
@@ -31,10 +43,9 @@ public class TimeTrackingActivity extends ListActivity implements StopwatchListe
 		
 		Bundle extras = getIntent().getExtras();
 		mCourseID = extras.getLong("course_id");
+		mTimeTrackingList = new ArrayList<Expenditure>();
 		
-		mTimeTrackingList = StaticModuleData.getStudentData().getTimeTrackingData(mCourseID);
-		
-		mAdapter = new ArrayAdapter<TimeTracking>(this, android.R.layout.simple_list_item_1, this.mTimeTrackingList);
+		mAdapter = new ArrayAdapter<Expenditure>(this, android.R.layout.simple_list_item_1, mTimeTrackingList);
 		setListAdapter(mAdapter);
 	}
 
@@ -96,4 +107,34 @@ public class TimeTrackingActivity extends ListActivity implements StopwatchListe
 		
 		startActivityForResult(intent, REQUEST_NEW);
 	}
+	
+	private class TimeTrackingTask extends AsyncTask<Void, Void, List<Expenditure>> {
+
+		@Override
+		protected void onPreExecute() {
+			showLoadingProgressDialog();
+		}
+
+		@Override
+		protected List<Expenditure> doInBackground(Void... params) {
+			try {
+				return ModuleDAO.getExpendituresByCourse(mCourseID);
+			} catch (HttpClientErrorException e) {
+				Log.e(TAG, e.getLocalizedMessage(), e);
+				return null;
+			} catch (ResourceAccessException e) {
+				Log.e(TAG, e.getLocalizedMessage(), e);
+				return null;
+			}
+		}
+
+		@Override
+		protected void onPostExecute(List<Expenditure> result) {
+			mTimeTrackingList = result;
+			mAdapter.notifyDataSetChanged();
+			dismissProgressDialog();
+		}
+	}
+	
+	
 }
