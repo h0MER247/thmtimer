@@ -29,7 +29,6 @@ public class ModuleDAO {
 			mUser = Connection.request("/users/" + Connection.username, HttpMethod.GET, User.class);
 		}
 		return mUser;
-		
 	}
 
 	public static StudentData getStudentData() {

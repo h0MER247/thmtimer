@@ -12,7 +12,6 @@ import de.thm.mni.thmtimer.model.CourseModel;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +28,7 @@ public class TeacherFragment extends AbstractAsyncFragment {
 	private static final int REQUEST_CREATECOURSE = 2;
 	private TeacherCourseListAdapter mAdapter;
 	private List<Long> mData;
-	
+	private boolean mHasFetchedData = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +37,10 @@ public class TeacherFragment extends AbstractAsyncFragment {
 
 		if (mData == null) {
 			mData = new ArrayList<Long>();
+			/*if (!mHasFetchedData)
+				new TeacherCoursesTask().execute();
+			else
+				mData.addAll(ModuleDAO.getTeacherCourseIDs());*/
 		}
 		if (mAdapter == null) {
 
@@ -55,7 +58,6 @@ public class TeacherFragment extends AbstractAsyncFragment {
 
 			});*/
 		}
-		new TeacherCoursesTask().execute();
 	}
 
 	private class TeacherCourseListAdapter extends ArrayAdapter<Long> {
@@ -145,9 +147,10 @@ public class TeacherFragment extends AbstractAsyncFragment {
 	}
 	
 	protected void displayResponse() {
-		mData.addAll(ModuleDAO.getStudentCourseIDs());
+		mHasFetchedData = true;
+		mData.addAll(ModuleDAO.getTeacherCourseIDs());
 		mAdapter.notifyDataSetChanged();
-		//((ModuleListActivity) getActivity()).refresh();
+		((ModuleListActivity) getActivity()).refresh();
 	}
 	
 	private class TeacherCoursesTask extends AsyncTask<Void, Void, List<CourseModel>> {

@@ -20,12 +20,17 @@ public class ModuleListActivity extends FragmentActivity {
 	private ViewPager mPager;
 	private TabPagerAdapter mTabAdapter;
 	private ActionBar mActionBar;
+	private StudentFragment mStudentFragment;
+	private TeacherFragment mTeacherFragment;
 	
 	protected static final String TAG = ModuleListActivity.class.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		mStudentFragment = new StudentFragment();
+		mTeacherFragment = new TeacherFragment();
 
 		setContentView(R.layout.modulelistactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -35,13 +40,13 @@ public class ModuleListActivity extends FragmentActivity {
 
 				@Override
 				public Fragment firstTab() {
-					return new StudentFragment();
+					return mStudentFragment;
 				}
 
 				@Override
 				public Fragment secondTab() {
 					if (ModuleDAO.getUser().isLecteur())
-						return new TeacherFragment();
+						return mTeacherFragment;
 					return null;
 				}
 

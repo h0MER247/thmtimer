@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,15 +24,19 @@ import android.widget.TextView;
 import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
+import de.thm.mni.thmtimer.util.Connection;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.util.StaticModuleData;
 
 public class StudentFragment extends AbstractAsyncFragment {
 	private StudentCourseListAdapter mAdapter;
 	private List<Long> mData;
+	private boolean mHasFetchedData = false;
 
 	protected static final int REQUEST_NEW = 1;
 	protected static final int REQUEST_TIMETRACKING = 2;
+	
+	protected static final String TAG = StudentFragment.class.getSimpleName();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,10 @@ public class StudentFragment extends AbstractAsyncFragment {
 
 		if (mData == null) {
 			mData = new ArrayList<Long>();
+			if (!mHasFetchedData)
+				new StudentCoursesTask().execute();
+			else
+				mData.addAll(ModuleDAO.getStudentCourseIDs());
 		}
 		if (mAdapter == null) {
 			mAdapter = new StudentCourseListAdapter(savedInstanceState);
@@ -57,7 +66,6 @@ public class StudentFragment extends AbstractAsyncFragment {
 
 			});*/
 		}
-		new StudentCoursesTask().execute();
 	}
 
 	private class StudentCourseListAdapter extends ArrayAdapter<Long> {
@@ -206,9 +214,11 @@ public class StudentFragment extends AbstractAsyncFragment {
 	}
 	
 	protected void displayResponse() {
+		Log.d(TAG, "Number of Courses loaded: "+ ModuleDAO.getStudentCourseIDs());
+		mHasFetchedData = true;
 		mData.addAll(ModuleDAO.getStudentCourseIDs());
 		mAdapter.notifyDataSetChanged();
-		//((ModuleListActivity) getActivity()).refresh();
+		((ModuleListActivity) getActivity()).refresh();
 	}
 	
 	private class StudentCoursesTask extends AsyncTask<Void, Void, List<CourseModel>> {
