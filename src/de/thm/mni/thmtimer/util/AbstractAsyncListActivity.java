@@ -24,7 +24,7 @@ import android.app.ProgressDialog;
  * @author Roy Clarkson
  * @author Pierre-Yves Ricau
  */
-public abstract class AbstractAsyncListActivity extends ListActivity {
+public abstract class AbstractAsyncListActivity extends ListActivity implements AbstractAsyncView {
 
 	protected static final String TAG = AbstractAsyncListActivity.class.getSimpleName();
 
@@ -44,10 +44,11 @@ public abstract class AbstractAsyncListActivity extends ListActivity {
 	// ***************************************
 	// Public methods
 	// ***************************************
-	public void showLoadingProgressDialog() {
-		this.showProgressDialog(getString(R.string.connection_loading));
+	public void showProgressDialog(int stringRes) {
+		
+		showProgressDialog(getString(stringRes));
 	}
-
+	
 	public void showProgressDialog(CharSequence message) {
 		if (progressDialog == null) {
 			progressDialog = new ProgressDialog(this);
@@ -63,5 +64,4 @@ public abstract class AbstractAsyncListActivity extends ListActivity {
 			progressDialog.dismiss();
 		}
 	}
-
 }

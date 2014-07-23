@@ -13,55 +13,72 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package de.thm.mni.thmtimer.util;
 
 import de.thm.mni.thmtimer.R;
 import android.app.Activity;
 import android.app.ProgressDialog;
 
+
 /**
  * @author Roy Clarkson
  * @author Pierre-Yves Ricau
  */
-public abstract class AbstractAsyncActivity extends Activity {
-
-	protected static final String TAG = AbstractAsyncActivity.class.getSimpleName();
-
+public abstract class AbstractAsyncActivity extends Activity implements AbstractAsyncView {
+	
 	private ProgressDialog progressDialog;
-
 	private boolean destroyed = false;
+	
 
 	// ***************************************
 	// Activity methods
 	// ***************************************
 	@Override
 	protected void onDestroy() {
+		
 		super.onDestroy();
 		destroyed = true;
 	}
-
+	
+	/* Fix #11128 */
+	@Override
+	public void onPause() {
+		
+		super.onPause();
+		dismissProgressDialog();
+	}
+	
+	
+	
 	// ***************************************
 	// Public methods
 	// ***************************************
-	public void showLoadingProgressDialog() {
-		this.showProgressDialog(getString(R.string.connection_loading));
+	public void showProgressDialog(int stringRes) {
+		
+		showProgressDialog(getString(stringRes));
 	}
-
+	
 	public void showProgressDialog(CharSequence message) {
-		if (progressDialog == null) {
+		
+		if(progressDialog == null) {
+			
 			progressDialog = new ProgressDialog(this);
 			progressDialog.setIndeterminate(true);
 		}
-
-		progressDialog.setMessage(message);
-		progressDialog.show();
-	}
-
-	public void dismissProgressDialog() {
-		if (progressDialog != null && !destroyed) {
-			progressDialog.dismiss();
+		
+		/* Fix #11128 */
+		if(!destroyed) {
+			
+			progressDialog.setMessage(message);
+			progressDialog.show();
 		}
 	}
 
+	public void dismissProgressDialog() {
+		
+		if(progressDialog != null && !destroyed) {
+			
+			progressDialog.dismiss();
+		}
+	}
 }
