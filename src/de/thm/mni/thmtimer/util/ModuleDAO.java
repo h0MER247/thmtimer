@@ -9,7 +9,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import de.thm.thmtimer.entities.Expenditure;
 import de.thm.thmtimer.entities.User;
 import de.thm.mni.thmtimer.R;
@@ -48,7 +50,10 @@ public class ModuleDAO {
 			return mJobSize;
 		}
 	}
-	
+	public static boolean hasFinishedJob() {
+		
+		return mJobSize == 0;
+	}
 	
 	
 	public static void loadUserFromServer(AbstractAsyncView ctx, int daoRequestID) {
@@ -270,7 +275,7 @@ public class ModuleDAO {
 				if(!isAllCourseListInvalid())
 					return;
 				
-				CourseModel[] courseModels = Connection.request("/courses/" + Connection.getUsername(),
+				CourseModel[] courseModels = Connection.request("/courses/",
 						                                        HttpMethod.GET,
 						                                        CourseModel[].class);
 				
@@ -416,7 +421,10 @@ public class ModuleDAO {
 			@Override
 			protected void onPreExecute() {
 				
-				view.showProgressDialog(dialogMessage);
+				Log.d("LOG", "Showing Progessdialog with string ID" + dialogMessage);
+				
+				if(view != null)
+					view.showProgressDialog(dialogMessage);
 			}
 				
 			@Override
@@ -441,8 +449,6 @@ public class ModuleDAO {
 				
 			protected void onPostExecute(Boolean result) {
 				
-				view.dismissProgressDialog();
-				
 				int jobSize = getJobSize();
 				
 				if(result) {
@@ -453,16 +459,22 @@ public class ModuleDAO {
 						setJobSize(jobSize);
 					}
 					
-					view.onDAOSuccess(requestID);
+					if(view != null)
+						view.onDAOSuccess(requestID);
 					
-					if(jobSize == 0)
+					if((jobSize == 0) && (view != null))
 						view.onDAOFinished();
 				}
 				else {
 					
-					view.onDAOError(requestID, mErrorMessage);
+					if(view != null)
+						view.onDAOError(requestID, mErrorMessage);
+					
 					setJobSize(-1);
 				}
+				
+				if(view != null)
+					view.dismissProgressDialog();
 			}
 		};
 		

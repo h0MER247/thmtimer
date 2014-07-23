@@ -25,7 +25,6 @@ import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.StaticModuleData;
 
 
 public class StudentFragment extends AbstractAsyncFragment {
@@ -161,6 +160,12 @@ public class StudentFragment extends AbstractAsyncFragment {
 			
 			mAdapter.notifyDataSetInvalidated();
 			
+			if(mViewData.size() == 0) {
+				
+				Toast.makeText(getActivity(),
+						       "Du scheinst noch keinem Kurs beigetreten zu sein.\nKurse fügst du mit dem + Zeichen hinzu!",
+						       Toast.LENGTH_LONG).show();
+			}
 			Log.d(TAG, String.format("Number of student courses loaded: [%d]", mViewData.size()));
 			
 			/* Fix #11128 */
@@ -213,8 +218,9 @@ public class StudentFragment extends AbstractAsyncFragment {
 			name.setText(course.getName());
 			subtext.setText(course.getTeacher());
 			
-			
-			TimeData timeInvested = StaticModuleData.getStudentData().getTimeInvestedTotal(course.getId());
+			// TODO
+			TimeData timeInvested = new TimeData();
+			timeInvested.setTimeInHours(60);// StaticModuleData.getStudentData().getTimeInvestedTotal(course.getId());
 			Date startDate = course.getStartDate();
 			
 			if (startDate != null) {

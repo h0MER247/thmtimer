@@ -103,8 +103,6 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		});
 
 		// Zeitdaten von der Stoppuhr
-		
-		
 		if(extras.containsKey("stopped_time")) {
 			
 			TimeData t = new TimeData();

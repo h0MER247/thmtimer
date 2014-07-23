@@ -77,15 +77,21 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 		switch (item.getItemId()) {
 		
 		case R.id.action_stopwatch:
-			StopwatchDialog dialog = new StopwatchDialog();
-			dialog.setListener(this);
-			dialog.show(getFragmentManager(), "STOPWATCH");
+			if(ModuleDAO.hasFinishedJob()) {
+				
+				StopwatchDialog dialog = new StopwatchDialog();
+				dialog.setListener(this);
+				dialog.show(getFragmentManager(), "STOPWATCH");
+			}
 			return true;
 			
 		case R.id.action_add:
-			Intent intent = new Intent(this, TrackTimeActivity.class);
-			intent.putExtra("course_id", mCourseID);
-			startActivityForResult(intent, REQUEST_ADD_TIMETRACKING);
+			if(ModuleDAO.hasFinishedJob()) {
+				
+				Intent intent = new Intent(this, TrackTimeActivity.class);
+				intent.putExtra("course_id", mCourseID);
+				startActivityForResult(intent, REQUEST_ADD_TIMETRACKING);
+			}
 			return true;
 			
 		case android.R.id.home:
@@ -104,6 +110,7 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 			
 			return;
 		}
+		
 		switch(requestCode) {
 		
 		case REQUEST_ADD_TIMETRACKING:
@@ -114,12 +121,13 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 			
 			// Expenditure erstellen
 			Expenditure e = new Expenditure();
-			e.setCourse(mCourse);
 			e.setCategory(category);
+			e.setCourse(mCourse);
 			e.setDescription("Test");
 			e.setDuration(timeInMinutes.shortValue());
 			e.setStart(new Date());
 			e.setUser(ModuleDAO.getUser());
+			e.setId(0);
 			
 			ModuleDAO.setJobSize(1);
 			ModuleDAO.postStudentExpenditureToServer(this, DAO_POST_EXPENDITURE, e);
@@ -170,6 +178,8 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 			           Toast.LENGTH_LONG).show();
 			break;
 		}
+		
+		finish();
 	}
 
 	@Override
@@ -183,6 +193,7 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 			break;
 			
 		case DAO_REQUEST_TIMECATEGORYS:
+			Log.d("LOG", "Loaded times...");
 			Log.d("LOG", "Loaded " + ModuleDAO.getTimeCategorys().size());
 			break;
 			
@@ -194,6 +205,7 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 	@Override
 	public void onDAOFinished() {
 		
+		Log.d("LOG", "Finished DAO");
 		mAdapter.notifyDataSetChanged();
 	}
 }
