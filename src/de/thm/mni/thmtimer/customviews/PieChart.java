@@ -10,27 +10,33 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.View;
 
 public class PieChart extends View {
 	
-	public final static Integer[] DEFAULT_COLORS = { 0xFF0099CC,
-		                                             0xFF9933CC,
-		                                             0xFF669900,
-		                                             0xFFFF8800,
-		                                             0xFFCC0000 };
+	public final static Integer[] DEFAULT_PIECHART_COLORS = { 0xFF0099CC,
+		                                                      0xFF9933CC,
+		                                                      0xFF669900,
+		                                                      0xFFFF8800,
+		                                                      0xFFCC0000 };
+	
+	public final static Integer DEFAULT_PIECHART_TEXT_COLOR = 0xFF000000;
 
+	private Paint mPaint;
+	
 	private ArrayList<Float> mValues;
 	private ArrayList<LinearGradient> mGradients;
 
 	private Integer[] mColorsNormal;
 	private Integer[] mColorsBright;
-	private RectF mPieBounds;
-	private Rect mTextBounds;
-	private Double mRadius;
-	private Paint mPaint;
+	private Integer mTextColor;
 	
+	private RectF mDrawingBound;
+	private Rect mTextBounds;
+	
+	private Double mRadius;
 	
 
 	public PieChart(Context context, AttributeSet attrs) {
@@ -42,11 +48,12 @@ public class PieChart extends View {
 
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-		mPieBounds = new RectF();
+		mDrawingBound = new RectF();
 		mTextBounds = new Rect();
 
 		setTextSize(24f);
-		setColors(DEFAULT_COLORS);
+		setColors(DEFAULT_PIECHART_COLORS,
+				  DEFAULT_PIECHART_TEXT_COLOR);
 	}
 
 	
@@ -55,23 +62,25 @@ public class PieChart extends View {
 		mPaint.setTextSize(textSize);
 	}
 
-	public void setColors(Integer[] colors) {
+	public void setColors(Integer[] chartColors, Integer textColor) {
 		
-		mColorsNormal = colors;
-		mColorsBright = new Integer[colors.length];
+		mColorsNormal = chartColors;
+		mColorsBright = new Integer[chartColors.length];
 
 		for (int i = 0;
-				 i < colors.length;
+				 i < chartColors.length;
 				 i++) {
 			
-			Integer r = Color.red(colors[i]);
-			Integer g = Color.green(colors[i]);
-			Integer b = Color.blue(colors[i]);
+			Integer r = Color.red(chartColors[i]);
+			Integer g = Color.green(chartColors[i]);
+			Integer b = Color.blue(chartColors[i]);
 
 			mColorsBright[i] = Color.rgb(Math.min((r + 255) / 2, 255),
 					                     Math.min((g + 255) / 2, 255),
 					                     Math.min((b + 255) / 2, 255));
 		}
+		
+		mTextColor = textColor;
 	}
 
 	private Integer getColorNormal(int entryNumber) {
@@ -85,19 +94,23 @@ public class PieChart extends View {
 	}
 	
 	public void addValue(Float value) {
+		
 		mValues.add(value);
-
 		mGradients.clear();
+		
 		invalidate();
 	}
 	
 	
-
-
+	
 	@Override
 	public void draw(Canvas canvas) {
 		
-		if (mValues.size() != 0) {
+		if(mValues.isEmpty()) {
+			
+			drawNoDataMessage(canvas);
+		}
+		else {
 			
 			//
 			// Summe aller Werte berechnen
@@ -152,7 +165,28 @@ public class PieChart extends View {
 			}
 		}
 	}
+	
+	private void drawNoDataMessage(Canvas canvas) {
+		
+		mDrawingBound = new RectF(getPaddingLeft(),
+				                  getPaddingTop(),
+				                  getWidth() - getPaddingRight(),
+				                  getHeight() - getPaddingBottom());
+		
+		String message = "No chart data available";
+		
 
+		mPaint.setColor(mTextColor);;
+		mPaint.setStyle(Style.FILL);
+		
+		mPaint.getTextBounds(message, 0, message.length(), mTextBounds);
+		
+		canvas.drawText(message,
+				        -mTextBounds.left + ((mDrawingBound.width() - mTextBounds.width()) / 2),
+				        -mTextBounds.top  + ((mDrawingBound.height() - mTextBounds.height()) / 2),
+				        mPaint);
+	}
+	
 	private void drawLabel(Canvas canvas, Float angleStart, Float angleSweep, String label) {
 		
 		Float angle = -90f + angleStart + (angleSweep / 2f);
@@ -164,15 +198,15 @@ public class PieChart extends View {
 		
 		// Transformation des Koordinatensystems in den Ursprungspunkt (Mitte
 		// des Tortendiagramms)
-		x += mPieBounds.centerX();
-		y += mPieBounds.centerY();
+		x += mDrawingBound.centerX();
+		y += mDrawingBound.centerY();
 
 		// Abmessungen des Labels berechnen
 		mPaint.getTextBounds(label, 0, label.length(), mTextBounds);
 		
 		// Label mittig an (x, y) zeichnen
 		mPaint.setStyle(Paint.Style.FILL);
-		mPaint.setColor(Color.BLACK);
+		mPaint.setColor(mTextColor);
 		
 		canvas.drawText(label,
 				        x.floatValue() - (mTextBounds.width() / 2f),
@@ -198,12 +232,12 @@ public class PieChart extends View {
 
 			// Transformation des Koordinatensystems in den Ursprungspunkt
 			// (Mitte des Tortendiagramms)
-			x += mPieBounds.centerX();
-			y += mPieBounds.centerY();
+			x += mDrawingBound.centerX();
+			y += mDrawingBound.centerY();
 
 			// Farbverlauf von (centerX, centerY) nach (x, y)
-			gradient = new LinearGradient(mPieBounds.centerX(),
-					                      mPieBounds.centerY(),
+			gradient = new LinearGradient(mDrawingBound.centerX(),
+					                      mDrawingBound.centerY(),
 					                      x.floatValue(),
 					                      y.floatValue(),
 					                      getColorBright(pieceNumber),
@@ -221,14 +255,14 @@ public class PieChart extends View {
 		// Tortenstück zeichnen
 		mPaint.setStyle(Paint.Style.FILL);
 		mPaint.setShader(getGradient(angleStart, angleSweep, pieceNumber));
-		canvas.drawArc(mPieBounds, angleStart, angleSweep, true, mPaint);
+		canvas.drawArc(mDrawingBound, angleStart, angleSweep, true, mPaint);
 		mPaint.setShader(null);
 
 		// Rand des Tortenstücks zeichnen
 		mPaint.setStrokeWidth(2f);
 		mPaint.setStyle(Paint.Style.STROKE);
 		mPaint.setColor(Color.BLACK);
-		canvas.drawArc(mPieBounds, angleStart, angleSweep, true, mPaint);
+		canvas.drawArc(mDrawingBound, angleStart, angleSweep, true, mPaint);
 	}
 	
 	
@@ -238,7 +272,10 @@ public class PieChart extends View {
 		
 		super.onSizeChanged(w, h, oldw, oldh);
 		
+		mGradients.clear();
 		calculateSize();
+		
+		invalidate();
 	}
 	
 	@Override
@@ -246,7 +283,10 @@ public class PieChart extends View {
 		
 		super.setPadding(left, top, right, bottom);
 		
+		mGradients.clear();
 		calculateSize();
+		
+		invalidate();
 	}
 	
 	private void calculateSize() {
@@ -264,7 +304,7 @@ public class PieChart extends View {
 		int right = left + d;
 		int bottom = top + d;
 		
-		mPieBounds.set(left, top, right, bottom);
+		mDrawingBound.set(left, top, right, bottom);
 		mRadius = d / 2.0;
 	}
 }
