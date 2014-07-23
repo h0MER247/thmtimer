@@ -3,6 +3,7 @@ package de.thm.mni.thmtimer.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.HttpClientErrorException;
@@ -21,6 +22,13 @@ import de.thm.thmtimer.entities.Category;
 
 public class ModuleDAO {
 	
+	public static final int DAO_SURVIVALPACKAGE_USER = 10;
+	public static final int DAO_SURVIVALPACKAGE_STUDENTCOURSELIST = 11;
+	public static final int DAO_SURVIVALPACKAGE_TEACHERCOURSELIST = 12;
+	public static final int DAO_SURVIVALPACKAGE_TIMECATEGORYS = 13;
+	public static final int DAO_SURVIVALPACKAGE_MODULES = 14;
+	public static final int DAO_SURVIVALPACKAGE_EXPENDITURES = 15;
+	
 	private static User mUser;
 	private static List<Course> mAllCourses;
 	private static List<Course> mStudentCourses;
@@ -30,28 +38,30 @@ public class ModuleDAO {
 	private static List<Module> mModules;
 	
 	
-	
 
-	/*
+	
+	//
+	// ---------- ALLES WAS MAN BRAUCHT :)
+	//
+	
 	public static void getSurvivalPackageFromServer() {
 		
-		beginJob();
-		getUserFromServer(0);
-		getStudentCourseListFromServer(requestID);
-		getTeacherCourseList();
-		getTimeCategorys();
-		getModules();
-		
-		
-	}*/
+		getUserFromServer(DAO_SURVIVALPACKAGE_USER);
+		getStudentCourseListFromServer(DAO_SURVIVALPACKAGE_STUDENTCOURSELIST);
+		getTeacherCourseListFromServer(DAO_SURVIVALPACKAGE_TEACHERCOURSELIST);
+		getTimeCategorysFromServer(DAO_SURVIVALPACKAGE_TIMECATEGORYS);
+		getModulesFromServer(DAO_SURVIVALPACKAGE_MODULES);
+		getStudentExpendituresFromServer(DAO_SURVIVALPACKAGE_EXPENDITURES);
+	}
 	
 	
-	
+	//
 	// --------- MODULE
+	//
 	
 	public static void getModulesFromServer(int requestID) {
 		
-		addJob(GET_MODULES, requestID);
+		addJob(new GET_MODULES(), requestID);
 	}
 	
 	public static List<Module> getModuleList() {
@@ -61,7 +71,7 @@ public class ModuleDAO {
 	
 	public static Module getModuleByID(long id) {
 		
-		if(!isModulesInvalidated()) {
+		if(mModules != null) {
 			
 			for(Module m : mModules) {
 				
@@ -73,11 +83,6 @@ public class ModuleDAO {
 		return null;
 	}
 	
-	private static boolean isModulesInvalidated() {
-		
-		return mModules == null;
-	}
-	
 	public static void invalidateModules() {
 		
 		mModules = null;
@@ -85,21 +90,18 @@ public class ModuleDAO {
 	
 	
 
-	// --------- USER
+	//
+	// --------- BENUTZER
+	//
 	
 	public static void getUserFromServer(int requestID) {
 		
-		addJob(GET_USER, requestID);
+		addJob(new GET_USER(), requestID);
 	}
 	
 	public static User getUser() {
 		
 		return mUser;
-	}
-
-	public static boolean isUserInvalidated() {
-		
-		return mUser == null;
 	}
 	
 	public static void invalidateUser() {
@@ -109,16 +111,23 @@ public class ModuleDAO {
 	
 	
 	
-	// --------- TIME CATEGORYS
+	//
+	// --------- ZEIT KATEGORIEN
+	//
 	
 	public static void getTimeCategorysFromServer(int requestID) {
 		
-		addJob(GET_TIMECATEGORYS, requestID);
+		addJob(new GET_TIMECATEGORYS(), requestID);
+	}
+	
+	public static List<Category> getTimeCategorys() {
+		
+		return mTimeCategorys;
 	}
 	
 	public static Category getTimeCategoryByID(Long id) {
 		
-		if(!isTimeCategorysInvalid()) {
+		if(mTimeCategorys != null) {
 			
 			for(Category c : mTimeCategorys) {
 				
@@ -130,16 +139,6 @@ public class ModuleDAO {
 		return null;
 	}
 	
-	public static List<Category> getTimeCategorys() {
-		
-		return mTimeCategorys;
-	}
-	
-	public static boolean isTimeCategorysInvalid() {
-		
-		return mTimeCategorys == null;
-	}
-		
 	public static void invalidateTimeCategorys() {
 		
 		mTimeCategorys = null;
@@ -147,17 +146,27 @@ public class ModuleDAO {
 	
 	
 	
-	// --------- STUDENT COURSE LIST
+	//
+	// --------- STUDENTEN IN EINEN KURS EINSCHREIBEN
+	//
 	
 	public static void addStudentToCourse(int requestID, Long courseID) {
 		
-		ADD_STUDENT_TO_COURSE.setParameter(courseID);
-		addJob(ADD_STUDENT_TO_COURSE, requestID);
+		ServerOperation op = new ADD_STUDENT_TO_COURSE();
+		op.setParameter(courseID);
+		
+		addJob(op, requestID);
 	}
+	
+	
+
+	//
+	// --------- KURSLISTE DES STUDENTEN ABFRAGEN
+	//
 	
 	public static void getStudentCourseListFromServer(int requestID) {
 		
-		addJob(GET_STUDENTCOURSELIST, requestID);
+		addJob(new GET_STUDENTCOURSELIST(), requestID);
 	}
 	
 	public static List<Course> getStudentCourseList() {
@@ -165,19 +174,9 @@ public class ModuleDAO {
 		return mStudentCourses;
 	}
 	
-	public static boolean isStudentCourseListInvalid() {
-		
-		return mStudentCourses == null;
-	}
-	
-	public static void invalidateStudentCourseList() {
-		
-		mStudentCourses = null;
-	}
-	
 	public static Course getStudentCourseByID(Long id) {
 		
-		if(!isStudentCourseListInvalid()) {
+		if(mStudentCourses != null) {
 			
 			for(Course c : mStudentCourses) {
 				
@@ -191,13 +190,20 @@ public class ModuleDAO {
 		return null;
 	}
 	
+	public static void invalidateStudentCourseList() {
+		
+		mStudentCourses = null;
+	}
+	
 
-
-	// --------- TEACHER COURSE LIST
+	
+	//
+	// --------- KURSLISTE DES DOZENTEN ABFRAGEN
+	//
 	
 	public static void getTeacherCourseListFromServer(int requestID) {
 		
-		addJob(GET_TEACHERCOURSELIST, requestID);
+		addJob(new GET_TEACHERCOURSELIST(), requestID);
 	}
 	
 	public static List<Course> getTeacherCourseList() {
@@ -205,19 +211,9 @@ public class ModuleDAO {
 		return mTeacherCourses;
 	}
 	
-	public static Boolean isTeacherCourseListInvalid() {
-		
-		return mTeacherCourses == null;
-	}
-	
-	public static void invalidateTeacherCourseList() {
-		
-		mTeacherCourses = null;
-	}
-	
 	public static Course getTeacherCourseByID(Long id) {
 		
-		if(!isTeacherCourseListInvalid()) {
+		if(mTeacherCourses != null) {
 			
 			for(Course c : mTeacherCourses) {
 				
@@ -231,78 +227,57 @@ public class ModuleDAO {
 		return null;
 	}
 	
-	
-	
-	// --------- ALL COURSE LIST 
-	
-	public static void getAllCourseListFromServer(int requestID) {
+	public static void invalidateTeacherCourseList() {
 		
-		addJob(GET_ALLCOURSELIST, requestID);
+		mTeacherCourses = null;
 	}
 	
-	public static List<Course> getAllCourseList() {
+
+	
+	
+	//
+	// --------- KURSLISTE ALLER VERFÜGBAREN KURSE ABFRAGEN
+	//
+	
+	public static void getFullCourseListFromServer(int requestID) {
+		
+		addJob(new GET_FULLCOURSELIST(), requestID);
+	}
+	
+	public static List<Course> getFullCourseList() {
 		
 		return mAllCourses;
 	}
 	
-	public static Boolean isAllCourseListInvalid() {
-		
-		return mAllCourses == null;
-	}
-	
-	public static void invalidateAllCourseList() {
+	public static void invalidateFullCourseList() {
 		
 		mAllCourses = null;
 	}
 	
-	public static Course getAllCourseByID(Long id) {
-		
-		if(!isAllCourseListInvalid()) {
-			
-			for(Course c : mAllCourses) {
-				
-				if(c.getId() == id) {
-					
-					return c;
-				}
-			}
-		}
-		
-		return null;
-	}	
 	
 	
-	
-	
-	// --------- EXPENDITURES
+	//
+	// --------- AUFWÄNDE ABRUFEN / ABSPEICHERN
+	//
 	
 	public static void getStudentExpendituresFromServer(int requestID) {
 
-		addJob(GET_EXPENDITURES, requestID);
+		addJob(new GET_ALL_EXPENDITURES(), requestID);
 	}
 	
 	public static void postStudentExpenditureToServer(int requestID, Expenditure expenditure) {
 		
-		POST_EXPENDITURE.setParameter(expenditure);
+		ServerOperation op = new POST_EXPENDITURE();
+		op.setParameter(expenditure);
 		
-		addJob(POST_EXPENDITURE, requestID);
-	}
-	
-	public static Boolean isStudentExpendituresInvalid() {
-		
-		return mStudentExpenditures == null;
-	}
-	
-	public static void invalidateStudentExpenditures() {
-		
-		mStudentExpenditures = null;
+		addJob(op, requestID);
 	}
 	
 	public static List<Expenditure> getStudentExpendituresByCourseID(Long courseID) {
 		
 		ArrayList<Expenditure> ret = new ArrayList<Expenditure>();
 		
-		if(!isStudentExpendituresInvalid()) {
+		if(mStudentExpenditures != null) {
 			
 			for(Expenditure e : mStudentExpenditures) {
 				
@@ -314,36 +289,33 @@ public class ModuleDAO {
 		return ret;
 	}
 	
+	public static void invalidateStudentExpenditures() {
+		
+		mStudentExpenditures = null;
+	}
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	//
-	// --------------- Serverkommunikation
-	//
 
 	
-	
 	/**
-	 * Server Operations
+	 * =============================================================================================
+	 * Server Operationen
+	 * =============================================================================================
 	 * 
 	 * Hier alle Serveroperationen implementieren die wir benötigen !!!
 	 */
 	
 	//
-	// User Objekt laden
+	// User laden
 	//
-	private static ServerOperation GET_USER = new ServerOperation() {
+	private static class GET_USER extends ServerOperation {
 		
 		@Override
 		public boolean runIf() {
 			
-			return isUserInvalidated();
+			return mUser == null;
 		}
 		
 		@Override
@@ -362,19 +334,21 @@ public class ModuleDAO {
 		@Override
 		public int getDialogMessage() {
 			
+			// TODO: Eigener String dafür
 			return R.string.connection_loading;
 		}
 	};
 	
+	
 	//
 	// Zeitkategorien holen
 	//
-	private static ServerOperation GET_TIMECATEGORYS = new ServerOperation() {
+	private static class GET_TIMECATEGORYS extends ServerOperation {
 		
 		@Override
 		public boolean runIf() {
 			
-			return isTimeCategorysInvalid();
+			return mTimeCategorys == null;
 		}
 		
 		@Override
@@ -399,15 +373,16 @@ public class ModuleDAO {
 		} 
 	};
 	
+	
 	//
 	// Kursliste für die Rolle Student laden
 	//
-	private static ServerOperation GET_STUDENTCOURSELIST = new ServerOperation()  {
+	private static class GET_STUDENTCOURSELIST extends ServerOperation {
 		
 		@Override
 		public boolean runIf() {
 			
-			return isStudentCourseListInvalid();
+			return mStudentCourses == null;
 		}
 		
 		@Override
@@ -432,15 +407,16 @@ public class ModuleDAO {
 		}
 	};
 	
+	
 	//
 	// Kursliste für die Rolle Dozent laden
 	//
-	private static ServerOperation GET_TEACHERCOURSELIST = new ServerOperation() {
+	private static class GET_TEACHERCOURSELIST extends ServerOperation {
 		
 		@Override
 		public boolean runIf() {
 			
-			return isTeacherCourseListInvalid();
+			return mTeacherCourses == null;
 		}
 		
 		@Override
@@ -471,15 +447,16 @@ public class ModuleDAO {
 		}
 	};
 	
+	
 	//
 	// Alle Kurse vom Server laden (für die Suche)
 	//
-	private static ServerOperation GET_ALLCOURSELIST = new ServerOperation() {
+	private static class GET_FULLCOURSELIST extends ServerOperation {
 		
 		@Override
 		public boolean runIf() {
 			
-			return isAllCourseListInvalid();
+			return mAllCourses == null;
 		}
 		
 		@Override
@@ -504,10 +481,11 @@ public class ModuleDAO {
 		}
 	};
 	
+	
 	//
 	// Aufwandseintrag zum Server schicken
 	//
-	private static ServerOperation POST_EXPENDITURE = new ServerOperation() {
+	private static class POST_EXPENDITURE extends ServerOperation {
 		
 		private Expenditure mExpenditure;
 		
@@ -543,16 +521,17 @@ public class ModuleDAO {
 			return R.string.connection_saving_expenditures;
 		}
 	};
+	
 
 	//
 	// Liste mit Aufwänden vom Server holen
 	//
-	private static ServerOperation GET_EXPENDITURES = new ServerOperation() {
+	private static class GET_ALL_EXPENDITURES extends ServerOperation {
 		
 		@Override
 		public boolean runIf() {
 			
-			return isStudentExpendituresInvalid();
+			return mStudentExpenditures == null;
 		}
 		
 		@Override
@@ -580,15 +559,16 @@ public class ModuleDAO {
 		}
 	};
 	
+	
 	//
 	// Module vom Server holen
 	//
-	private static ServerOperation GET_MODULES = new ServerOperation() {
+	private static class GET_MODULES extends ServerOperation {
 
 		@Override
 		public boolean runIf() {
 
-			return isModulesInvalidated();
+			return mModules == null;
 		}
 
 		@Override
@@ -609,17 +589,16 @@ public class ModuleDAO {
 		@Override
 		public int getDialogMessage() {
 			
-			// TODO
+			//TODO: Eigener String dafür
 			return R.string.connection_loading;
 		}
-		
-		
 	};
+	
 	
 	//
 	// Student in einen Kurs einschreiben
 	//
-	private static ServerOperation ADD_STUDENT_TO_COURSE = new ServerOperation() {
+	private static class ADD_STUDENT_TO_COURSE extends ServerOperation {
 		
 		private Long mCourseID;
 		
@@ -648,38 +627,36 @@ public class ModuleDAO {
 		@Override
 		public int getDialogMessage() {
 			
-			// TODO
+			//TODO: Eigener String dafür
 			return R.string.connection_loading;
 		}
 	};
 	
 	
+	
+	// TODO: Mehr ServerOperations unterstützen
+	
 
+	// ---------------------------------------------------------------------------------------------
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	private interface ServerOperation {
+	private static abstract class ServerOperation {
 		
-		public boolean runIf();
+		public abstract boolean runIf();
 		
-		public void    run();
-		public void    setParameter(Object... parameter);
+		public abstract void run();
+		public abstract void setParameter(Object... parameter);
 		
-		public int     getDialogMessage();
+		public abstract int getDialogMessage();
 	}
 	
 	private static class ServerJob {
 		
 		private ServerOperation mOperation;
-		private int             mRequestID;
-		private boolean         mOk;
-		private String          mErrorMessage;
+		private int mRequestID;
+		private boolean mOk;
+		private String mErrorMessage;
 		
 		public ServerJob(ServerOperation operation, int requestID) {
 			
@@ -712,13 +689,31 @@ public class ModuleDAO {
 	}
 	
 	private static ArrayList<ServerJob> mJobs;
-	
+	private static AsyncTask<ServerJob, ServerJob, Boolean> mJobWorker;
 	
 	
 	/**
 	 * Neuen Job starten
 	 */
 	public static void beginJob() {
+		
+		if((mJobs != null) && (mJobWorker != null)) {
+			
+			try {
+				
+				//
+				// Der Job wird aus irgendwelchen Gründen noch verarbeitet. Wir warten einfach
+				// bis er fertig ist.
+				//
+				mJobWorker.get();
+			}
+			catch (InterruptedException e) {
+				
+			}
+			catch (ExecutionException e) {
+				
+			}
+		}
 		
 		mJobs = new ArrayList<ServerJob>();
 	}
@@ -737,7 +732,7 @@ public class ModuleDAO {
 	private static void addJob(ServerOperation operation, int requestID) {
 		
 		if(mJobs == null)
-			throw new IllegalArgumentException("You cant add to a job before you start one!");
+			throw new IllegalArgumentException("Start a job with beginJob() first!");
 		
 		mJobs.add(new ServerJob(operation, requestID));
 	}
@@ -755,10 +750,13 @@ public class ModuleDAO {
 	public static void commitJob(final Context ctx, final ModuleDAOListener listener) {
 		
 		if(mJobs == null)
-			throw new IllegalArgumentException("Cant commit an unstarted job");
+			throw new IllegalArgumentException("Can't commit an unstarted job! Start one with beginJob().");
+		
+		if(mJobs.size() == 0)
+			return;
 		
 		
-		AsyncTask<ServerJob, ServerJob, Boolean> worker = new AsyncTask<ServerJob, ServerJob, Boolean>() {
+		mJobWorker = new AsyncTask<ServerJob, ServerJob, Boolean>() {
 			
 			private ProgressDialog mDialog;
 			
@@ -814,7 +812,9 @@ public class ModuleDAO {
 	            if(job.mOk) {
 	            	
 	            	mDialog.setMessage(ctx.getResources().getString(job.getOperation().getDialogMessage()));
-	            	mDialog.show();
+	            	
+	            	if(!mDialog.isShowing())
+	            		mDialog.show();
 	            }
 	            else {
 	            	
@@ -824,17 +824,19 @@ public class ModuleDAO {
 	        }
 	        
 			protected void onPostExecute(Boolean result) {
+						
+				mJobs = null;
+				
+				if(result && (listener != null))
+					listener.onDAOFinished();
 				
 				if((mDialog != null) && mDialog.isShowing())
 					mDialog.dismiss();
 				
 				mDialog = null;
-				
-				if(result && (listener != null))
-					listener.onDAOFinished();
 			}
 		};
 		
-		worker.execute(mJobs.toArray(new ServerJob[mJobs.size()]));
+		mJobWorker.execute(mJobs.toArray(new ServerJob[mJobs.size()]));
 	}
 }
