@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,10 +31,11 @@ public class StudentFragment extends AbstractAsyncFragment {
 	
 	private final String TAG = StudentFragment.class.getSimpleName();
 	
-	private final int REQUEST_NEW = 1;
+	private final int REQUEST_ADD_COURSE = 1;
 	private final int REQUEST_TIMETRACKING = 2;
 	
 	private final int DAO_REQUEST_STUDENT_COURSELIST = 0;
+	private final int DAO_ADD_STUDENT_TO_COURSE = 1;
 	
 	private StudentCourseListAdapter mAdapter;
 	private List<Course> mViewData;
@@ -53,7 +54,8 @@ public class StudentFragment extends AbstractAsyncFragment {
 		if(mAdapter == null)
 			mAdapter = new StudentCourseListAdapter(savedInstanceState);
 		
-		Log.d("LOG", "Getting student courselist...");
+		
+		// Alle Ressourcen anfordern, die wir benötigen
 		ModuleDAO.beginJob();
 		ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENT_COURSELIST);
 		ModuleDAO.commitJob(this);
@@ -77,7 +79,7 @@ public class StudentFragment extends AbstractAsyncFragment {
 			Intent intent = new Intent(getActivity(),
 					                   EnterModuleActivity.class);
 			intent.putExtra("fragment", "student");
-			startActivityForResult(intent, REQUEST_NEW);
+			startActivityForResult(intent, REQUEST_ADD_COURSE);
 			return true;
 			
 		default:
@@ -121,13 +123,29 @@ public class StudentFragment extends AbstractAsyncFragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-		if(requestCode == REQUEST_TIMETRACKING) {
-			
+		if(resultCode != Activity.RESULT_OK)
+			return;
+
+		switch(requestCode) {
+		
+		case REQUEST_TIMETRACKING:
 			mAdapter.notifyDataSetChanged();
 			
 			/* Fix #11128 */
 			if(getActivity() != null)
 				((ModuleListActivity)getActivity()).refresh();
+			break;
+			
+		/*
+		case REQUEST_ADD_COURSE:
+			Long courseID = data.getExtras().getLong("course_id");
+			
+			ModuleDAO.beginJob();
+			ModuleDAO.addStudentToCourse(DAO_ADD_STUDENT_TO_COURSE, courseID);
+			ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENT_COURSELIST);
+			ModuleDAO.commitJob(this);
+			break;
+		*/
 		}
 	}
 	
@@ -198,13 +216,15 @@ public class StudentFragment extends AbstractAsyncFragment {
 			TextView time = (TextView)convertView.findViewById(R.id.timeInvested);
 			TextView subtext = (TextView)convertView.findViewById(R.id.subtext);
 
-			// TODO
+			// TODO: Stimmt auch net wirklich...
 			name.setText(course.getName());
 			subtext.setText(course.getLecturer().get(0).getLastName());
 			
-			// TODO
+			// TODO: Serverteam muss investierte Zeit für einen Kurs verfügbar machen
+			//       Möglich ist auch alle Expenditures abrufen und zusammenzählen -.-
+			//
 			TimeData timeInvested = new TimeData();
-			timeInvested.setTimeInHours(60);// StaticModuleData.getStudentData().getTimeInvestedTotal(course.getId());
+			timeInvested.setTimeInHours(123);// StaticModuleData.getStudentData().getTimeInvestedTotal(course.getId());
 			Date startDate = course.getStart();
 			
 			if (startDate != null) {

@@ -1,40 +1,41 @@
 package de.thm.mni.thmtimer;
 
-import android.app.Dialog;
+import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.thmtimer.entities.Module;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-public class ModuleDetailFragment extends DialogFragment implements
-		OnClickListener {
-
-	private static Dialog mDialog;
+public class ModuleDetailFragment extends AbstractAsyncFragment {
+	
 	private TextView mModuleName, mModuleNumber, mCreditPoints, mResponsible,
 			mDescription, mExpenditure, mRequirement, mTestingMethod, mSWS,
 			mFrequency, mPrereq;
 	private Button mBtnEnter;
-	private Long id;
-
+	private Long mModuleID;
+	
+	private final int DAO_REQUEST_MODULES = 0;
+	
+	
 	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		mDialog = super.onCreateDialog(savedInstanceState);
-		mDialog.setTitle(R.string.module_details);
-		return mDialog;
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater,
+			                 ViewGroup container,
+			                 Bundle savedInstanceState) {
+		
+		mModuleID = getArguments().getLong("id", -1);
+		
+		
 		// Inflate the layout for this fragment
-		View view = inflater.inflate(R.layout.moduldetailfragment, container,
-				false);
+		View view = inflater.inflate(R.layout.moduldetailfragment,
+				                     container,
+				                     false);
 
 		// get views
 		mModuleName = (TextView) view.findViewById(R.id.name);
@@ -49,19 +50,58 @@ public class ModuleDetailFragment extends DialogFragment implements
 		mFrequency = (TextView) view.findViewById(R.id.frequency);
 		mPrereq = (TextView) view.findViewById(R.id.prerequisites);
 		mBtnEnter = (Button) view.findViewById(R.id.enter);
-		mBtnEnter.setOnClickListener(this);
-
-		id = getArguments().getLong("id", -1);
-		//Module m = StaticModuleData.findModule(id);
+		mBtnEnter.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				// TODO
+				Toast.makeText(getActivity(),
+						       "TODO: Liste mit allen Kursen zu diesem Modul wo man sich dann wirklich einschreiben kann",
+						       Toast.LENGTH_LONG).show();
+			}
+		});
 		
-/*
+		// Sicherstellen, dass alle Ressourcen verfügbar sind
+		ModuleDAO.beginJob();
+		ModuleDAO.getModulesFromServer(DAO_REQUEST_MODULES);
+		ModuleDAO.commitJob(this);
+		
+		return view;
+	}
+	
+
+	@Override
+	public void onDAOError(int requestID, String message) {
+		
+		switch(requestID) {
+		
+		case DAO_REQUEST_MODULES:
+			Toast.makeText(getActivity(),
+					       String.format("Fehler beim Laden der Modulliste: %s", message),
+					       Toast.LENGTH_LONG).show();
+			break;
+		}
+	}
+	
+	@Override
+	public void onDAOFinished() {
+
+		Module m = ModuleDAO.getModuleByID(mModuleID);
+		
 		mModuleName.setText(m.getName());
-		mModuleNumber.setText(m.getModuleNumber());
-		mCreditPoints.setText(m.getCreditPoints().toString());
+		mModuleNumber.setText(m.getNumber());
+		mCreditPoints.setText(String.valueOf(m.getCreditPoints()));
+		
+		mExpenditure.setText(String.format("%d %s",
+				                           m.getCreditPoints() * 30,
+				                           getString(R.string.hours)));
+		
+		/*
+		 * Im Moment auskommentiert, da vom Server nicht vorgesehen / implementiert
+		 * 
+		mDescription.setText(c.getDescription()); 
 		mResponsible.setText(m.getResponsible());
-		mDescription.setText(m.getDescription());
-		mExpenditure.setText(Integer.toString((m.getCreditPoints() * 30)) + " "
-				+ getString(R.string.hours));
 		mRequirement.setText(m.getRequirement());
 		mTestingMethod.setText(m.getTestingMethod());
 		mSWS.setText(Integer.toString(m.getSWS()));
@@ -74,23 +114,6 @@ public class ModuleDetailFragment extends DialogFragment implements
 			}
 		}
 		mPrereq.setText(Html.fromHtml(sb.toString()));
-*/
-		return view;
+		*/
 	}
-
-	@Override
-	public void onClick(View arg0) {
-		enterModule();
-		if (mDialog != null) {
-			mDialog.dismiss();
-		}
-		dismiss();
-	}
-
-	private void enterModule() {
-		// send Information to Server
-		//Log.i("", id.toString());
-		//StaticModuleData.getStudentData().addCourse(id);
-	}
-
 }

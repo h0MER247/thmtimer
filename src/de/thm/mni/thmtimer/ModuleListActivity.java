@@ -18,6 +18,7 @@ import de.thm.mni.thmtimer.util.ZoomPageTransformer;
 import de.thm.thmtimer.entities.User;
 
 
+
 public class ModuleListActivity extends FragmentActivity {
 	
 	private final String TAG = ModuleListActivity.class.getSimpleName();
@@ -39,8 +40,10 @@ public class ModuleListActivity extends FragmentActivity {
 		setContentView(R.layout.modulelistactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
+		
 		if(mUser == null)
 			mUser = ModuleDAO.getUser();
+		
 		
 		// Fragmente initialisieren
 		if(mStudentFragment == null)
@@ -98,7 +101,7 @@ public class ModuleListActivity extends FragmentActivity {
 				@Override
 				public void onPageSelected(int position) {
 					
-					mActionBar = getActionBar();
+					//mActionBar = getActionBar();
 					if(mActionBar.getSelectedNavigationIndex() != position)
 						mActionBar.setSelectedNavigationItem(position);
 				}

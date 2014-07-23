@@ -6,10 +6,9 @@ import java.util.List;
 
 import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.thmtimer.entities.Course;
+import de.thm.thmtimer.entities.Module;
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +26,10 @@ import android.widget.SearchView.OnQueryTextListener;
 
 public class ModuleSearchFragment extends AbstractAsyncFragment {
 
-	private final int DAO_REQUEST_ALL_COURSES = 0;
+	private final int DAO_REQUEST_MODULES = 0;
 	
-	private List<Course> mCourseList;
-	private List<Course> mAdapterData;
+	private List<Module> mModuleList;
+	private List<Module> mAdapterData;
 	private SearchView mSearch;
 	private ModuleListAdapter mAdapter;
 	
@@ -42,18 +41,18 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 		setHasOptionsMenu(true);
 		
 		
-		if(mCourseList == null)
-			mCourseList = new ArrayList<Course>();
+		if(mModuleList == null)
+			mModuleList = new ArrayList<Module>();
 		
 		if(mAdapterData == null)
-			mAdapterData = new ArrayList<Course>();
+			mAdapterData = new ArrayList<Module>();
 		
 		if(mAdapter == null)
 			mAdapter = new ModuleListAdapter(savedInstanceState);
 		
 		
 		ModuleDAO.beginJob();
-		ModuleDAO.getAllCourseListFromServer(DAO_REQUEST_ALL_COURSES);
+		ModuleDAO.getModulesFromServer(DAO_REQUEST_MODULES);
 		ModuleDAO.commitJob(this);
 	}
 	
@@ -103,13 +102,12 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 					
 					ea.closeSearch(mAdapter.getItem(pos).getId());
 				}
-				
 			}
 		});
-		mAdapter.sort(new Comparator<Course>(){
+		mAdapter.sort(new Comparator<Module>(){
 
 			@Override
-			public int compare(Course lhs, Course rhs) {
+			public int compare(Module lhs, Module rhs) {
 				
 				return lhs.getName().compareTo(rhs.getName());
 			}
@@ -126,22 +124,22 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 		
 		switch(requestID) {
 		
-		case DAO_REQUEST_ALL_COURSES:
+		case DAO_REQUEST_MODULES:
 			Toast.makeText(getActivity(),
-					       String.format("Kann die Kursliste nicht laden: %s", message),
+					       String.format("Kann die Modulliste nicht laden: %s", message),
 					       Toast.LENGTH_LONG).show();
 			break;
-		}		
+		}
 	}
 
 	@Override
 	public void onDAOFinished() {
 		
-		mCourseList.clear();
-		mCourseList.addAll(ModuleDAO.getAllCourseList());
+		mModuleList.clear();
+		mModuleList.addAll(ModuleDAO.getModuleList());
 		
 		mAdapterData.clear();
-		mAdapterData.addAll(mCourseList);
+		mAdapterData.addAll(mModuleList);
 		
 		mAdapter.notifyDataSetChanged();
 	}
@@ -155,7 +153,7 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 	
 	
 	
-	private class ModuleListAdapter extends ArrayAdapter<Course> {
+	private class ModuleListAdapter extends ArrayAdapter<Module> {
 
 		private Bundle mBundle;
 		
@@ -179,12 +177,13 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 			TextView name = (TextView)convertView.findViewById(R.id.moduleName);
 			TextView subtext = (TextView)convertView.findViewById(R.id.subtext);
 			
+			// Das was wir hier hatten hat das Serverteam nicht implementiert
+			final Module module = getItem(position);			
 			
-			final Course course = getItem(position);			
-			
-			// TODO
-			subtext.setText(course.getLecturer().get(0).getLastName());
-			name.setText(course.getName());
+			name.setText(module.getName());
+			subtext.setText(String.format("%s (%s)",
+					                      module.getShortcut(),
+					                      module.getNumber()));
 			
 			return convertView;
 		}
@@ -202,13 +201,12 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 					
 					if(constraint != null && constraint.toString().length() > 0) {
 						
-						List<Course> found = new ArrayList<Course>();
-						for(Course c : mCourseList) {
+						List<Module> found = new ArrayList<Module>();
+						for(Module m : mModuleList) {
 							
-							// TODO
-							if(c.getName().toLowerCase().contains(constraint)) {
+							if(getSearchStringForModule(m).contains(constraint)) {
 								
-								found.add(c);
+								found.add(m);
 							}
 						}
 
@@ -217,8 +215,8 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 					}
 					else {
 						
-						result.values = mCourseList;
-						result.count = mCourseList.size();
+						result.values = mModuleList;
+						result.count = mModuleList.size();
 					}
 					
 					return result;
@@ -228,13 +226,29 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 				@Override
 				protected void publishResults(CharSequence constraint, FilterResults results) {
 					
-					List<Course> res = (List<Course>)results.values;
+					List<Module> res = (List<Module>)results.values;
 					
 					clear();
-					for(Course item : res)
+					for(Module item : res)
 						add(item);
 					
 					notifyDataSetChanged();
+				}
+				
+				
+				/**
+				 * Hier alles reinpacken nach dem gesucht werden kann
+				 * 
+				 * @param module
+				 *   Das Modul
+				 * @return
+				 *   String mit allen suchbaren Begriffen für dieses Modul
+				 */
+				private String getSearchStringForModule(Module module) {
+					
+					String ret = module.getName() + " " + module.getNumber() + " " + module.getShortcut();
+					
+					return ret.toLowerCase();
 				}
 			};
 		}

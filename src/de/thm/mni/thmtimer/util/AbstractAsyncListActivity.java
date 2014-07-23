@@ -16,7 +16,6 @@
 
 package de.thm.mni.thmtimer.util;
 
-import de.thm.mni.thmtimer.R;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 

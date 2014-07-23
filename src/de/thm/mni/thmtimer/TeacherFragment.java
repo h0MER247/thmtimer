@@ -7,6 +7,7 @@ import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.Course;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,8 +27,7 @@ public class TeacherFragment extends AbstractAsyncFragment {
 	
 	private final String TAG = TeacherFragment.class.getSimpleName();
 	
-	private final int REQUEST_NEW = 1;
-	private final int REQUEST_CREATECOURSE = 2;
+	private final int REQUEST_ENTER_MODULE = 1;
 	
 	private final int DAO_REQUEST_TEACHER_COURSELIST = 0;
 	
@@ -49,6 +49,7 @@ public class TeacherFragment extends AbstractAsyncFragment {
 			mAdapter = new TeacherCourseListAdapter(savedInstanceState);
 		
 		
+		// Alle Ressourcen anfordern, die wir benötigen
 		ModuleDAO.beginJob();
 		ModuleDAO.getTeacherCourseListFromServer(DAO_REQUEST_TEACHER_COURSELIST);
 		ModuleDAO.commitJob(this);
@@ -72,7 +73,7 @@ public class TeacherFragment extends AbstractAsyncFragment {
 			Intent intent = new Intent(getActivity(),
 					                   EnterModuleActivity.class);
 			intent.putExtra("fragment", "teacher");
-			startActivityForResult(intent, REQUEST_NEW);
+			startActivityForResult(intent, REQUEST_ENTER_MODULE);
 			return true;
 			
 		default:
@@ -116,7 +117,12 @@ public class TeacherFragment extends AbstractAsyncFragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-		if (requestCode == REQUEST_CREATECOURSE) {
+		if(resultCode != Activity.RESULT_OK)
+			return;
+		
+		if(requestCode == REQUEST_ENTER_MODULE) {
+			
+			// TODO
 			
 			mAdapter.notifyDataSetChanged();
 			

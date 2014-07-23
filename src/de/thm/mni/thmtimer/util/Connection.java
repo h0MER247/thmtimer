@@ -2,9 +2,7 @@ package de.thm.mni.thmtimer.util;
 
 import java.io.IOException;
 
-import org.apache.http.entity.StringEntity;
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpAuthentication;
@@ -108,7 +106,8 @@ public class Connection {
 
 		Log.d(TAG, "URL:" + url);
 		Log.d(TAG, "Method: " + method.toString());
-		Log.d(TAG, "Response type: " + responseType.toString());
+		if(responseType != null)
+			Log.d(TAG, "Response type: " + responseType.toString());
 
 		// Populate the HTTP Basic Authentication header with the username and
 		// password
@@ -153,7 +152,8 @@ public class Connection {
 
 		Log.d(TAG, "URL:" + url);
 		Log.d(TAG, "Method: " + method.toString());
-		Log.d(TAG, "Response type: " + responseType.toString());
+		if(responseType != null)
+			Log.d(TAG, "Response type: " + responseType.toString());
 
 		// Populate the HTTP Basic Authentication header with the username and
 		// password

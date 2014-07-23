@@ -47,7 +47,7 @@ public class TeacherCourseDetailActivity extends AbstractAsyncActivity {
 		mCourseID = getIntent().getExtras().getLong("course_id");
 		mCourse   = ModuleDAO.getTeacherCourseByID(mCourseID);
 		
-		
+		// Alle Ressourcen anfordern, die wir benötigen
 		ModuleDAO.beginJob();
 		ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
 		// TODO: Statistikdaten holen

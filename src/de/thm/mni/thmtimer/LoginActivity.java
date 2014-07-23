@@ -176,8 +176,10 @@ public class LoginActivity extends AbstractAsyncActivity {
 			ModuleDAO.invalidateTeacherCourseList();
 			ModuleDAO.invalidateTimeCategorys();
 			ModuleDAO.invalidateStudentExpenditures();
+			ModuleDAO.invalidateModules();
 			ModuleDAO.invalidateUser();
 			
+			// Alle Ressourcen anfordern, die wir benötigen
 			ModuleDAO.beginJob();
 			ModuleDAO.getUserFromServer(DAO_REQUEST_USER);
 			ModuleDAO.commitJob(this);

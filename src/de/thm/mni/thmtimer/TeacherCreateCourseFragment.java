@@ -69,8 +69,5 @@ public class TeacherCreateCourseFragment extends Fragment{
 
 
 		return view;
-
-	}	
-
-
+	}
 }

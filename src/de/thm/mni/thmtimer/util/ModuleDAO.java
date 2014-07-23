@@ -9,9 +9,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Expenditure;
+import de.thm.thmtimer.entities.Module;
 import de.thm.thmtimer.entities.User;
 import de.thm.mni.thmtimer.R;
 import de.thm.thmtimer.entities.Category;
@@ -25,7 +25,44 @@ public class ModuleDAO {
 	private static List<Expenditure> mStudentExpenditures;
 	private static List<Course> mTeacherCourses;
 	private static List<Category> mTimeCategorys;
+	private static List<Module> mModules;
 	
+	
+	// --------- MODULE
+	
+	public static void getModulesFromServer(int requestID) {
+		
+		addJob(GET_MODULES, requestID);
+	}
+	
+	public static List<Module> getModuleList() {
+		
+		return mModules;
+	}
+	
+	public static Module getModuleByID(long id) {
+		
+		if(!isModulesInvalidated()) {
+			
+			for(Module m : mModules) {
+				
+				if(m.getId() == id)
+					return m;
+			}
+		}
+		
+		return null;
+	}
+	
+	public static boolean isModulesInvalidated() {
+		
+		return mModules == null;
+	}
+	
+	public static void invalidateModules() {
+		
+		mModules = null;
+	}
 	
 	
 
@@ -92,6 +129,12 @@ public class ModuleDAO {
 	
 	
 	// --------- STUDENT COURSE LIST
+	
+	public static void addStudentToCourse(int requestID, Long courseID) {
+		
+		ADD_STUDENT_TO_COURSE.setParameter(courseID);
+		addJob(ADD_STUDENT_TO_COURSE, requestID);
+	}
 	
 	public static void getStudentCourseListFromServer(int requestID) {
 		
@@ -267,9 +310,12 @@ public class ModuleDAO {
 	
 	public interface ServerOperation {
 		
-		public void run();
-		public void setParameter(Object... parameter);
-		public int  getDialogMessage();
+		public boolean runIf();
+		
+		public void    run();
+		public void    setParameter(Object... parameter);
+		
+		public int     getDialogMessage();
 	}
 	
 	
@@ -278,13 +324,20 @@ public class ModuleDAO {
 	 * 
 	 * Hier alle Serveroperationen implementieren die wir benötigen !!!
 	 */
+	
+	//
+	// User Objekt laden
+	//
 	private static ServerOperation GET_USER = new ServerOperation() {
 		
 		@Override
-		public void run() {
+		public boolean runIf() {
 			
-			if(!isUserInvalidated())
-				return;
+			return isUserInvalidated();
+		}
+		
+		@Override
+		public void run() {
 			
 			mUser = Connection.request("/users/" + Connection.getUsername(),
 					                   HttpMethod.GET,
@@ -303,13 +356,19 @@ public class ModuleDAO {
 		}
 	};
 	
+	//
+	// Zeitkategorien holen
+	//
 	private static ServerOperation GET_TIMECATEGORYS = new ServerOperation() {
 		
 		@Override
-		public void run() {
+		public boolean runIf() {
 			
-			if(!isTimeCategorysInvalid())
-				return;
+			return isTimeCategorysInvalid();
+		}
+		
+		@Override
+		public void run() {
 			
 			Category[] categorys = Connection.request("/categories/",
 					                                  HttpMethod.GET,
@@ -330,13 +389,19 @@ public class ModuleDAO {
 		} 
 	};
 	
+	//
+	// Kursliste für die Rolle Student laden
+	//
 	private static ServerOperation GET_STUDENTCOURSELIST = new ServerOperation()  {
 		
 		@Override
-		public void run() {
+		public boolean runIf() {
 			
-			if(!isStudentCourseListInvalid())
-				return;
+			return isStudentCourseListInvalid();
+		}
+		
+		@Override
+		public void run() {
 			
 			Course[] Courses = Connection.request("/courses/user/" + Connection.getUsername(),
 					                     HttpMethod.GET,
@@ -357,13 +422,19 @@ public class ModuleDAO {
 		}
 	};
 	
+	//
+	// Kursliste für die Rolle Dozent laden
+	//
 	private static ServerOperation GET_TEACHERCOURSELIST = new ServerOperation() {
 		
 		@Override
-		public void run() {
+		public boolean runIf() {
 			
-			if(!isTeacherCourseListInvalid())
-				return;
+			return isTeacherCourseListInvalid();
+		}
+		
+		@Override
+		public void run() {
 			
 			/*
 			// TODO: Warten bis das Serverteam den Bug gefixed hat und die Liste abrufbar ist
@@ -390,17 +461,23 @@ public class ModuleDAO {
 		}
 	};
 	
+	//
+	// Alle Kurse vom Server laden (für die Suche)
+	//
 	private static ServerOperation GET_ALLCOURSELIST = new ServerOperation() {
+		
+		@Override
+		public boolean runIf() {
+			
+			return isAllCourseListInvalid();
+		}
 		
 		@Override
 		public void run() {
 			
-            if(!isAllCourseListInvalid())
-                return;
-            
-            Course[] courses = Connection.request("/courses/" + Connection.getUsername(),
-                                                            HttpMethod.GET,
-                                                            Course[].class);
+            Course[] courses = Connection.request("/courses/",
+                                                  HttpMethod.GET,
+                                                  Course[].class);
             
             mAllCourses = Arrays.asList(courses);
 		}
@@ -417,9 +494,18 @@ public class ModuleDAO {
 		}
 	};
 	
+	//
+	// Aufwandseintrag zum Server schicken
+	//
 	private static ServerOperation POST_EXPENDITURE = new ServerOperation() {
 		
-		Expenditure mExpenditure;
+		private Expenditure mExpenditure;
+		
+		@Override
+		public boolean runIf() {
+			
+			return true;
+		}
 		
 		@Override
 		public void run() {
@@ -448,13 +534,19 @@ public class ModuleDAO {
 		}
 	};
 
+	//
+	// Liste mit Aufwänden vom Server holen
+	//
 	private static ServerOperation GET_EXPENDITURES = new ServerOperation() {
 		
 		@Override
-		public void run() {
+		public boolean runIf() {
 			
-			if(!isStudentExpendituresInvalid())
-				return;
+			return isStudentExpendituresInvalid();
+		}
+		
+		@Override
+		public void run() {
 			
 			Expenditure[] expenditures = Connection.request("/expenditures/",
 					                                        HttpMethod.GET,
@@ -478,13 +570,84 @@ public class ModuleDAO {
 		}
 	};
 	
+	//
+	// Module vom Server holen
+	//
+	private static ServerOperation GET_MODULES = new ServerOperation() {
+
+		@Override
+		public boolean runIf() {
+
+			return isModulesInvalidated();
+		}
+
+		@Override
+		public void run() {
+			
+			Module[] modules = Connection.request("/modules",
+					                              HttpMethod.GET,
+					                              Module[].class);
+			
+			mModules = Arrays.asList(modules);
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+			
+		}
+
+		@Override
+		public int getDialogMessage() {
+			
+			// TODO
+			return R.string.connection_loading;
+		}
+		
+		
+	};
+	
+	//
+	// Student in einen Kurs einschreiben
+	//
+	private static ServerOperation ADD_STUDENT_TO_COURSE = new ServerOperation() {
+		
+		private Long mCourseID;
+		
+		@Override
+		public boolean runIf() {
+			
+			return true;
+		}
+
+		@Override
+		public void run() {
+			
+			Connection.request("/courses/" + mCourseID.toString() + "/user/" + Connection.getUsername(),
+					           HttpMethod.POST,
+					           null);
+			
+			invalidateStudentCourseList();
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+
+			mCourseID = (Long)parameter[0];
+		}
+
+		@Override
+		public int getDialogMessage() {
+			
+			// TODO
+			return R.string.connection_loading;
+		}
+	};
 	
 	
 	
 	
-	/**
-	 * Hier passiert die Magic :) 
-	 */
+
+	
 	private static class ServerJob {
 		
 		private ServerOperation mOperation;
@@ -537,6 +700,7 @@ public class ModuleDAO {
 	}
 	
 	/**
+	 * Job(s) ausführen
 	 * 
 	 * @param yourActivityOrView
 	 *   Aktivität oder Fragment vom Typ AbstractAsyncActivity/AbstractAsyncFragment oder AbstractAsyncListActivity
@@ -556,6 +720,9 @@ public class ModuleDAO {
 				for(ServerJob job : params) {
 					
 					ServerOperation op = job.getOperation();
+					
+					if(!op.runIf())
+						continue;
 					
 					try {
 						
@@ -584,6 +751,8 @@ public class ModuleDAO {
 	        	
 	            super.onProgressUpdate(values);
 	            
+	            // TODO: Manchmal tritt es auf, dass die Progressdialoge nicht angezeigt werden, sondern
+	            //       das Fenster nur grau wird... Sollte gefixed werden!!!
 	            yourActivityOrView.dismissProgressDialog();
 	            
 	            
