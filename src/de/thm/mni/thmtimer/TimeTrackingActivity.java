@@ -13,10 +13,10 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import de.thm.mni.thmtimer.StopwatchDialog.StopwatchListener;
-import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.util.AbstractAsyncListActivity;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.Category;
+import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Expenditure;
 
 
@@ -33,7 +33,7 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 	private List<Expenditure> mTimeTrackingList;
 	
 	private Long mCourseID;
-	private CourseModel mCourse;
+	private Course mCourse;
 	
 	
 	@Override
@@ -57,9 +57,10 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 		mCourse = ModuleDAO.getStudentCourseByID(mCourseID);
 		
 		
-		ModuleDAO.setJobSize(2);
-		ModuleDAO.loadStudentExpendituresFromServer(this, DAO_REQUEST_STUDENT_EXPENDITURES);
-		ModuleDAO.loadTimeCategorysFromServer(this, DAO_REQUEST_TIMECATEGORYS);
+		ModuleDAO.beginJob();
+		ModuleDAO.getExpendituresFromServer(DAO_REQUEST_STUDENT_EXPENDITURES);
+		ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
+		ModuleDAO.commitJob(this);
 	}
 
 	@Override
@@ -76,22 +77,16 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 		
 		switch (item.getItemId()) {
 		
-		case R.id.action_stopwatch:
-			if(ModuleDAO.hasFinishedJob()) {
-				
-				StopwatchDialog dialog = new StopwatchDialog();
-				dialog.setListener(this);
-				dialog.show(getFragmentManager(), "STOPWATCH");
-			}
+		case R.id.action_stopwatch:				
+			StopwatchDialog dialog = new StopwatchDialog();
+			dialog.setListener(this);
+			dialog.show(getFragmentManager(), "STOPWATCH");
 			return true;
 			
 		case R.id.action_add:
-			if(ModuleDAO.hasFinishedJob()) {
-				
-				Intent intent = new Intent(this, TrackTimeActivity.class);
-				intent.putExtra("course_id", mCourseID);
-				startActivityForResult(intent, REQUEST_ADD_TIMETRACKING);
-			}
+			Intent intent = new Intent(this, TrackTimeActivity.class);
+			intent.putExtra("course_id", mCourseID);
+			startActivityForResult(intent, REQUEST_ADD_TIMETRACKING);
 			return true;
 			
 		case android.R.id.home:
@@ -129,8 +124,9 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 			e.setUser(ModuleDAO.getUser());
 			e.setId(0);
 			
-			ModuleDAO.setJobSize(1);
-			ModuleDAO.postStudentExpenditureToServer(this, DAO_POST_EXPENDITURE, e);
+			ModuleDAO.beginJob();
+			ModuleDAO.postExpenditureToServer(DAO_POST_EXPENDITURE, e);
+			ModuleDAO.commitJob(this);
 			
 			Log.d("LOG", String.format("Category: %d, Time: %d", categoryID, timeInMinutes));
 			
@@ -181,29 +177,12 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 		
 		finish();
 	}
-
-	@Override
-	public void onDAOSuccess(int requestID) {
-		
-		switch(requestID) {
-		
-		case DAO_REQUEST_STUDENT_EXPENDITURES:
-			mTimeTrackingList.clear();
-			mTimeTrackingList.addAll(ModuleDAO.getStudentExpendituresByCourseID(mCourseID));
-			break;
-			
-		case DAO_REQUEST_TIMECATEGORYS:
-			Log.d("LOG", "Loaded times...");
-			Log.d("LOG", "Loaded " + ModuleDAO.getTimeCategorys().size());
-			break;
-			
-		case DAO_POST_EXPENDITURE:
-			break;
-		}
-	}
-
+	
 	@Override
 	public void onDAOFinished() {
+		
+		mTimeTrackingList.clear();
+		mTimeTrackingList.addAll(ModuleDAO.getStudentExpendituresByCourseID(mCourseID));
 		
 		Log.d("LOG", "Finished DAO");
 		mAdapter.notifyDataSetChanged();

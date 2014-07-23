@@ -7,6 +7,7 @@ import java.util.List;
 import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.thmtimer.entities.Course;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,8 +30,8 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 
 	private final int DAO_REQUEST_ALL_COURSES = 0;
 	
-	private List<CourseModel> mCourseList;
-	private List<CourseModel> mAdapterData;
+	private List<Course> mCourseList;
+	private List<Course> mAdapterData;
 	private SearchView mSearch;
 	private ModuleListAdapter mAdapter;
 	
@@ -43,17 +44,18 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 		
 		
 		if(mCourseList == null)
-			mCourseList = new ArrayList<CourseModel>();
+			mCourseList = new ArrayList<Course>();
 		
 		if(mAdapterData == null)
-			mAdapterData = new ArrayList<CourseModel>();
+			mAdapterData = new ArrayList<Course>();
 		
 		if(mAdapter == null)
 			mAdapter = new ModuleListAdapter(savedInstanceState);
 		
 		
-		ModuleDAO.setJobSize(1);
-		ModuleDAO.loadAllCourseListFromServer(this, DAO_REQUEST_ALL_COURSES);
+		ModuleDAO.beginJob();
+		ModuleDAO.getAllCourseListFromServer(DAO_REQUEST_ALL_COURSES);
+		ModuleDAO.commitJob(this);
 	}
 	
 
@@ -105,10 +107,10 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 				
 			}
 		});
-		mAdapter.sort(new Comparator<CourseModel>(){
+		mAdapter.sort(new Comparator<Course>(){
 
 			@Override
-			public int compare(CourseModel lhs, CourseModel rhs) {
+			public int compare(Course lhs, Course rhs) {
 				
 				return lhs.getName().compareTo(rhs.getName());
 			}
@@ -134,22 +136,13 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 	}
 
 	@Override
-	public void onDAOSuccess(int requestID) {
-		
-		switch(requestID) {
-		
-		case DAO_REQUEST_ALL_COURSES:
-			mCourseList.clear();
-			mCourseList.addAll(ModuleDAO.getAllCourseList());
-			
-			mAdapterData.clear();
-			mAdapterData.addAll(mCourseList);
-			break;
-		}
-	}
-
-	@Override
 	public void onDAOFinished() {
+		
+		mCourseList.clear();
+		mCourseList.addAll(ModuleDAO.getAllCourseList());
+		
+		mAdapterData.clear();
+		mAdapterData.addAll(mCourseList);
 		
 		mAdapter.notifyDataSetChanged();
 	}
@@ -163,7 +156,7 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 	
 	
 	
-	private class ModuleListAdapter extends ArrayAdapter<CourseModel> {
+	private class ModuleListAdapter extends ArrayAdapter<Course> {
 
 		private Bundle mBundle;
 		
@@ -188,7 +181,7 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 			TextView subtext = (TextView)convertView.findViewById(R.id.subtext);
 			
 			
-			final CourseModel course = getItem(position);			
+			final Course course = getItem(position);			
 			
 			// TODO
 			subtext.setText(course.getLecturer().get(0).getLastName());
@@ -210,8 +203,8 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 					
 					if(constraint != null && constraint.toString().length() > 0) {
 						
-						List<CourseModel> found = new ArrayList<CourseModel>();
-						for(CourseModel c : mCourseList) {
+						List<Course> found = new ArrayList<Course>();
+						for(Course c : mCourseList) {
 							
 							// TODO
 							if(c.getName().toLowerCase().contains(constraint)) {
@@ -236,10 +229,10 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 				@Override
 				protected void publishResults(CharSequence constraint, FilterResults results) {
 					
-					List<CourseModel> res = (List<CourseModel>)results.values;
+					List<Course> res = (List<Course>)results.values;
 					
 					clear();
-					for(CourseModel item : res)
+					for(Course item : res)
 						add(item);
 					
 					notifyDataSetChanged();

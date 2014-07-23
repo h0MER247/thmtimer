@@ -25,6 +25,7 @@ import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.thmtimer.entities.Course;
 
 
 public class StudentFragment extends AbstractAsyncFragment {
@@ -37,7 +38,7 @@ public class StudentFragment extends AbstractAsyncFragment {
 	private final int DAO_REQUEST_STUDENT_COURSELIST = 0;
 	
 	private StudentCourseListAdapter mAdapter;
-	private List<CourseModel> mViewData;
+	private List<Course> mViewData;
 	
 
 	@Override
@@ -48,15 +49,14 @@ public class StudentFragment extends AbstractAsyncFragment {
 		
 		
 		if(mViewData == null)
-			mViewData = new ArrayList<CourseModel>();
+			mViewData = new ArrayList<Course>();
 		
 		if(mAdapter == null)
 			mAdapter = new StudentCourseListAdapter(savedInstanceState);
 		
-		
-		ModuleDAO.setJobSize(1);
-		ModuleDAO.loadStudentCourseListFromServer(this,
-				                                  DAO_REQUEST_STUDENT_COURSELIST);
+		ModuleDAO.beginJob();
+		ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENT_COURSELIST);
+		ModuleDAO.commitJob(this);
 	}
 	
 	
@@ -105,7 +105,7 @@ public class StudentFragment extends AbstractAsyncFragment {
 					               int position,
 					               long id) {
 				
-				final CourseModel course = mAdapter.getItem(position);
+				final Course course = mAdapter.getItem(position);
 				
 				Intent intent = new Intent(getActivity(),
 						                   TimeTrackingActivity.class);
@@ -148,36 +148,19 @@ public class StudentFragment extends AbstractAsyncFragment {
 	
 	
 	@Override
-	public void onDAOSuccess(int requestID) {
-		
-		Log.d("LOG", "onDAOSuccess");
-		
-		switch(requestID) {
-		
-		case DAO_REQUEST_STUDENT_COURSELIST:
-			mViewData.clear();
-			mViewData.addAll(ModuleDAO.getStudentCourseList());
-			
-			mAdapter.notifyDataSetInvalidated();
-			
-			if(mViewData.size() == 0) {
-				
-				Toast.makeText(getActivity(),
-						       "Du scheinst noch keinem Kurs beigetreten zu sein.\nKurse fügst du mit dem + Zeichen hinzu!",
-						       Toast.LENGTH_LONG).show();
-			}
-			Log.d(TAG, String.format("Number of student courses loaded: [%d]", mViewData.size()));
-			
-			/* Fix #11128 */
-			//if(getActivity() != null)
-			//	((ModuleListActivity)getActivity()).refresh();
-			break;
-		}
-	}
-	
-	@Override
 	public void onDAOFinished() {
 		
+		mViewData.clear();
+		mViewData.addAll(ModuleDAO.getStudentCourseList());
+		
+		mAdapter.notifyDataSetInvalidated();
+		
+		if(mViewData.size() == 0) {
+			
+			Toast.makeText(getActivity(),
+					       "Du scheinst noch keinem Kurs beigetreten zu sein.\nKurse fügst du mit dem + Zeichen hinzu!",
+					       Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	
@@ -185,7 +168,7 @@ public class StudentFragment extends AbstractAsyncFragment {
 	/**
 	 * Adapter für das ListView
 	 */
-	private class StudentCourseListAdapter extends ArrayAdapter<CourseModel> {
+	private class StudentCourseListAdapter extends ArrayAdapter<Course> {
 
 		private Bundle mBundle;
 		private final long FOUR_MONTHS = 10368000000l;
@@ -208,20 +191,21 @@ public class StudentFragment extends AbstractAsyncFragment {
 						                                         false);
 			}
 			
-			final CourseModel course = getItem(position);
+			final Course course = getItem(position);
 			
 
 			TextView name = (TextView)convertView.findViewById(R.id.moduleName);
 			TextView time = (TextView)convertView.findViewById(R.id.timeInvested);
 			TextView subtext = (TextView)convertView.findViewById(R.id.subtext);
 
+			// TODO
 			name.setText(course.getName());
-			subtext.setText(course.getTeacher());
+			subtext.setText(course.getLecturer().get(0).getLastName());
 			
 			// TODO
 			TimeData timeInvested = new TimeData();
 			timeInvested.setTimeInHours(60);// StaticModuleData.getStudentData().getTimeInvestedTotal(course.getId());
-			Date startDate = course.getStartDate();
+			Date startDate = course.getStart();
 			
 			if (startDate != null) {
 				

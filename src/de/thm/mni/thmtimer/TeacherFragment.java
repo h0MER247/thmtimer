@@ -6,7 +6,7 @@ import java.util.List;
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.model.CourseModel;
+import de.thm.thmtimer.entities.Course;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +33,7 @@ public class TeacherFragment extends AbstractAsyncFragment {
 	private final int DAO_REQUEST_TEACHER_COURSELIST = 0;
 	
 	private TeacherCourseListAdapter mAdapter;
-	private List<CourseModel> mViewData;
+	private List<Course> mViewData;
 	
 	
 	@Override
@@ -44,15 +44,15 @@ public class TeacherFragment extends AbstractAsyncFragment {
 		
 		
 		if(mViewData == null)
-			mViewData = new ArrayList<CourseModel>();
+			mViewData = new ArrayList<Course>();
 		
 		if(mAdapter == null)
 			mAdapter = new TeacherCourseListAdapter(savedInstanceState);
 		
 		
-		ModuleDAO.setJobSize(1);
-		ModuleDAO.loadTeacherCourseListFromServer(this,
-				                                  DAO_REQUEST_TEACHER_COURSELIST);
+		ModuleDAO.beginJob();
+		ModuleDAO.getTeacherCourseListFromServer(DAO_REQUEST_TEACHER_COURSELIST);
+		ModuleDAO.commitJob(this);
 	}
 	
 	
@@ -101,7 +101,7 @@ public class TeacherFragment extends AbstractAsyncFragment {
 					                int position,
 					                long id) {
 				
-				final CourseModel course = mAdapter.getItem(position);
+				final Course course = mAdapter.getItem(position);
 				
 				Intent intent = new Intent(getActivity(),
 						                   TeacherCourseDetailActivity.class);
@@ -143,28 +143,12 @@ public class TeacherFragment extends AbstractAsyncFragment {
 	}
 	
 	@Override
-	public void onDAOSuccess(int requestID) {
-		
-		switch(requestID) {
-		
-		case DAO_REQUEST_TEACHER_COURSELIST:
-			mViewData.clear();
-			mViewData.addAll(ModuleDAO.getTeacherCourseList());
-		
-			mAdapter.notifyDataSetInvalidated();
-		
-			Log.d(TAG, String.format("Number of teacher courses loaded: [%d]", mViewData.size()));
-		
-			///* Fix #11128 */
-			//if(getActivity() != null)
-			//	((ModuleListActivity)getActivity()).refresh();
-			break;
-		}
-	}
-	
-	@Override
 	public void onDAOFinished() {
 		
+		mViewData.clear();
+		mViewData.addAll(ModuleDAO.getTeacherCourseList());
+	
+		mAdapter.notifyDataSetInvalidated();
 	}
 	
 	
@@ -172,7 +156,7 @@ public class TeacherFragment extends AbstractAsyncFragment {
 	/**
 	 * Adapter für das ListView
 	 */
-	private class TeacherCourseListAdapter extends ArrayAdapter<CourseModel> {
+	private class TeacherCourseListAdapter extends ArrayAdapter<Course> {
 		
 		private Bundle mBundle;
 
@@ -193,14 +177,14 @@ public class TeacherFragment extends AbstractAsyncFragment {
 						                                         false);
 			}
 
-			final CourseModel course = getItem(position);
+			final Course course = getItem(position);
 			
 			TextView name = (TextView)convertView.findViewById(R.id.moduleName);
 			TextView subtext = (TextView)convertView.findViewById(R.id.subtext);
 
 			name.setText(course.getName());
 			subtext.setText(String.format("%d %s",
-					                      course.getStudentCount(),
+					                      course.getUsers().size(),
 					                      getString(R.string.students)));
 			
 			return convertView;

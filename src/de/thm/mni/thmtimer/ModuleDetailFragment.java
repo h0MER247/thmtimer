@@ -10,8 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import de.thm.mni.thmtimer.model.Module;
-import de.thm.mni.thmtimer.util.StaticModuleData;
+
 
 public class ModuleDetailFragment extends DialogFragment implements
 		OnClickListener {
@@ -53,8 +52,9 @@ public class ModuleDetailFragment extends DialogFragment implements
 		mBtnEnter.setOnClickListener(this);
 
 		id = getArguments().getLong("id", -1);
-		Module m = StaticModuleData.findModule(id);
-
+		//Module m = StaticModuleData.findModule(id);
+		
+/*
 		mModuleName.setText(m.getName());
 		mModuleNumber.setText(m.getModuleNumber());
 		mCreditPoints.setText(m.getCreditPoints().toString());
@@ -74,7 +74,7 @@ public class ModuleDetailFragment extends DialogFragment implements
 			}
 		}
 		mPrereq.setText(Html.fromHtml(sb.toString()));
-
+*/
 		return view;
 	}
 
@@ -90,7 +90,7 @@ public class ModuleDetailFragment extends DialogFragment implements
 	private void enterModule() {
 		// send Information to Server
 		//Log.i("", id.toString());
-		StaticModuleData.getStudentData().addCourse(id);
+		//StaticModuleData.getStudentData().addCourse(id);
 	}
 
 }

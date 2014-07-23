@@ -3,7 +3,6 @@ package de.thm.mni.thmtimer;
 import de.thm.mni.thmtimer.util.Connection;
 import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.StaticModuleData;
 import de.thm.thmtimer.entities.User;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -48,10 +47,6 @@ public class LoginActivity extends AbstractAsyncActivity {
 		EditText editPassword = (EditText)findViewById(R.id.password);
 		CheckBox rememberMe   = (CheckBox)findViewById(R.id.remember_me);
 		
-		
-		// ONLY FOR STATIC DATA
-		StaticModuleData.fillData();
-
 		
 		// Set rememberMe checkbox depending on saved settings 
 		rememberMe.setChecked(mSharedPref.getBoolean(SETTINGS_REMEMBERME, false));
@@ -130,18 +125,10 @@ public class LoginActivity extends AbstractAsyncActivity {
 	}
 	
 	@Override
-	public void onDAOSuccess(int requestID) {
-		
-		switch(requestID) {
-		
-		case DAO_REQUEST_USER:
-			mUser = ModuleDAO.getUser();
-			break;
-		}
-	}
-	
-	@Override
 	public void onDAOFinished() {
+		
+		mUser = ModuleDAO.getUser();
+		
 		
 		CheckBox rememberMe = (CheckBox)findViewById(R.id.remember_me);
 		
@@ -191,8 +178,9 @@ public class LoginActivity extends AbstractAsyncActivity {
 			ModuleDAO.invalidateStudentExpenditures();
 			ModuleDAO.invalidateUser();
 			
-			ModuleDAO.setJobSize(1);
-			ModuleDAO.loadUserFromServer(this, DAO_REQUEST_USER);
+			ModuleDAO.beginJob();
+			ModuleDAO.getUserFromServer(DAO_REQUEST_USER);
+			ModuleDAO.commitJob(this);
 		}
 	}
 }

@@ -2,75 +2,37 @@ package de.thm.mni.thmtimer.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
+import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Expenditure;
 import de.thm.thmtimer.entities.User;
 import de.thm.mni.thmtimer.R;
-import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.thmtimer.entities.Category;
 
 
 public class ModuleDAO {
 	
-	private static Integer mJobSize = -1;
-	
 	private static User mUser;
-	private static List<CourseModel> mAllCourses;
-	private static List<CourseModel> mStudentCourses;
+	private static List<Course> mAllCourses;
+	private static List<Course> mStudentCourses;
 	private static List<Expenditure> mStudentExpenditures;
-	private static List<CourseModel> mTeacherCourses;
+	private static List<Course> mTeacherCourses;
 	private static List<Category>    mTimeCategorys;
 	
 	
 	
-	/*
-	 * Gibt die Anzahl der vom DAO gewünschten Ressourcen an, sind dann alle "loadXYZFromServer" Anfragen
-	 * erfolgreich fertiggestellt wird onDAOFinished() aufgerufen.
-	 */
-	public static void setJobSize(int size) {
-		
-		synchronized(mJobSize) {
-		
-			mJobSize = size;
-		}
-	}
-	public static int getJobSize() {
-		
-		synchronized(mJobSize) {
-			
-			return mJobSize;
-		}
-	}
-	public static boolean hasFinishedJob() {
-		
-		return mJobSize == 0;
-	}
+
+	// --------- USER
 	
-	
-	public static void loadUserFromServer(AbstractAsyncView ctx, int daoRequestID) {
+	public static void getUserFromServer(int requestID) {
 		
-		DoServerOperation(ctx, daoRequestID, R.string.connection_loading, new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				if(!isUserInvalidated())
-					return;
-				
-				mUser = Connection.request("/users/" + Connection.getUsername(),
-						                   HttpMethod.GET,
-						                   User.class);
-			}
-		});
+		addJob(GET_USER, requestID);
 	}
 	
 	public static User getUser() {
@@ -90,25 +52,11 @@ public class ModuleDAO {
 	
 	
 	
-
+	// --------- TIME CATEGORYS
 	
-	public static void loadTimeCategorysFromServer(AbstractAsyncView ctx, int daoRequestID) {
+	public static void getTimeCategorysFromServer(int requestID) {
 		
-		DoServerOperation(ctx, daoRequestID, R.string.connection_loading_categories, new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				if(!isTimeCategorysInvalid())
-					return;
-				
-				Category[] categorys = Connection.request("/categories/",
-						                                  HttpMethod.GET,
-						                                  Category[].class);
-				
-				mTimeCategorys = Arrays.asList(categorys);
-			}
-		});
+		addJob(GET_TIMECATEGORYS, requestID);
 	}
 	
 	public static Category getTimeCategoryByID(Long id) {
@@ -143,27 +91,14 @@ public class ModuleDAO {
 	
 	
 	
-	public static void loadStudentCourseListFromServer(AbstractAsyncView ctx, int daoRequestID) {
+	// --------- STUDENT COURSE LIST
+	
+	public static void getStudentCourseListFromServer(int requestID) {
 		
-		DoServerOperation(ctx, daoRequestID, R.string.connection_loading_courses, new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				if(!isStudentCourseListInvalid())
-					return;
-				
-				CourseModel[] courseModels = Connection.request("/courses/user/" + Connection.getUsername(),
-						                     HttpMethod.GET,
-						                     CourseModel[].class);
-
-				mStudentCourses = Arrays.asList(courseModels);
-			}
-		});
+		addJob(GET_STUDENTCOURSELIST, requestID);
 	}
 	
-	
-	public static List<CourseModel> getStudentCourseList() {
+	public static List<Course> getStudentCourseList() {
 		
 		return mStudentCourses;
 	}
@@ -178,11 +113,11 @@ public class ModuleDAO {
 		mStudentCourses = null;
 	}
 	
-	public static CourseModel getStudentCourseByID(Long id) {
+	public static Course getStudentCourseByID(Long id) {
 		
 		if(!isStudentCourseListInvalid()) {
 			
-			for(CourseModel c : mStudentCourses) {
+			for(Course c : mStudentCourses) {
 				
 				if(c.getId() == id) {
 					
@@ -196,33 +131,16 @@ public class ModuleDAO {
 	
 	
 	
+
+
+	// --------- TEACHER COURSE LIST
 	
-
-	public static void loadTeacherCourseListFromServer(AbstractAsyncView ctx, int daoRequestID) {
-
-		DoServerOperation(ctx, daoRequestID, R.string.connection_loading_courses, new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				if(!isTeacherCourseListInvalid())
-					return;
-				
-				/*
-				CourseModel[] courseModels = Connection.request("/courses/lecture/" + Connection.getUsername(),
-						                                        HttpMethod.GET,
-						                                        CourseModel[].class);
-				*/
-				CourseModel[] courseModels = Connection.request("/courses/user/" + Connection.getUsername(),
-						                                        HttpMethod.GET,
-						                                        CourseModel[].class);
-				
-				mTeacherCourses = Arrays.asList(courseModels);
-			}
-		});
+	public static void getTeacherCourseListFromServer(int requestID) {
+		
+		addJob(GET_TEACHERCOURSELIST, requestID);
 	}
 	
-	public static List<CourseModel> getTeacherCourseList() {
+	public static List<Course> getTeacherCourseList() {
 		
 		return mTeacherCourses;
 	}
@@ -237,11 +155,11 @@ public class ModuleDAO {
 		mTeacherCourses = null;
 	}
 	
-	public static CourseModel getTeacherCourseByID(Long id) {
+	public static Course getTeacherCourseByID(Long id) {
 		
 		if(!isTeacherCourseListInvalid()) {
 			
-			for(CourseModel c : mTeacherCourses) {
+			for(Course c : mTeacherCourses) {
 				
 				if(c.getId() == id) {
 					
@@ -256,35 +174,14 @@ public class ModuleDAO {
 	
 	
 	
+	// --------- ALL COURSE LIST 
 	
-	/**
-	 * Lädt alle verfügbaren Kurse vom Server
-	 * 
-	 * @param ctx
-	 *   Activity oder Fragment
-	 * @param id
-	 *   RequestID welche bei onDAOSuccess() oder onDAOError() zurückgegeben wird
-	 */
-	public static void loadAllCourseListFromServer(AbstractAsyncView ctx, int daoRequestID) {
-
-		DoServerOperation(ctx, daoRequestID, R.string.connection_loading_courses, new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				if(!isAllCourseListInvalid())
-					return;
-				
-				CourseModel[] courseModels = Connection.request("/courses/",
-						                                        HttpMethod.GET,
-						                                        CourseModel[].class);
-				
-				mAllCourses = Arrays.asList(courseModels);
-			}
-		});
+	public static void getAllCourseListFromServer(int requestID) {
+		
+		addJob(GET_ALLCOURSELIST, requestID);
 	}
 	
-	public static List<CourseModel> getAllCourseList() {
+	public static List<Course> getAllCourseList() {
 		
 		return mAllCourses;
 	}
@@ -299,11 +196,11 @@ public class ModuleDAO {
 		mAllCourses = null;
 	}
 	
-	public static CourseModel getAllCourseByID(Long id) {
+	public static Course getAllCourseByID(Long id) {
 		
 		if(!isAllCourseListInvalid()) {
 			
-			for(CourseModel c : mAllCourses) {
+			for(Course c : mAllCourses) {
 				
 				if(c.getId() == id) {
 					
@@ -318,50 +215,18 @@ public class ModuleDAO {
 	
 	
 	
-	
-	
-	public static void postStudentExpenditureToServer(AbstractAsyncView ctx, int daoRequestID, final Expenditure expenditureData) {
-		
-		DoServerOperation(ctx, daoRequestID, R.string.connection_saving_expenditures, new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				Expenditure expenditure = Connection.request("/expenditures/",
-						                                     HttpMethod.POST,
-						                                     expenditureData,
-						                                     Expenditure.class);
-				
-				if(mStudentExpenditures == null)
-					mStudentExpenditures = new ArrayList<Expenditure>();
-				
-				mStudentExpenditures.add(expenditure);
-			}
-		});
+	public static void getExpendituresFromServer(int requestID) {
+
+		addJob(GET_EXPENDITURES, requestID);
 	}
 	
-	public static void loadStudentExpendituresFromServer(AbstractAsyncView ctx, int daoRequestID) {
+	public static void postExpenditureToServer(int requestID, Expenditure expenditure) {
 		
-		DoServerOperation(ctx, daoRequestID, R.string.connection_loading_expenditures, new Runnable() {
-			
-			@Override
-			public void run() {
-				
-				if(!isStudentExpendituresInvalid())
-					return;
-				
-				Expenditure[] expenditures = Connection.request("/expenditures/",
-						                                        HttpMethod.GET,
-						                                        Expenditure[].class);
-				
-				if(mStudentExpenditures == null)
-					mStudentExpenditures = new ArrayList<Expenditure>();
-				
-				mStudentExpenditures.addAll(Arrays.asList(expenditures));
-			}
-		});
+		POST_EXPENDITURE.setParameter(expenditure);
+		
+		addJob(POST_EXPENDITURE, requestID);
 	}
-		
+	
 	public static Boolean isStudentExpendituresInvalid() {
 		
 		return mStudentExpenditures == null;
@@ -390,14 +255,231 @@ public class ModuleDAO {
 	
 	
 	
-
+	
 	
 	//
 	// --------------- Serverkommunikation
 	//
 	
+	public interface ServerOperation {
+		
+		public void run();
+		public void setParameter(Object... parameter);
+		public int  getDialogMessage();
+	}
+	
+	
 	/**
-	 * Holt Daten vom Server
+	 * Server Operations
+	 * 
+	 * Hier alle Serveroperationen implementieren die wir benötigen !!!
+	 */
+	public static ServerOperation GET_USER = new ServerOperation() {
+		
+		@Override
+		public void run() {
+			
+			if(!isUserInvalidated())
+				return;
+			
+			mUser = Connection.request("/users/" + Connection.getUsername(),
+					                   HttpMethod.GET,
+					                   User.class);
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+			
+		}
+
+		@Override
+		public int getDialogMessage() {
+			
+			return R.string.connection_loading;
+		}
+	};
+	
+	public static ServerOperation GET_TIMECATEGORYS = new ServerOperation() {
+		
+		@Override
+		public void run() {
+			
+			if(!isTimeCategorysInvalid())
+				return;
+			
+			Category[] categorys = Connection.request("/categories/",
+					                                  HttpMethod.GET,
+					                                  Category[].class);
+			
+			mTimeCategorys = Arrays.asList(categorys);
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+			
+		}
+		
+		@Override
+		public int getDialogMessage() {
+			
+			return R.string.connection_loading_categories;
+		} 
+	};
+	
+	public static ServerOperation GET_STUDENTCOURSELIST = new ServerOperation()  {
+		
+		@Override
+		public void run() {
+			
+			if(!isStudentCourseListInvalid())
+				return;
+			
+			Course[] Courses = Connection.request("/courses/user/" + Connection.getUsername(),
+					                     HttpMethod.GET,
+					                     Course[].class);
+
+			mStudentCourses = Arrays.asList(Courses);
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+			
+		}
+		
+		@Override
+		public int getDialogMessage() {
+			
+			return R.string.connection_loading_courses;
+		}
+	};
+	
+	public static ServerOperation GET_TEACHERCOURSELIST = new ServerOperation() {
+		
+		@Override
+		public void run() {
+			
+			if(!isTeacherCourseListInvalid())
+				return;
+			
+			/*
+			// TODO: Warten bis das Serverteam den Bug gefixed hat und die Liste abrufbar ist
+			Course[] Courses = Connection.request("/courses/lecture/" + Connection.getUsername(),
+					                                        HttpMethod.GET,
+					                                        Course[].class);
+			*/
+			Course[] Courses = Connection.request("/courses/user/" + Connection.getUsername(),
+					                                   HttpMethod.GET,
+					                                   Course[].class);
+			
+			mTeacherCourses = Arrays.asList(Courses);
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+			
+		}
+		
+		@Override
+		public int getDialogMessage() {
+			
+			return R.string.connection_loading_courses;
+		}
+	};
+	
+	public static ServerOperation GET_ALLCOURSELIST = new ServerOperation() {
+		
+		@Override
+		public void run() {
+			
+            if(!isAllCourseListInvalid())
+                return;
+            
+            Course[] courses = Connection.request("/courses/" + Connection.getUsername(),
+                                                            HttpMethod.GET,
+                                                            Course[].class);
+            
+            mAllCourses = Arrays.asList(courses);
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+			
+		}
+		
+		@Override
+		public int getDialogMessage() {
+			
+			return R.string.connection_loading_courses;
+		}
+	};
+	
+	public static ServerOperation POST_EXPENDITURE = new ServerOperation() {
+		
+		Expenditure mExpenditure;
+		
+		@Override
+		public void run() {
+			
+			Expenditure expenditure = Connection.request("/expenditures/",
+					                                     HttpMethod.POST,
+					                                     mExpenditure,
+					                                     Expenditure.class);
+			
+			if(mStudentExpenditures == null)
+				mStudentExpenditures = new ArrayList<Expenditure>();
+			
+			mStudentExpenditures.add(expenditure);
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+			
+			mExpenditure = (Expenditure)parameter[0];
+		}
+		
+		@Override
+		public int getDialogMessage() {
+			
+			return R.string.connection_saving_expenditures;
+		}
+	};
+
+	public static ServerOperation GET_EXPENDITURES = new ServerOperation() {
+		
+		@Override
+		public void run() {
+			
+			if(!isStudentExpendituresInvalid())
+				return;
+			
+			Expenditure[] expenditures = Connection.request("/expenditures/",
+					                                        HttpMethod.GET,
+					                                        Expenditure[].class);
+			
+			if(mStudentExpenditures == null)
+				mStudentExpenditures = new ArrayList<Expenditure>();
+			
+			mStudentExpenditures.addAll(Arrays.asList(expenditures));
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+			
+		}
+		
+		@Override
+		public int getDialogMessage() {
+			
+			return R.string.connection_loading_expenditures;
+		}
+	};
+	
+	
+	
+	
+	
+	/**
+	 * Hier passiert die Magic :)
 	 * 
 	 * @param currentActivityOrFragment
 	 *    Referenz auf die Aktivität oder das Fragment in welchem man diese Funktion aufruft.
@@ -408,77 +490,109 @@ public class ModuleDAO {
 	 * @throws ExecutionException 
 	 * @throws InterruptedException 
 	 */
-	private static void DoServerOperation(final AbstractAsyncView view,
-			                              final int requestID,
-			                              final int dialogMessage,
-			                              final Runnable operation) {
+	private static class ServerJob {
 		
-		// Task initialisieren
-		AsyncTask<Void, Void, Boolean> at = new AsyncTask<Void, Void, Boolean>() {
+		private ServerOperation mOperation;
+		private int             mRequestID;
+		private boolean         mOk;
+		private String          mErrorMessage;
+		
+		public ServerJob(ServerOperation operation, int requestID) {
 			
-			private String mErrorMessage = "Unknown Error";
-					
+			mOperation = operation;
+			mRequestID = requestID;
+			
+			mOk = true;
+		}
+		
+		public ServerOperation getOperation() { return mOperation; }
+		public int getRequestID() { return mRequestID; }
+		public void setErrorMessage(String msg) { mErrorMessage = msg; mOk = false; }
+		public String getErrorMessage() { return mErrorMessage; }
+	}
+	
+	private static ArrayList<ServerJob> mJobs;
+	
+	
+	
+	
+	public static void beginJob() {
+		
+		mJobs = new ArrayList<ServerJob>();
+	}
+	
+	private static void addJob(ServerOperation operation, int requestID) {
+		
+		if(mJobs == null)
+			throw new IllegalArgumentException("You cant add to a job before you start one!");
+		
+		mJobs.add(new ServerJob(operation, requestID));
+	}
+	
+	public static void commitJob(final AbstractAsyncView yourActivityOrView) {
+		
+		if(mJobs == null)
+			throw new IllegalArgumentException("Cant commit an unstarted job");
+		
+		new AsyncTask<ServerJob, ServerJob, Boolean>() {
+			
+			private String mErrorMessage;
+			
 			@Override
-			protected void onPreExecute() {
+			protected Boolean doInBackground(ServerJob... params) {
 				
-				Log.d("LOG", "Showing Progessdialog with string ID" + dialogMessage);
-				
-				if(view != null)
-					view.showProgressDialog(dialogMessage);
-			}
-				
-			@Override
-			protected Boolean doInBackground(Void... params) {
+				for(ServerJob job : params) {
 					
-				try {
-				
-					operation.run();
-					return true;
-				}
-				catch(HttpClientErrorException e) {
+					int requestID      = job.getRequestID();
+					ServerOperation op = job.getOperation();
 					
-					mErrorMessage = e.toString();
-					return false;
-				}
-				catch(ResourceAccessException e) {
+					try {
 						
-					mErrorMessage = e.toString();
-					return false;
+						publishProgress(job);
+						op.run();
+					}
+	                catch(final HttpClientErrorException e) {
+	                	
+	                	job.setErrorMessage(e.toString());
+	                	publishProgress(job);
+	                    return false;
+	                }
+	                catch(final ResourceAccessException e) {
+	                	
+	                	job.setErrorMessage(e.toString());
+	                	publishProgress(job);
+	                    return false;
+	                }
 				}
-			}
 				
+				return true;
+			}
+			
+	        @Override
+	        protected void onProgressUpdate(ServerJob... values) {
+	        	
+	            super.onProgressUpdate(values);
+	            
+	            yourActivityOrView.dismissProgressDialog();
+	            
+	            
+	            ServerJob job = values[0];
+	            
+	            if(job.mOk)
+	            	yourActivityOrView.showProgressDialog(job.getOperation().getDialogMessage());
+	            else
+	            	yourActivityOrView.onDAOError(job.getRequestID(), job.getErrorMessage());
+	            
+	        }
+	        
 			protected void onPostExecute(Boolean result) {
 				
-				int jobSize = getJobSize();
+				yourActivityOrView.dismissProgressDialog();
 				
-				if(result) {
-					
-					if(jobSize > 0) {
-						
-						jobSize--;
-						setJobSize(jobSize);
-					}
-					
-					if(view != null)
-						view.onDAOSuccess(requestID);
-					
-					if((jobSize == 0) && (view != null))
-						view.onDAOFinished();
-				}
-				else {
-					
-					if(view != null)
-						view.onDAOError(requestID, mErrorMessage);
-					
-					setJobSize(-1);
-				}
-				
-				if(view != null)
-					view.dismissProgressDialog();
+				if(result)
+					yourActivityOrView.onDAOFinished();
 			}
-		};
-		
-		// Task ausführen
-		at.execute();
+			
+		}.execute(mJobs.toArray(new ServerJob[mJobs.size()]));
 	}
 }

@@ -7,6 +7,5 @@ public interface AbstractAsyncView {
 	public void dismissProgressDialog();
 	
 	public void onDAOError(int requestID, String message);
-	public void onDAOSuccess(int requestID);
 	public void onDAOFinished();
 }

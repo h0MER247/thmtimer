@@ -9,6 +9,7 @@ import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.Category;
+import de.thm.thmtimer.entities.Course;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -26,7 +27,7 @@ public class TeacherCourseDetailActivity extends AbstractAsyncActivity {
 	private final int DAO_REQUEST_TIMECATEGORYS = 0;
 	
 	private Long mCourseID;
-	private CourseModel mCourse;
+	private Course mCourse;
 	private ArrayList<Category> mTimeCategorys;
 	
 	
@@ -47,9 +48,10 @@ public class TeacherCourseDetailActivity extends AbstractAsyncActivity {
 		mCourse   = ModuleDAO.getTeacherCourseByID(mCourseID);
 		
 		
-		ModuleDAO.setJobSize(1);
-		ModuleDAO.loadTimeCategorysFromServer(this, DAO_REQUEST_TIMECATEGORYS);
+		ModuleDAO.beginJob();
+		ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
 		// TODO: Statistikdaten holen
+		ModuleDAO.commitJob(this);
 	}
 
 	@Override
@@ -79,21 +81,13 @@ public class TeacherCourseDetailActivity extends AbstractAsyncActivity {
 			break;
 		}
 	}
-
-	@Override
-	public void onDAOSuccess(int requestID) {
-		
-		switch(requestID) {
-			
-		case DAO_REQUEST_TIMECATEGORYS:
-			mTimeCategorys.clear();
-			mTimeCategorys.addAll(ModuleDAO.getTimeCategorys());
-			break;
-		}
-	}
-
+	
 	@Override
 	public void onDAOFinished() {
+		
+		mTimeCategorys.clear();
+		mTimeCategorys.addAll(ModuleDAO.getTimeCategorys());
+		
 		
 		// Kursname setzen
 		TextView courseName = (TextView)findViewById(R.id.teachercoursedetail_txtCourseName);
@@ -101,9 +95,10 @@ public class TeacherCourseDetailActivity extends AbstractAsyncActivity {
 		
 		// Eingeschriebene Studenten setzen
 		TextView enrolledStudents = (TextView)findViewById(R.id.teachercoursedetail_txtEnrolledStudents);
+
 		enrolledStudents.setText(String.format("%s: %d",
 				                               getText(R.string.students),
-                                               mCourse.getStudentCount()));
+                                               mCourse.getUsers().size()));
 		
 		// Tabs für investierte Zeiten und Historie initialisieren
 		TabHost tabHost = (TabHost) findViewById(R.id.teachercoursedetail_tabHost);
