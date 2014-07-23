@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,12 +23,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.thm.mni.thmtimer.model.TimeData;
-import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Course;
 
 
-public class StudentFragment extends AbstractAsyncFragment {
+public class StudentFragment extends Fragment implements ModuleDAOListener {
 	
 	private final String TAG = StudentFragment.class.getSimpleName();
 	
@@ -58,7 +59,7 @@ public class StudentFragment extends AbstractAsyncFragment {
 		// Alle Ressourcen anfordern, die wir benötigen
 		ModuleDAO.beginJob();
 		ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENT_COURSELIST);
-		ModuleDAO.commitJob(this);
+		ModuleDAO.commitJob(getActivity(), this);
 	}
 	
 	

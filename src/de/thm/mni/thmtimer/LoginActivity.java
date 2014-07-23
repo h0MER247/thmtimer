@@ -1,9 +1,10 @@
 package de.thm.mni.thmtimer;
 
 import de.thm.mni.thmtimer.util.Connection;
-import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.User;
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +20,7 @@ import android.widget.Toast;
 
 
 
-public class LoginActivity extends AbstractAsyncActivity {
+public class LoginActivity extends Activity implements ModuleDAOListener {
 	
 	//private final String TAG = LoginActivity.class.getSimpleName();
 	
@@ -182,7 +183,7 @@ public class LoginActivity extends AbstractAsyncActivity {
 			// Alle Ressourcen anfordern, die wir benötigen
 			ModuleDAO.beginJob();
 			ModuleDAO.getUserFromServer(DAO_REQUEST_USER);
-			ModuleDAO.commitJob(this);
+			ModuleDAO.commitJob(this, this);
 		}
 	}
 }

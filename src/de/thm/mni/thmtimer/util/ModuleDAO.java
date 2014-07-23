@@ -8,6 +8,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Expenditure;
@@ -26,6 +28,23 @@ public class ModuleDAO {
 	private static List<Course> mTeacherCourses;
 	private static List<Category> mTimeCategorys;
 	private static List<Module> mModules;
+	
+	
+	
+
+	/*
+	public static void getSurvivalPackageFromServer() {
+		
+		beginJob();
+		getUserFromServer(0);
+		getStudentCourseListFromServer(requestID);
+		getTeacherCourseList();
+		getTimeCategorys();
+		getModules();
+		
+		
+	}*/
+	
 	
 	
 	// --------- MODULE
@@ -54,7 +73,7 @@ public class ModuleDAO {
 		return null;
 	}
 	
-	public static boolean isModulesInvalidated() {
+	private static boolean isModulesInvalidated() {
 		
 		return mModules == null;
 	}
@@ -307,16 +326,7 @@ public class ModuleDAO {
 	//
 	// --------------- Serverkommunikation
 	//
-	
-	public interface ServerOperation {
-		
-		public boolean runIf();
-		
-		public void    run();
-		public void    setParameter(Object... parameter);
-		
-		public int     getDialogMessage();
-	}
+
 	
 	
 	/**
@@ -644,9 +654,25 @@ public class ModuleDAO {
 	};
 	
 	
-	
-	
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private interface ServerOperation {
+		
+		public boolean runIf();
+		
+		public void    run();
+		public void    setParameter(Object... parameter);
+		
+		public int     getDialogMessage();
+	}
 	
 	private static class ServerJob {
 		
@@ -663,10 +689,26 @@ public class ModuleDAO {
 			mOk = true;
 		}
 		
-		public ServerOperation getOperation() { return mOperation; }
-		public int getRequestID() { return mRequestID; }
-		public void setErrorMessage(String msg) { mErrorMessage = msg; mOk = false; }
-		public String getErrorMessage() { return mErrorMessage; }
+		public ServerOperation getOperation() { 
+			
+			return mOperation;
+		}
+		
+		public int getRequestID() {
+			
+			return mRequestID;
+		}
+		
+		public void setErrorMessage(String msg) {
+			
+			mErrorMessage = msg;
+			mOk = false;
+		}
+		
+		public String getErrorMessage() {
+			
+			return mErrorMessage;
+		}
 	}
 	
 	private static ArrayList<ServerJob> mJobs;
@@ -680,6 +722,7 @@ public class ModuleDAO {
 		
 		mJobs = new ArrayList<ServerJob>();
 	}
+	
 	
 	/**
 	 * Job hinzufügen
@@ -699,21 +742,36 @@ public class ModuleDAO {
 		mJobs.add(new ServerJob(operation, requestID));
 	}
 	
+	
 	/**
-	 * Job(s) ausführen
+	 * Jobs ausführen
 	 * 
-	 * @param yourActivityOrView
-	 *   Aktivität oder Fragment vom Typ AbstractAsyncActivity/AbstractAsyncFragment oder AbstractAsyncListActivity
-	 *   aus welcher man den Job commited. Wird benötigt um den Fortschritt anzuzeigen.
+	 * @param ctx
+	 *   Kontext (bei Activity: this, bei Fragment: getActivity())
+	 * @param listener
+	 *   Listener um Fehlermeldungen zu bekommen und benachrichtigt zu werden, wenn der
+	 *   Job erfolgreich abgeschlossen wurde.
 	 */
-	public static void commitJob(final AbstractAsyncView yourActivityOrView) {
+	public static void commitJob(final Context ctx, final ModuleDAOListener listener) {
 		
 		if(mJobs == null)
 			throw new IllegalArgumentException("Cant commit an unstarted job");
 		
 		
-		new AsyncTask<ServerJob, ServerJob, Boolean>() {
+		AsyncTask<ServerJob, ServerJob, Boolean> worker = new AsyncTask<ServerJob, ServerJob, Boolean>() {
 			
+			private ProgressDialog mDialog;
+			
+			@Override
+			protected void onPreExecute() {
+				
+				mDialog = new ProgressDialog(ctx);
+				
+				mDialog.setCancelable(false);
+				mDialog.setCanceledOnTouchOutside(false);
+				mDialog.setIndeterminate(true);
+			}
+
 			@Override
 			protected Boolean doInBackground(ServerJob... params) {
 				
@@ -721,26 +779,26 @@ public class ModuleDAO {
 					
 					ServerOperation op = job.getOperation();
 					
-					if(!op.runIf())
-						continue;
-					
-					try {
+					if(op.runIf()) {
 						
-						publishProgress(job);
-						op.run();
+						try {
+							
+							publishProgress(job);
+							op.run();
+						}
+		                catch(final HttpClientErrorException e) {
+		                	
+		                	job.setErrorMessage(e.toString());
+		                	publishProgress(job);
+		                    return false;
+		                }
+		                catch(final ResourceAccessException e) {
+		                	
+		                	job.setErrorMessage(e.toString());
+		                	publishProgress(job);
+		                    return false;
+		                }
 					}
-	                catch(final HttpClientErrorException e) {
-	                	
-	                	job.setErrorMessage(e.toString());
-	                	publishProgress(job);
-	                    return false;
-	                }
-	                catch(final ResourceAccessException e) {
-	                	
-	                	job.setErrorMessage(e.toString());
-	                	publishProgress(job);
-	                    return false;
-	                }
 				}
 				
 				return true;
@@ -751,28 +809,32 @@ public class ModuleDAO {
 	        	
 	            super.onProgressUpdate(values);
 	            
-	            // TODO: Manchmal tritt es auf, dass die Progressdialoge nicht angezeigt werden, sondern
-	            //       das Fenster nur grau wird... Sollte gefixed werden!!!
-	            yourActivityOrView.dismissProgressDialog();
-	            
-	            
 	            ServerJob job = values[0];
 	            
-	            if(job.mOk)
-	            	yourActivityOrView.showProgressDialog(job.getOperation().getDialogMessage());
-	            else
-	            	yourActivityOrView.onDAOError(job.getRequestID(), job.getErrorMessage());
-	            
+	            if(job.mOk) {
+	            	
+	            	mDialog.setMessage(ctx.getResources().getString(job.getOperation().getDialogMessage()));
+	            	mDialog.show();
+	            }
+	            else {
+	            	
+	            	if(listener != null) 
+	            		listener.onDAOError(job.getRequestID(), job.getErrorMessage());
+	            }
 	        }
 	        
 			protected void onPostExecute(Boolean result) {
 				
-				yourActivityOrView.dismissProgressDialog();
+				if((mDialog != null) && mDialog.isShowing())
+					mDialog.dismiss();
 				
-				if(result)
-					yourActivityOrView.onDAOFinished();
+				mDialog = null;
+				
+				if(result && (listener != null))
+					listener.onDAOFinished();
 			}
-			
-		}.execute(mJobs.toArray(new ServerJob[mJobs.size()]));
+		};
+		
+		worker.execute(mJobs.toArray(new ServerJob[mJobs.size()]));
 	}
 }

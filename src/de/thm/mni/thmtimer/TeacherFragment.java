@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.thm.mni.thmtimer.R;
-import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Course;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class TeacherFragment extends AbstractAsyncFragment {
+public class TeacherFragment extends Fragment implements ModuleDAOListener {
 	
 	private final String TAG = TeacherFragment.class.getSimpleName();
 	
@@ -52,7 +53,7 @@ public class TeacherFragment extends AbstractAsyncFragment {
 		// Alle Ressourcen anfordern, die wir benötigen
 		ModuleDAO.beginJob();
 		ModuleDAO.getTeacherCourseListFromServer(DAO_REQUEST_TEACHER_COURSELIST);
-		ModuleDAO.commitJob(this);
+		ModuleDAO.commitJob(getActivity(), this);
 	}
 	
 	

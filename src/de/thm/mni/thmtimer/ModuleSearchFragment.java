@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Module;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ import android.widget.Toast;
 import android.widget.SearchView.OnQueryTextListener;
 
 
-public class ModuleSearchFragment extends AbstractAsyncFragment {
+public class ModuleSearchFragment extends Fragment implements ModuleDAOListener {
 
 	private final int DAO_REQUEST_MODULES = 0;
 	
@@ -53,7 +54,7 @@ public class ModuleSearchFragment extends AbstractAsyncFragment {
 		
 		ModuleDAO.beginJob();
 		ModuleDAO.getModulesFromServer(DAO_REQUEST_MODULES);
-		ModuleDAO.commitJob(this);
+		ModuleDAO.commitJob(getActivity(), this);
 	}
 	
 

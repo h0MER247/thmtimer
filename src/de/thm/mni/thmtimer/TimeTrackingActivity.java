@@ -19,14 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import de.thm.mni.thmtimer.StopwatchDialog.StopwatchListener;
 import de.thm.mni.thmtimer.model.TimeData;
-import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
 import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Category;
 import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Expenditure;
 
 
-public class TimeTrackingActivity extends AbstractAsyncActivity implements StopwatchListener {
+public class TimeTrackingActivity extends Activity implements StopwatchListener, ModuleDAOListener {
 	
 	private final int REQUEST_ADD_TIMETRACKING = 0;
 	private final int REQUEST_EDIT_TIMETRACKING = 1;
@@ -87,7 +87,7 @@ public class TimeTrackingActivity extends AbstractAsyncActivity implements Stopw
 		ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENT_COURSELIST);
 		ModuleDAO.getStudentExpendituresFromServer(DAO_REQUEST_STUDENT_EXPENDITURES);
 		ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
-		ModuleDAO.commitJob(this);
+		ModuleDAO.commitJob(this, this);
 	}
 
 	@Override
@@ -152,7 +152,7 @@ public class TimeTrackingActivity extends AbstractAsyncActivity implements Stopw
 			
 			ModuleDAO.beginJob();
 			ModuleDAO.postStudentExpenditureToServer(DAO_POST_EXPENDITURE, e);
-			ModuleDAO.commitJob(this);
+			ModuleDAO.commitJob(this, this);
 			
 			mAdapter.notifyDataSetChanged();
 			break;

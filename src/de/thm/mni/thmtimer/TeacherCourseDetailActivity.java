@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import de.thm.mni.thmtimer.customviews.Legend;
 import de.thm.mni.thmtimer.customviews.LineChart;
 import de.thm.mni.thmtimer.customviews.PieChart;
-import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
 import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Category;
 import de.thm.thmtimer.entities.Course;
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -20,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class TeacherCourseDetailActivity extends AbstractAsyncActivity {
+public class TeacherCourseDetailActivity extends Activity implements ModuleDAOListener {
 	
 	private final String TAG = TeacherCourseDetailActivity.class.getSimpleName();
 	
@@ -51,7 +52,7 @@ public class TeacherCourseDetailActivity extends AbstractAsyncActivity {
 		ModuleDAO.beginJob();
 		ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
 		// TODO: Statistikdaten holen
-		ModuleDAO.commitJob(this);
+		ModuleDAO.commitJob(this, this);
 	}
 
 	@Override

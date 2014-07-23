@@ -1,9 +1,10 @@
 package de.thm.mni.thmtimer;
 
-import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Module;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class ModuleDetailFragment extends AbstractAsyncFragment {
+public class ModuleDetailFragment extends Fragment implements ModuleDAOListener {
 	
 	private TextView mModuleName, mModuleNumber, mCreditPoints, mResponsible,
 			mDescription, mExpenditure, mRequirement, mTestingMethod, mSWS,
@@ -65,7 +66,7 @@ public class ModuleDetailFragment extends AbstractAsyncFragment {
 		// Sicherstellen, dass alle Ressourcen verfügbar sind
 		ModuleDAO.beginJob();
 		ModuleDAO.getModulesFromServer(DAO_REQUEST_MODULES);
-		ModuleDAO.commitJob(this);
+		ModuleDAO.commitJob(getActivity(), this);
 		
 		return view;
 	}
