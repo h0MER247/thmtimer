@@ -21,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
@@ -54,6 +53,7 @@ public class StudentFragment extends AbstractAsyncFragment {
 		if(mAdapter == null)
 			mAdapter = new StudentCourseListAdapter(savedInstanceState);
 		
+		Log.d("LOG", "Getting student courselist...");
 		ModuleDAO.beginJob();
 		ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENT_COURSELIST);
 		ModuleDAO.commitJob(this);

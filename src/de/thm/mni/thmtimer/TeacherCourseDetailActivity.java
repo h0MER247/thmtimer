@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import de.thm.mni.thmtimer.customviews.Legend;
 import de.thm.mni.thmtimer.customviews.LineChart;
 import de.thm.mni.thmtimer.customviews.PieChart;
-import de.thm.mni.thmtimer.model.CourseModel;
 import de.thm.mni.thmtimer.util.AbstractAsyncActivity;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.Category;
@@ -19,6 +18,7 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 public class TeacherCourseDetailActivity extends AbstractAsyncActivity {
 	

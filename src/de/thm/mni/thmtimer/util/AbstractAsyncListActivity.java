@@ -53,6 +53,8 @@ public abstract class AbstractAsyncListActivity extends ListActivity implements 
 		if (progressDialog == null) {
 			progressDialog = new ProgressDialog(this);
 			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(false);
+			progressDialog.setCanceledOnTouchOutside(false);
 		}
 
 		progressDialog.setMessage(message);

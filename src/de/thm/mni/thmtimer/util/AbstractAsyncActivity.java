@@ -64,6 +64,8 @@ public abstract class AbstractAsyncActivity extends Activity implements Abstract
 			
 			progressDialog = new ProgressDialog(this);
 			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(false);
+			progressDialog.setCanceledOnTouchOutside(false);
 		}
 		
 		/* Fix #11128 */

@@ -128,10 +128,7 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 			ModuleDAO.postExpenditureToServer(DAO_POST_EXPENDITURE, e);
 			ModuleDAO.commitJob(this);
 			
-			Log.d("LOG", String.format("Category: %d, Time: %d", categoryID, timeInMinutes));
-			
 			mAdapter.notifyDataSetChanged();
-			setResult(Activity.RESULT_OK);
 			break;
 			
 		case REQUEST_EDIT_TIMETRACKING:

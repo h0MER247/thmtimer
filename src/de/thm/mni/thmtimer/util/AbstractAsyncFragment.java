@@ -44,6 +44,8 @@ public abstract class AbstractAsyncFragment extends Fragment implements Abstract
 			
 			progressDialog = new ProgressDialog(getActivity());
 			progressDialog.setIndeterminate(true);
+			progressDialog.setCancelable(false);
+			progressDialog.setCanceledOnTouchOutside(false);
 		}
 
 		/* Fix #11128 */

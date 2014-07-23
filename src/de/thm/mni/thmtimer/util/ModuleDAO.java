@@ -9,6 +9,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Expenditure;
 import de.thm.thmtimer.entities.User;
@@ -23,7 +24,7 @@ public class ModuleDAO {
 	private static List<Course> mStudentCourses;
 	private static List<Expenditure> mStudentExpenditures;
 	private static List<Course> mTeacherCourses;
-	private static List<Category>    mTimeCategorys;
+	private static List<Category> mTimeCategorys;
 	
 	
 	
@@ -90,7 +91,6 @@ public class ModuleDAO {
 	
 	
 	
-	
 	// --------- STUDENT COURSE LIST
 	
 	public static void getStudentCourseListFromServer(int requestID) {
@@ -128,8 +128,6 @@ public class ModuleDAO {
 		
 		return null;
 	}
-	
-	
 	
 
 
@@ -170,7 +168,6 @@ public class ModuleDAO {
 		
 		return null;
 	}
-	
 	
 	
 	
@@ -215,6 +212,8 @@ public class ModuleDAO {
 	
 	
 	
+	// --------- EXPENDITURES
+	
 	public static void getExpendituresFromServer(int requestID) {
 
 		addJob(GET_EXPENDITURES, requestID);
@@ -252,6 +251,11 @@ public class ModuleDAO {
 		
 		return ret;
 	}
+	
+	
+	
+	
+	
 	
 	
 	
@@ -479,16 +483,7 @@ public class ModuleDAO {
 	
 	
 	/**
-	 * Hier passiert die Magic :)
-	 * 
-	 * @param currentActivityOrFragment
-	 *    Referenz auf die Aktivität oder das Fragment in welchem man diese Funktion aufruft.
-	 *    
-	 * @param op
-	 *    GET-Operation, die am Server durchgeführt werden soll
-	 *    
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * Hier passiert die Magic :) 
 	 */
 	private static class ServerJob {
 		
@@ -515,12 +510,24 @@ public class ModuleDAO {
 	
 	
 	
-	
+	/**
+	 * Neuen Job starten
+	 */
 	public static void beginJob() {
 		
 		mJobs = new ArrayList<ServerJob>();
 	}
 	
+	/**
+	 * Job hinzufügen
+	 * 
+	 * @param operation
+	 *    Gewünschte Operation die ausgeführt werden soll
+	 * @param requestID
+	 *    Eine requestID welche im Fehlerfall benötigt wird. Sollte beim commiten
+	 *    ein Fehler auftreten, wird in der Activity onDAOError() mit der entsprechenden
+	 *    requestID aufgerufen, und man kann dann entsprechend auf den Fehler reagieren.
+	 */
 	private static void addJob(ServerOperation operation, int requestID) {
 		
 		if(mJobs == null)
@@ -529,21 +536,25 @@ public class ModuleDAO {
 		mJobs.add(new ServerJob(operation, requestID));
 	}
 	
+	/**
+	 * 
+	 * @param yourActivityOrView
+	 *   Aktivität oder Fragment vom Typ AbstractAsyncActivity/AbstractAsyncFragment oder AbstractAsyncListActivity
+	 *   aus welcher man den Job commited. Wird benötigt um den Fortschritt anzuzeigen.
+	 */
 	public static void commitJob(final AbstractAsyncView yourActivityOrView) {
 		
 		if(mJobs == null)
 			throw new IllegalArgumentException("Cant commit an unstarted job");
 		
+		
 		new AsyncTask<ServerJob, ServerJob, Boolean>() {
-			
-			private String mErrorMessage;
 			
 			@Override
 			protected Boolean doInBackground(ServerJob... params) {
 				
 				for(ServerJob job : params) {
 					
-					int requestID      = job.getRequestID();
 					ServerOperation op = job.getOperation();
 					
 					try {
