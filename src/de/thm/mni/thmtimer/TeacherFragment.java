@@ -3,15 +3,13 @@ package de.thm.mni.thmtimer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.client.HttpClientErrorException;
-
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.model.CourseModel;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,96 +20,92 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 public class TeacherFragment extends AbstractAsyncFragment {
-	private static final int REQUEST_NEW = 1;
-	private static final int REQUEST_CREATECOURSE = 2;
+	
+	private final String TAG = TeacherFragment.class.getSimpleName();
+	
+	private final int REQUEST_NEW = 1;
+	private final int REQUEST_CREATECOURSE = 2;
+	
+	private final int DAO_REQUEST_TEACHER_COURSELIST = 0;
+	
 	private TeacherCourseListAdapter mAdapter;
-	private List<Long> mData;
-	private boolean mHasFetchedData = false;
-
+	private List<CourseModel> mViewData;
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-
-		if (mData == null) {
-			mData = new ArrayList<Long>();
-			/*if (!mHasFetchedData)
-				new TeacherCoursesTask().execute();
-			else
-				mData.addAll(ModuleDAO.getTeacherCourseIDs());*/
-		}
-		if (mAdapter == null) {
-
+		
+		
+		if(mViewData == null)
+			mViewData = new ArrayList<CourseModel>();
+		
+		if(mAdapter == null)
 			mAdapter = new TeacherCourseListAdapter(savedInstanceState);
-			/*mAdapter.sort(new Comparator<Long>() {
-
-				@Override
-				public int compare(Long arg0, Long arg1) {
-					return StaticModuleData
-							.findCourse(arg0)
-							.getName()
-							.compareTo(
-									StaticModuleData.findCourse(arg1).getName());
-				}
-
-			});*/
-		}
+		
+		
+		ModuleDAO.setJobSize(1);
+		ModuleDAO.loadTeacherCourseListFromServer(this,
+				                                  DAO_REQUEST_TEACHER_COURSELIST);
 	}
-
-	private class TeacherCourseListAdapter extends ArrayAdapter<Long> {
-
-		private Bundle bundle;
-
-		public TeacherCourseListAdapter(Bundle bundle) {
-
-			super(getActivity(), R.layout.teacherlistitem, mData);
-			this.bundle = bundle;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-
-			if (convertView == null) {
-
-				convertView = getLayoutInflater(bundle).inflate(
-						R.layout.teacherlistitem, parent, false);
-			}
-
-			final CourseModel course = ModuleDAO.findTeacherCourse(mData.get(position));
-
-			TextView name = (TextView) convertView
-					.findViewById(R.id.moduleName);
-			TextView subtext = (TextView) convertView
-					.findViewById(R.id.subtext);
-
-			name.setText(course.getName());
-			subtext.setText(Integer.toString(course.getStudentCount()) + " "
-					+ getString(R.string.students));
-
-			return convertView;
-		}
-	}
-
+	
+	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View view = inflater
-				.inflate(R.layout.teacherfragment, container, false);
-
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.teacherfragment, menu);
+	}
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+		
+		case R.id.action_add:
+			Intent intent = new Intent(getActivity(),
+					                   EnterModuleActivity.class);
+			intent.putExtra("fragment", "teacher");
+			startActivityForResult(intent, REQUEST_NEW);
+			return true;
+			
+		default:
+			return false;
+		}
+	}
+	
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			                 ViewGroup container,
+			                 Bundle savedInstanceState) {
+		
+		View view = inflater.inflate(R.layout.teacherfragment,
+				                     container,
+				                     false);
+		
 		ListView listView = (ListView) view.findViewById(R.id.teacherModules);
-
-		listView.setAdapter(new TeacherCourseListAdapter(savedInstanceState));
+		listView.setAdapter(mAdapter);
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent,
+					                View view,
+					                int position,
+					                long id) {
+				
+				final CourseModel course = mAdapter.getItem(position);
+				
 				Intent intent = new Intent(getActivity(),
-						TeacherCourseDetailActivity.class);
-				intent.putExtra("course_id", mAdapter.getItem(position));
+						                   TeacherCourseDetailActivity.class);
+				intent.putExtra("course_id", course.getId());
 				startActivity(intent);
 			}
 		});
@@ -119,61 +113,97 @@ public class TeacherFragment extends AbstractAsyncFragment {
 		return view;
 	}
 	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.teacherfragment, menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_add:
-			Intent intent = new Intent(getActivity(), EnterModuleActivity.class);
-			intent.putExtra("fragment", "teacher");
-			startActivityForResult(intent, REQUEST_NEW);
-			return true;
-		default:
-			return false;
-		}
-	}
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
 		if (requestCode == REQUEST_CREATECOURSE) {
+			
 			mAdapter.notifyDataSetChanged();
-			((ModuleListActivity)getActivity()).refresh();
+			
+			/* Fix #11128 */
+			if(getActivity() != null)
+				((ModuleListActivity)getActivity()).refresh();
 		}
 	}
 	
-	protected void displayResponse() {
-		mHasFetchedData = true;
-		mData.addAll(ModuleDAO.getTeacherCourseIDs());
-		mAdapter.notifyDataSetChanged();
-		((ModuleListActivity) getActivity()).refresh();
+	
+	
+	@Override
+	public void onDAOError(int requestID, String message) {
+		
+		switch(requestID) {
+		
+		case DAO_REQUEST_TEACHER_COURSELIST:
+			Toast.makeText(getActivity(),
+					       String.format("Fehler beim Laden der Dozentenliste: %s", message),
+					       Toast.LENGTH_LONG).show();
+			break;
+		}
 	}
 	
-	private class TeacherCoursesTask extends AsyncTask<Void, Void, List<CourseModel>> {
+	@Override
+	public void onDAOSuccess(int requestID) {
+		
+		switch(requestID) {
+		
+		case DAO_REQUEST_TEACHER_COURSELIST:
+			mViewData.clear();
+			mViewData.addAll(ModuleDAO.getTeacherCourseList());
+		
+			mAdapter.notifyDataSetInvalidated();
+		
+			Log.d(TAG, String.format("Number of teacher courses loaded: [%d]", mViewData.size()));
+		
+			///* Fix #11128 */
+			//if(getActivity() != null)
+			//	((ModuleListActivity)getActivity()).refresh();
+			break;
+		}
+	}
+	
+	@Override
+	public void onDAOFinished() {
+		
+	}
+	
+	
+	
+	/**
+	 * Adapter für das ListView
+	 */
+	private class TeacherCourseListAdapter extends ArrayAdapter<CourseModel> {
+		
+		private Bundle mBundle;
+
+		public TeacherCourseListAdapter(Bundle bundle) {
+
+			super(getActivity(), R.layout.teacherlistitem, mViewData);
+			
+			mBundle = bundle;
+		}
 
 		@Override
-		protected void onPreExecute() {
-			showProgressDialog(getString(R.string.connection_loading_courses));
-		}
-		
-		@Override
-		protected List<CourseModel> doInBackground(Void... params) {
-			try {
-				return ModuleDAO.getTeacherCourseList();
-			} catch (HttpClientErrorException e) {
-				// Forbidden
-				return null;
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			if (convertView == null) {
+
+				convertView = getLayoutInflater(mBundle).inflate(R.layout.teacherlistitem,
+						                                         parent,
+						                                         false);
 			}
-		}
-		
-		@Override
-		protected void onPostExecute(List<CourseModel> result) {
-			dismissProgressDialog();
-			displayResponse();
+
+			final CourseModel course = getItem(position);
+			
+			TextView name = (TextView)convertView.findViewById(R.id.moduleName);
+			TextView subtext = (TextView)convertView.findViewById(R.id.subtext);
+
+			name.setText(course.getName());
+			subtext.setText(String.format("%d %s",
+					                      course.getStudentCount(),
+					                      getString(R.string.students)));
+			
+			return convertView;
 		}
 	}
 }
