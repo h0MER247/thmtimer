@@ -214,12 +214,12 @@ public class ModuleDAO {
 	
 	// --------- EXPENDITURES
 	
-	public static void getExpendituresFromServer(int requestID) {
+	public static void getStudentExpendituresFromServer(int requestID) {
 
 		addJob(GET_EXPENDITURES, requestID);
 	}
 	
-	public static void postExpenditureToServer(int requestID, Expenditure expenditure) {
+	public static void postStudentExpenditureToServer(int requestID, Expenditure expenditure) {
 		
 		POST_EXPENDITURE.setParameter(expenditure);
 		
@@ -278,7 +278,7 @@ public class ModuleDAO {
 	 * 
 	 * Hier alle Serveroperationen implementieren die wir benötigen !!!
 	 */
-	public static ServerOperation GET_USER = new ServerOperation() {
+	private static ServerOperation GET_USER = new ServerOperation() {
 		
 		@Override
 		public void run() {
@@ -303,7 +303,7 @@ public class ModuleDAO {
 		}
 	};
 	
-	public static ServerOperation GET_TIMECATEGORYS = new ServerOperation() {
+	private static ServerOperation GET_TIMECATEGORYS = new ServerOperation() {
 		
 		@Override
 		public void run() {
@@ -330,7 +330,7 @@ public class ModuleDAO {
 		} 
 	};
 	
-	public static ServerOperation GET_STUDENTCOURSELIST = new ServerOperation()  {
+	private static ServerOperation GET_STUDENTCOURSELIST = new ServerOperation()  {
 		
 		@Override
 		public void run() {
@@ -357,7 +357,7 @@ public class ModuleDAO {
 		}
 	};
 	
-	public static ServerOperation GET_TEACHERCOURSELIST = new ServerOperation() {
+	private static ServerOperation GET_TEACHERCOURSELIST = new ServerOperation() {
 		
 		@Override
 		public void run() {
@@ -390,7 +390,7 @@ public class ModuleDAO {
 		}
 	};
 	
-	public static ServerOperation GET_ALLCOURSELIST = new ServerOperation() {
+	private static ServerOperation GET_ALLCOURSELIST = new ServerOperation() {
 		
 		@Override
 		public void run() {
@@ -417,7 +417,7 @@ public class ModuleDAO {
 		}
 	};
 	
-	public static ServerOperation POST_EXPENDITURE = new ServerOperation() {
+	private static ServerOperation POST_EXPENDITURE = new ServerOperation() {
 		
 		Expenditure mExpenditure;
 		
@@ -448,7 +448,7 @@ public class ModuleDAO {
 		}
 	};
 
-	public static ServerOperation GET_EXPENDITURES = new ServerOperation() {
+	private static ServerOperation GET_EXPENDITURES = new ServerOperation() {
 		
 		@Override
 		public void run() {

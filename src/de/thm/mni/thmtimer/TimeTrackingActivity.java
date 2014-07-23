@@ -58,7 +58,7 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 		
 		
 		ModuleDAO.beginJob();
-		ModuleDAO.getExpendituresFromServer(DAO_REQUEST_STUDENT_EXPENDITURES);
+		ModuleDAO.getStudentExpendituresFromServer(DAO_REQUEST_STUDENT_EXPENDITURES);
 		ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
 		ModuleDAO.commitJob(this);
 	}
@@ -125,7 +125,7 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 			e.setId(0);
 			
 			ModuleDAO.beginJob();
-			ModuleDAO.postExpenditureToServer(DAO_POST_EXPENDITURE, e);
+			ModuleDAO.postStudentExpenditureToServer(DAO_POST_EXPENDITURE, e);
 			ModuleDAO.commitJob(this);
 			
 			mAdapter.notifyDataSetChanged();
