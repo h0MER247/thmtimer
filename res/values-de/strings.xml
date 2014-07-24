@@ -96,11 +96,15 @@
     <string name="colorAlert">GRÜN > GELB > ROT</string>
     <string name="confirm">Bestätigen</string>
 
-    <!-- Connection -->
-    <string name="connection_unreachable">Server nicht erreichbar</string>
-    <string name="connection_loading">Lade. Bitte warten...</string>
-	<string name="connection_loading_courses">Kurse werden geladen…</string>
-    <string name="connection_loading_categories">Lade Zeitkategorien…</string>
-    <string name="connection_loading_expenditures">Lade deine Aktivitätenliste…</string>
-    <string name="connection_saving_expenditures">Speichere deine Aktivitätenliste…</string>
+    <!-- Connection -->    
+    <string name="connection_unreachable">Server nicht erreichbar!</string>
+    <string name="connection_loading_user">Lade Benutzer. Bitte warten…</string>
+    <string name="connection_loading_courses">Lade Kurse. Bitte warten…</string>
+    <string name="connection_loading_modules">Lade Module. Bitte warten…</string>
+    <string name="connection_loading_statistics">Lade Statistiken. Bitte warten…</string>
+    <string name="connection_loading_categories">Lade Zeitkategorien. Bitte warten…</string>
+    <string name="connection_loading_expenditures">Lade deine Aufwandseinträge. Bitte warten…</string>
+    <string name="connection_saving_expenditures">Speichere deinen Aufwandseintrag. Bitte warten…</string>
+    <string name="connection_join_course">Trete dem Kurs bei. Bitte warten…</string>
+    
 </resources>

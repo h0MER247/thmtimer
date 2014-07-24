@@ -103,10 +103,14 @@
     <string name="confirm">Confirm</string>
     
     <!-- Connection -->
-    <string name="connection_unreachable">Server unreachable</string>
-    <string name="connection_loading">Loading. Please wait…</string>
-    <string name="connection_loading_courses">Your courses are being loaded…</string>
-    <string name="connection_loading_categories">Loading time categories…</string>
-    <string name="connection_loading_expenditures">Loading your expenditures…</string>
-    <string name="connection_saving_expenditures">Saving your expenditures…</string>
+    <string name="connection_unreachable">Server unreachable!</string>
+    <string name="connection_loading_user">Loading user. Please wait…</string>
+    <string name="connection_loading_courses">Loading courses. Please wait…</string>
+    <string name="connection_loading_modules">Loading modules. Please wait…</string>
+    <string name="connection_loading_statistics">Loading statistics. Please wait…</string>
+    <string name="connection_loading_categories">Loading time categories. Please wait…</string>
+    <string name="connection_loading_expenditures">Loading your expenditures. Please wait…</string>
+    <string name="connection_saving_expenditures">Saving your expenditure. Please wait…</string>
+    <string name="connection_join_course">Joining course. Please wait…</string>
+    
 </resources>
