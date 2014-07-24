@@ -131,8 +131,9 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 		switch(requestCode) {
 		
 		case REQUEST_ADD_TIMETRACKING:
-			Long categoryID = data.getExtras().getLong("category_id");
-			Integer timeInMinutes = data.getExtras().getInt("time");
+			Long categoryID    = data.getExtras().getLong("category_id");
+			Integer duration   = data.getExtras().getInt("duration");
+			String description = data.getExtras().getString("description");
 			
 			Category category = ModuleDAO.getTimeCategoryByID(categoryID);
 			
@@ -140,12 +141,23 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 			Expenditure e = new Expenditure();
 			e.setCategory(category);
 			e.setCourse(mCourse);
-			e.setDescription("TODO"); // TODO
-			e.setDuration(timeInMinutes.shortValue());
-			e.setStart(new Date());
+			e.setDescription(description);
+			e.setDuration(duration.shortValue());
+			
+			//
+			// Bugfix: Scheinbar erwartet der Server, dass setStart() auf einen Wert gesetzt wird, der mindestens so weit
+			//         in der Vergangenheit liegt, wie die aktuelle Uhrzeit minus der  eingetragene Dauer. Das würde die
+			//         sporadisch auftretenden "Bad Request"-Fehlermeldungen erklären... Ich werde es weiter beobachten.
+			//
+			Date d = new Date();
+			d.setTime(d.getTime() - (60000l * duration));
+			e.setStart(d);
+			//e.setStart(new Date());
+			
 			e.setUser(ModuleDAO.getUser());
 			e.setId(0);
 			
+			// Expenditure speichern
 			ModuleDAO.beginJob();
 			ModuleDAO.postStudentExpenditureToServer(DAO_POST_EXPENDITURE, e);
 			ModuleDAO.commitJob(this, this);
