@@ -46,7 +46,7 @@ public class StopwatchDialog extends DialogFragment {
 			                 ViewGroup container,
 			                 Bundle savedInstanceState) {
 		
-		View v = inflater.inflate(R.layout.fragment_stopwatch, null);
+		View v = inflater.inflate(R.layout.stopwatchfragment, null);
 		Button b;
 		
 		

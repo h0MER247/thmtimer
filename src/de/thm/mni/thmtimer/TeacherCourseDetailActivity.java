@@ -42,7 +42,7 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 		super.onCreate(savedInstanceState);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		setContentView(R.layout.activity_teachercoursedetail);
+		setContentView(R.layout.teachercoursedetailactivity);
 		
 		
 		if(mTimeCategorys == null)

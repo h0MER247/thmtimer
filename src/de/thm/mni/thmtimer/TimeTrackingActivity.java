@@ -45,7 +45,7 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 		
 		super.onCreate(savedInstanceState);
 		
-		this.setContentView(R.layout.activity_timetracking);
+		this.setContentView(R.layout.timetrackingactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		
