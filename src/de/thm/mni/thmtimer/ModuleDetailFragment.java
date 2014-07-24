@@ -1,7 +1,6 @@
 package de.thm.mni.thmtimer;
 
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Module;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,15 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class ModuleDetailFragment extends Fragment implements ModuleDAOListener {
+public class ModuleDetailFragment extends Fragment {
 	
 	private TextView mModuleName, mModuleNumber, mCreditPoints, mResponsible,
 			mDescription, mExpenditure, mRequirement, mTestingMethod, mSWS,
 			mFrequency, mPrereq;
 	private Button mBtnEnter;
 	private Long mModuleID;
-	
-	private final int DAO_REQUEST_MODULES = 0;
 	
 	
 	@Override
@@ -63,31 +60,7 @@ public class ModuleDetailFragment extends Fragment implements ModuleDAOListener 
 			}
 		});
 		
-		// Sicherstellen, dass alle Ressourcen verfügbar sind
-		ModuleDAO.beginJob();
-		ModuleDAO.getModulesFromServer(DAO_REQUEST_MODULES);
-		ModuleDAO.commitJob(getActivity(), this);
 		
-		return view;
-	}
-	
-
-	@Override
-	public void onDAOError(int requestID, String message) {
-		
-		switch(requestID) {
-		
-		case DAO_REQUEST_MODULES:
-			Toast.makeText(getActivity(),
-					       String.format("Fehler beim Laden der Modulliste: %s", message),
-					       Toast.LENGTH_LONG).show();
-			break;
-		}
-	}
-	
-	@Override
-	public void onDAOFinished() {
-
 		Module m = ModuleDAO.getModuleByID(mModuleID);
 		
 		mModuleName.setText(m.getName());
@@ -116,5 +89,7 @@ public class ModuleDetailFragment extends Fragment implements ModuleDAOListener 
 		}
 		mPrereq.setText(Html.fromHtml(sb.toString()));
 		*/
+		
+		return view;
 	}
 }

@@ -22,13 +22,6 @@ import de.thm.thmtimer.entities.Category;
 
 public class ModuleDAO {
 	
-	public static final int DAO_SURVIVALPACKAGE_USER = 10;
-	public static final int DAO_SURVIVALPACKAGE_STUDENTCOURSELIST = 11;
-	public static final int DAO_SURVIVALPACKAGE_TEACHERCOURSELIST = 12;
-	public static final int DAO_SURVIVALPACKAGE_TIMECATEGORYS = 13;
-	public static final int DAO_SURVIVALPACKAGE_MODULES = 14;
-	public static final int DAO_SURVIVALPACKAGE_EXPENDITURES = 15;
-	
 	private static User mUser;
 	private static List<Course> mAllCourses;
 	private static List<Course> mStudentCourses;
@@ -38,28 +31,12 @@ public class ModuleDAO {
 	private static List<Module> mModules;
 	
 	
-
-	
-	//
-	// ---------- ALLES WAS MAN BRAUCHT :)
-	//
-	
-	public static void getSurvivalPackageFromServer() {
-		
-		getUserFromServer(DAO_SURVIVALPACKAGE_USER);
-		getStudentCourseListFromServer(DAO_SURVIVALPACKAGE_STUDENTCOURSELIST);
-		getTeacherCourseListFromServer(DAO_SURVIVALPACKAGE_TEACHERCOURSELIST);
-		getTimeCategorysFromServer(DAO_SURVIVALPACKAGE_TIMECATEGORYS);
-		getModulesFromServer(DAO_SURVIVALPACKAGE_MODULES);
-		getStudentExpendituresFromServer(DAO_SURVIVALPACKAGE_EXPENDITURES);
-	}
-	
 	
 	//
 	// --------- MODULE
 	//
 	
-	public static void getModulesFromServer(int requestID) {
+	public static void getModuleListFromServer(int requestID) {
 		
 		addJob(new GET_MODULES(), requestID);
 	}

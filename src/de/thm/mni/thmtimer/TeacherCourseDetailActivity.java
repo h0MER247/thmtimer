@@ -25,7 +25,8 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 	
 	private final String TAG = TeacherCourseDetailActivity.class.getSimpleName();
 	
-	private final int DAO_REQUEST_TIMECATEGORYS = 0;
+	//private final int DAO_REQUEST_DURATION_PER_CATEGORY = 0; // TODO
+	//private final int DAO_REQUEST_DURATIONS_PER_WEEK = 1; // TODO
 	
 	private Long mCourseID;
 	private Course mCourse;
@@ -48,11 +49,46 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 		mCourseID = getIntent().getExtras().getLong("course_id");
 		mCourse   = ModuleDAO.getTeacherCourseByID(mCourseID);
 		
-		// Alle Ressourcen anfordern, die wir benötigen
-		ModuleDAO.beginJob();
-		ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
+		
+		mTimeCategorys.clear();
+		mTimeCategorys.addAll(ModuleDAO.getTimeCategorys());
+		
+		
+		// Kursname setzen
+		TextView courseName = (TextView)findViewById(R.id.teachercoursedetail_txtCourseName);
+		courseName.setText(mCourse.getName());
+		
+		// Eingeschriebene Studenten setzen
+		TextView enrolledStudents = (TextView)findViewById(R.id.teachercoursedetail_txtEnrolledStudents);
+
+		enrolledStudents.setText(String.format("%s: %d",
+				                               getText(R.string.students),
+                                               mCourse.getUsers().size()));
+		
+		//
+		// TODO: ViewPager verwenden
+		//
+		// Tabs für investierte Zeiten und Historie initialisieren
+		TabHost tabHost = (TabHost) findViewById(R.id.teachercoursedetail_tabHost);
+		TabSpec tab1;
+		TabSpec tab2;
+		
+		tabHost.setup();
+		
+		tab1 = tabHost.newTabSpec("tab1");
+		tab1.setContent(R.id.teachercoursedetail_tabInvestedTimes);
+		tab1.setIndicator("Invested Times");
+		tabHost.addTab(tab1);
+		
+		tab2 = tabHost.newTabSpec("tab2");
+		tab2.setContent(R.id.teachercoursedetail_tabHistory);
+		tab2.setIndicator("History");
+		tabHost.addTab(tab2);
+		
+		// Alle Statistikdaten frisch anfordern
+		//ModuleDAO.beginJob();
 		// TODO: Statistikdaten holen
-		ModuleDAO.commitJob(this, this);
+		//ModuleDAO.commitJob(this, this);
 	}
 
 	@Override
@@ -73,52 +109,14 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 	@Override
 	public void onDAOError(int requestID, String message) {
 		
-		switch(requestID) {
-		
-		case DAO_REQUEST_TIMECATEGORYS:
-			Toast.makeText(this,
-				       String.format("Fehler beim Laden der Zeitkategorien: %s", message),
-				       Toast.LENGTH_LONG).show();
-			break;
-		}
+		//switch(requestID) {
+		//
+		//}
 	}
 	
 	@Override
 	public void onDAOFinished() {
 		
-		mTimeCategorys.clear();
-		mTimeCategorys.addAll(ModuleDAO.getTimeCategorys());
-		
-		
-		// Kursname setzen
-		TextView courseName = (TextView)findViewById(R.id.teachercoursedetail_txtCourseName);
-		courseName.setText(mCourse.getName());
-		
-		// Eingeschriebene Studenten setzen
-		TextView enrolledStudents = (TextView)findViewById(R.id.teachercoursedetail_txtEnrolledStudents);
-
-		enrolledStudents.setText(String.format("%s: %d",
-				                               getText(R.string.students),
-                                               mCourse.getUsers().size()));
-		
-		// Tabs für investierte Zeiten und Historie initialisieren
-		TabHost tabHost = (TabHost) findViewById(R.id.teachercoursedetail_tabHost);
-		TabSpec tab1;
-		TabSpec tab2;
-		
-		tabHost.setup();
-		
-		tab1 = tabHost.newTabSpec("tab1");
-		tab1.setContent(R.id.teachercoursedetail_tabInvestedTimes);
-		tab1.setIndicator("Invested Times");
-		tabHost.addTab(tab1);
-		
-		tab2 = tabHost.newTabSpec("tab2");
-		tab2.setContent(R.id.teachercoursedetail_tabHistory);
-		tab2.setIndicator("History");
-		tabHost.addTab(tab2);
-		
-		// Blubb
 		setupInvestedTimes();
 		setupHistory();
 	}
@@ -154,6 +152,10 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 	}
 	
 	
+	//
+	// TODO: Serverteam ein Ticket schreiben, da ihre Daten unzureichend sind. Es wird nur die Zeit
+	//       pro Woche insgesamt geliefert, und nicht Zeit pro Woche je Kategorie. :(
+	//
 	private void setupHistory() {
 		
 		LineChart historyChart   = (LineChart)findViewById(R.id.teachercoursedetail_historyChart);

@@ -5,7 +5,6 @@ import java.util.List;
 
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Course;
 import android.app.Activity;
 import android.content.Intent;
@@ -21,16 +20,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-public class TeacherFragment extends Fragment implements ModuleDAOListener {
+public class TeacherFragment extends Fragment {
 	
 	private final String TAG = TeacherFragment.class.getSimpleName();
 	
 	private final int REQUEST_ENTER_MODULE = 1;
-	
-	private final int DAO_REQUEST_TEACHER_COURSELIST = 0;
 	
 	private TeacherCourseListAdapter mAdapter;
 	private List<Course> mViewData;
@@ -50,10 +46,10 @@ public class TeacherFragment extends Fragment implements ModuleDAOListener {
 			mAdapter = new TeacherCourseListAdapter(savedInstanceState);
 		
 		
-		// Alle Ressourcen anfordern, die wir benötigen
-		ModuleDAO.beginJob();
-		ModuleDAO.getTeacherCourseListFromServer(DAO_REQUEST_TEACHER_COURSELIST);
-		ModuleDAO.commitJob(getActivity(), this);
+		mViewData.clear();
+		mViewData.addAll(ModuleDAO.getTeacherCourseList());
+	
+		mAdapter.notifyDataSetInvalidated();
 	}
 	
 	
@@ -131,30 +127,6 @@ public class TeacherFragment extends Fragment implements ModuleDAOListener {
 			if(getActivity() != null)
 				((ModuleListActivity)getActivity()).refresh();
 		}
-	}
-	
-	
-	
-	@Override
-	public void onDAOError(int requestID, String message) {
-		
-		switch(requestID) {
-		
-		case DAO_REQUEST_TEACHER_COURSELIST:
-			Toast.makeText(getActivity(),
-					       String.format("Fehler beim Laden der Dozentenliste: %s", message),
-					       Toast.LENGTH_LONG).show();
-			break;
-		}
-	}
-	
-	@Override
-	public void onDAOFinished() {
-		
-		mViewData.clear();
-		mViewData.addAll(ModuleDAO.getTeacherCourseList());
-	
-		mAdapter.notifyDataSetInvalidated();
 	}
 	
 	

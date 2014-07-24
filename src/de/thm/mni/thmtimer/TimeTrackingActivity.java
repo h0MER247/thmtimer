@@ -31,11 +31,7 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 	private final int REQUEST_ADD_TIMETRACKING = 0;
 	private final int REQUEST_EDIT_TIMETRACKING = 1;
 	
-	private final int DAO_REQUEST_USER = 0;
-	private final int DAO_REQUEST_STUDENT_COURSELIST = 1;
-	private final int DAO_REQUEST_STUDENT_EXPENDITURES = 2;
-	private final int DAO_REQUEST_TIMECATEGORYS = 3;
-	private final int DAO_POST_EXPENDITURE = 4;
+	private final int DAO_POST_EXPENDITURE = 0;
 	
 	private ArrayAdapter<Expenditure> mAdapter;
 	private List<Expenditure> mTimeTrackingList;
@@ -81,13 +77,12 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 		});
 		
 		
-		// Alle Ressourcen anfordern, die wir benötigen
-		ModuleDAO.beginJob();
-		ModuleDAO.getUserFromServer(DAO_REQUEST_USER);
-		ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENT_COURSELIST);
-		ModuleDAO.getStudentExpendituresFromServer(DAO_REQUEST_STUDENT_EXPENDITURES);
-		ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
-		ModuleDAO.commitJob(this, this);
+		mCourse = ModuleDAO.getStudentCourseByID(mCourseID);
+		
+		mTimeTrackingList.clear();
+		mTimeTrackingList.addAll(ModuleDAO.getStudentExpendituresByCourseID(mCourseID));
+		
+		mAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -153,8 +148,6 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 			ModuleDAO.beginJob();
 			ModuleDAO.postStudentExpenditureToServer(DAO_POST_EXPENDITURE, e);
 			ModuleDAO.commitJob(this, this);
-			
-			mAdapter.notifyDataSetChanged();
 			break;
 			
 		case REQUEST_EDIT_TIMETRACKING:
@@ -178,24 +171,6 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 	public void onDAOError(int requestID, String message) {
 		
 		switch(requestID) {
-		
-		case DAO_REQUEST_USER:
-			Toast.makeText(this,
-				       String.format("Fehler beim Laden des Benutzers: %s", message),
-				       Toast.LENGTH_LONG).show();
-			break;
-		
-		case DAO_REQUEST_STUDENT_EXPENDITURES:
-			Toast.makeText(this,
-					       String.format("Fehler beim Laden der Aktivitäten: %s", message),
-					       Toast.LENGTH_LONG).show();
-			break;
-			
-		case DAO_REQUEST_TIMECATEGORYS:
-			Toast.makeText(this,
-				           String.format("Fehler beim Laden der Zeitkategorien: %s", message),
-				           Toast.LENGTH_LONG).show();
-			break;
 			
 		case DAO_POST_EXPENDITURE:
 			Toast.makeText(this,
@@ -209,9 +184,7 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 	
 	@Override
 	public void onDAOFinished() {
-		
-		mCourse = ModuleDAO.getStudentCourseByID(mCourseID);
-		
+
 		mTimeTrackingList.clear();
 		mTimeTrackingList.addAll(ModuleDAO.getStudentExpendituresByCourseID(mCourseID));
 		

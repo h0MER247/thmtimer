@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,16 +23,20 @@ import android.widget.Toast;
 
 public class LoginActivity extends Activity implements ModuleDAOListener {
 	
-	//private final String TAG = LoginActivity.class.getSimpleName();
+	private final String TAG = LoginActivity.class.getSimpleName();
 	
 	private static final String SETTINGS_USERNAME = "lastUserName";
 	private static final String SETTINGS_PASSWORD = "lastPassword";
 	private static final String SETTINGS_REMEMBERME = "rememberMe";
 	
 	private final int DAO_REQUEST_USER = 0;
+	private final int DAO_REQUEST_STUDENTCOURSELIST = 1;
+	private final int DAO_REQUEST_TEACHERCOURSELIST = 2;
+	private final int DAO_REQUEST_TIMECATEGORYS = 3;
+	private final int DAO_REQUEST_EXPENDITURES = 4;
+	private final int DAO_REQUEST_MODULELIST = 5;
 	
 	private SharedPreferences mSharedPref;
-	private User mUser;
 	
 	
 	@Override
@@ -119,16 +124,48 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 		
 		case DAO_REQUEST_USER:
 			Toast.makeText(this,
-					       String.format("Fehler beim Login: %s", message),
+					       String.format("Fehler beim Laden des Users: %s", message),
 					       Toast.LENGTH_LONG).show();
 			break;
+			
+		case DAO_REQUEST_STUDENTCOURSELIST:
+			Toast.makeText(this,
+				       	   String.format("Fehler beim Laden der Studentenkursliste: %s", message),
+				       	   Toast.LENGTH_LONG).show();
+			break;
+			
+		case DAO_REQUEST_TEACHERCOURSELIST:
+			Toast.makeText(this,
+			       	      String.format("Fehler beim Laden der Dozentenkursliste: %s", message),
+			       	      Toast.LENGTH_LONG).show();
+			break;
+			
+		case DAO_REQUEST_TIMECATEGORYS:
+			Toast.makeText(this,
+		       	           String.format("Fehler beim Laden der Zeitkategorien: %s", message),
+		       	           Toast.LENGTH_LONG).show();
+			break;
+			
+		case DAO_REQUEST_EXPENDITURES:
+			Toast.makeText(this,
+	       	               String.format("Fehler beim Laden der Aufwände: %s", message),
+	       	               Toast.LENGTH_LONG).show();
+			break;
+			
+		case DAO_REQUEST_MODULELIST:
+			Toast.makeText(this,
+    	                   String.format("Fehler beim Laden der Modulliste: %s", message),
+    	                   Toast.LENGTH_LONG).show();
+			break;
 		}
+		
+		// TODO: Was jetzt?!
 	}
 	
 	@Override
 	public void onDAOFinished() {
 		
-		mUser = ModuleDAO.getUser();
+		User user = ModuleDAO.getUser();
 		
 		
 		CheckBox rememberMe = (CheckBox)findViewById(R.id.remember_me);
@@ -146,7 +183,7 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 		// Show greetings
 		Toast.makeText(this,
 				       String.format(getString(R.string.login_greeting),
-				    		         mUser.getFirstName()),
+				    		                   user.getFirstName()),
 				       Toast.LENGTH_LONG).show();
 		
 		// Open Modulelist
@@ -172,17 +209,24 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 			Connection.setUsername(username);			
 			Connection.setPassword(password);
 			
-			ModuleDAO.invalidateAllCourseList();
+			ModuleDAO.invalidateFullCourseList();
+			ModuleDAO.invalidateModules();
 			ModuleDAO.invalidateStudentCourseList();
+			ModuleDAO.invalidateStudentExpenditures();
 			ModuleDAO.invalidateTeacherCourseList();
 			ModuleDAO.invalidateTimeCategorys();
-			ModuleDAO.invalidateStudentExpenditures();
-			ModuleDAO.invalidateModules();
 			ModuleDAO.invalidateUser();
 			
+			//
 			// Alle Ressourcen anfordern, die wir benötigen
+			//
 			ModuleDAO.beginJob();
 			ModuleDAO.getUserFromServer(DAO_REQUEST_USER);
+			ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENTCOURSELIST);
+			ModuleDAO.getTeacherCourseListFromServer(DAO_REQUEST_TEACHERCOURSELIST);
+			ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
+			ModuleDAO.getStudentExpendituresFromServer(DAO_REQUEST_EXPENDITURES);
+			ModuleDAO.getModuleListFromServer(DAO_REQUEST_MODULELIST);
 			ModuleDAO.commitJob(this, this);
 		}
 	}

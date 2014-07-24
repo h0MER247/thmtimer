@@ -24,19 +24,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Course;
 
 
-public class StudentFragment extends Fragment implements ModuleDAOListener {
+public class StudentFragment extends Fragment {
 	
 	private final String TAG = StudentFragment.class.getSimpleName();
 	
-	private final int REQUEST_ADD_COURSE = 1;
-	private final int REQUEST_TIMETRACKING = 2;
-	
-	private final int DAO_REQUEST_STUDENT_COURSELIST = 0;
-	private final int DAO_ADD_STUDENT_TO_COURSE = 1;
+	private final int REQUEST_TIMETRACKING = 1;
+	private final int REQUEST_ADD_COURSE = 2;
 	
 	private StudentCourseListAdapter mAdapter;
 	private List<Course> mViewData;
@@ -56,10 +52,18 @@ public class StudentFragment extends Fragment implements ModuleDAOListener {
 			mAdapter = new StudentCourseListAdapter(savedInstanceState);
 		
 		
-		// Alle Ressourcen anfordern, die wir benötigen
-		ModuleDAO.beginJob();
-		ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENT_COURSELIST);
-		ModuleDAO.commitJob(getActivity(), this);
+		mViewData.clear();
+		mViewData.addAll(ModuleDAO.getStudentCourseList());
+		
+		mAdapter.notifyDataSetInvalidated();
+		
+		if(mViewData.size() == 0) {
+			
+			// TODO
+			Toast.makeText(getActivity(),
+					       "Du scheinst noch keinem Kurs beigetreten zu sein.\nKurse fügst du mit dem + Zeichen hinzu!",
+					       Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	
@@ -152,38 +156,6 @@ public class StudentFragment extends Fragment implements ModuleDAOListener {
 	
 	
 	
-	@Override
-	public void onDAOError(int requestID, String message) {
-		
-		switch(requestID) {
-		
-		case DAO_REQUEST_STUDENT_COURSELIST:
-			Toast.makeText(getActivity(),
-					       String.format("Fehler beim Laden der Studentenliste: %s", message),
-					       Toast.LENGTH_LONG).show();
-			break;
-		}
-	}
-	
-	
-	@Override
-	public void onDAOFinished() {
-		
-		mViewData.clear();
-		mViewData.addAll(ModuleDAO.getStudentCourseList());
-		
-		mAdapter.notifyDataSetInvalidated();
-		
-		if(mViewData.size() == 0) {
-			
-			Toast.makeText(getActivity(),
-					       "Du scheinst noch keinem Kurs beigetreten zu sein.\nKurse fügst du mit dem + Zeichen hinzu!",
-					       Toast.LENGTH_LONG).show();
-		}
-	}
-	
-	
-	
 	/**
 	 * Adapter für das ListView
 	 */
@@ -220,12 +192,10 @@ public class StudentFragment extends Fragment implements ModuleDAOListener {
 			// TODO: Stimmt auch net wirklich...
 			name.setText(course.getName());
 			subtext.setText(course.getLecturer().get(0).getLastName());
+
 			
-			// TODO: Serverteam muss investierte Zeit für einen Kurs verfügbar machen
-			//       Möglich ist auch alle Expenditures abrufen und zusammenzählen -.-
-			//
 			TimeData timeInvested = new TimeData();
-			timeInvested.setTimeInHours(123);// StaticModuleData.getStudentData().getTimeInvestedTotal(course.getId());
+			timeInvested.setTimeInHours(123); // <--- TODO: Investierte Zeiten aus unseren Expenditures zusammenzählen...
 			Date startDate = course.getStart();
 			
 			if (startDate != null) {

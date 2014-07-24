@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MenuItem;
 
 public class EnterModuleActivity extends FragmentActivity {
@@ -71,7 +72,10 @@ public class EnterModuleActivity extends FragmentActivity {
 			@Override
 			public int getNumberOfTabs() {
 				
-				return mModuleDetail == null ? 1 : 2;
+				if(mSourceFragment.equals("teacher"))
+					return mTeacherCreateCourse == null ? 1 : 2;
+				else
+					return mModuleDetail == null ? 1 : 2;
 			}
 		});
 		mPager.setAdapter(mPagerAdapter);
@@ -110,6 +114,7 @@ public class EnterModuleActivity extends FragmentActivity {
 	public void closeSearch(long id) {
 
 		if(mSourceFragment.equals("teacher")){
+			Log.d("LOG", "OPEN");
 			mTeacherCreateCourse = new TeacherCreateCourseFragment();
 			Bundle b = new Bundle();
 			b.putLong("id", id); // id ist jetzt ne kursid!!!

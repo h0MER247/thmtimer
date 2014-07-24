@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Module;
 import android.app.Activity;
 import android.os.Bundle;
@@ -21,14 +20,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.SearchView.OnQueryTextListener;
 
 
-public class ModuleSearchFragment extends Fragment implements ModuleDAOListener {
+public class ModuleSearchFragment extends Fragment {
 
-	private final int DAO_REQUEST_MODULES = 0;
-	
 	private List<Module> mModuleList;
 	private List<Module> mAdapterData;
 	private SearchView mSearch;
@@ -52,9 +48,13 @@ public class ModuleSearchFragment extends Fragment implements ModuleDAOListener 
 			mAdapter = new ModuleListAdapter(savedInstanceState);
 		
 		
-		ModuleDAO.beginJob();
-		ModuleDAO.getModulesFromServer(DAO_REQUEST_MODULES);
-		ModuleDAO.commitJob(getActivity(), this);
+		mModuleList.clear();
+		mModuleList.addAll(ModuleDAO.getModuleList());
+		
+		mAdapterData.clear();
+		mAdapterData.addAll(mModuleList);
+		
+		mAdapter.notifyDataSetChanged();
 	}
 	
 
@@ -117,34 +117,6 @@ public class ModuleSearchFragment extends Fragment implements ModuleDAOListener 
 		lv.setAdapter(mAdapter);
 		return view;
 	}
-	
-
-	
-	@Override
-	public void onDAOError(int requestID, String message) {
-		
-		switch(requestID) {
-		
-		case DAO_REQUEST_MODULES:
-			Toast.makeText(getActivity(),
-					       String.format("Kann die Modulliste nicht laden: %s", message),
-					       Toast.LENGTH_LONG).show();
-			break;
-		}
-	}
-
-	@Override
-	public void onDAOFinished() {
-		
-		mModuleList.clear();
-		mModuleList.addAll(ModuleDAO.getModuleList());
-		
-		mAdapterData.clear();
-		mAdapterData.addAll(mModuleList);
-		
-		mAdapter.notifyDataSetChanged();
-	}
-	
 	
 	
 	public void clearFilter() {
