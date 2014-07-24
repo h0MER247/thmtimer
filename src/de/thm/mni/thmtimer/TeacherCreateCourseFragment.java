@@ -2,8 +2,8 @@ package de.thm.mni.thmtimer;
 
 import java.text.SimpleDateFormat;
 
-import de.thm.mni.thmtimer.model.Module;
-import de.thm.mni.thmtimer.util.StaticModuleData;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.thmtimer.entities.Module;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,7 +33,7 @@ public class TeacherCreateCourseFragment extends Fragment{
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.teachercreatecourse, container, false);
+		View view = (View)inflater.inflate(R.layout.teachercreatecourse, container, false);
 
 		// get views
 		mName = (TextView) view.findViewById(R.id.name);
@@ -43,9 +43,10 @@ public class TeacherCreateCourseFragment extends Fragment{
 		mCreate = (Button)view.findViewById(R.id.crate);
 
 		id = getArguments().getLong("id", -1);
-		Module module = StaticModuleData.findModule(id);	
+		Module m = ModuleDAO.getModuleByID(id);
+		//Module module = StaticModuleData.findModule(id);	
 
-		mCourseName.setText(module.getName());		
+		mCourseName.setText(m.getName());		
 
 		mCreate.setOnClickListener(new OnClickListener() {
 			@SuppressLint("SimpleDateFormat")
@@ -71,8 +72,5 @@ public class TeacherCreateCourseFragment extends Fragment{
 
 
 		return view;
-
-	}	
-
-
+	}
 }

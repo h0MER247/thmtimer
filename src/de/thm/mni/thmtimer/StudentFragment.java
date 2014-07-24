@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,221 +21,239 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import de.thm.mni.thmtimer.model.CourseModel;
+import android.widget.Toast;
 import de.thm.mni.thmtimer.model.TimeData;
-import de.thm.mni.thmtimer.util.AbstractAsyncFragment;
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.StaticModuleData;
+import de.thm.thmtimer.entities.Course;
 
-public class StudentFragment extends AbstractAsyncFragment {
-	private StudentCourseListAdapter mAdapter;
-	private List<Long> mData;
-	private boolean mHasFetchedData = false;
 
-	protected static final int REQUEST_NEW = 1;
-	protected static final int REQUEST_TIMETRACKING = 2;
+public class StudentFragment extends Fragment {
 	
-	protected static final String TAG = StudentFragment.class.getSimpleName();
+	private final String TAG = StudentFragment.class.getSimpleName();
+	
+	private final int REQUEST_TIMETRACKING = 1;
+	private final int REQUEST_ADD_COURSE = 2;
+	
+	private StudentCourseListAdapter mAdapter;
+	private List<Course> mViewData;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-
-		if (mData == null) {
-			mData = new ArrayList<Long>();
-			if (!mHasFetchedData)
-				new StudentCoursesTask().execute();
-			else
-				mData.addAll(ModuleDAO.getStudentCourseIDs());
-		}
-		if (mAdapter == null) {
+		
+		
+		if(mViewData == null)
+			mViewData = new ArrayList<Course>();
+		
+		if(mAdapter == null)
 			mAdapter = new StudentCourseListAdapter(savedInstanceState);
-			/*mAdapter.sort(new Comparator<Long>() {
-
-				@Override
-				public int compare(Long lhs, Long rhs) {
-					return StaticModuleData
-							.findCourse(lhs)
-							.getName()
-							.compareTo(
-									StaticModuleData.findCourse(rhs).getName());
-				}
-
-			});*/
+		
+		
+		mViewData.clear();
+		mViewData.addAll(ModuleDAO.getStudentCourseList());
+		
+		mAdapter.notifyDataSetInvalidated();
+		
+		if(mViewData.size() == 0) {
+			
+			// TODO
+			Toast.makeText(getActivity(),
+					       "Du scheinst noch keinem Kurs beigetreten zu sein.\nKurse fügst du mit dem + Zeichen hinzu!",
+					       Toast.LENGTH_LONG).show();
 		}
 	}
+	
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.studentfragment, menu);
+	}
+	
 
-	private class StudentCourseListAdapter extends ArrayAdapter<Long> {
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+		
+		case R.id.action_add:
+			Intent intent = new Intent(getActivity(),
+					                   EnterModuleActivity.class);
+			intent.putExtra("fragment", "student");
+			startActivityForResult(intent, REQUEST_ADD_COURSE);
+			return true;
+			
+		default:
+			return false;
+		}
+	}
+	
 
-		private Bundle bundle;
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			                 ViewGroup container,
+			                 Bundle savedInstanceState) {
+		
+		View view = inflater.inflate(R.layout.studentfragment,
+				                     container,
+				                     false);
+		
+		ListView listView = (ListView)view.findViewById(R.id.studentModules);
+		listView.setAdapter(mAdapter);
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent,
+					               View view,
+					               int position,
+					               long id) {
+				
+				final Course course = mAdapter.getItem(position);
+				
+				Intent intent = new Intent(getActivity(),
+						                   TimeTrackingActivity.class);
+				intent.putExtra("course_id", course.getId());
+				startActivityForResult(intent, REQUEST_TIMETRACKING);
+			}
+		});
+		
+		return view;
+	}
+	
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if(resultCode != Activity.RESULT_OK)
+			return;
+
+		switch(requestCode) {
+		
+		case REQUEST_TIMETRACKING:
+			mAdapter.notifyDataSetChanged();
+			
+			/* Fix #11128 */
+			if(getActivity() != null)
+				((ModuleListActivity)getActivity()).refresh();
+			break;
+			
+		/*
+		case REQUEST_ADD_COURSE:
+			Long courseID = data.getExtras().getLong("course_id");
+			
+			ModuleDAO.beginJob();
+			ModuleDAO.addStudentToCourse(DAO_ADD_STUDENT_TO_COURSE, courseID);
+			ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENT_COURSELIST);
+			ModuleDAO.commitJob(this);
+			break;
+		*/
+		}
+	}
+	
+	
+	
+	/**
+	 * Adapter für das ListView
+	 */
+	private class StudentCourseListAdapter extends ArrayAdapter<Course> {
+
+		private Bundle mBundle;
 		private final long FOUR_MONTHS = 10368000000l;
-
+		
+		
 		public StudentCourseListAdapter(Bundle bundle) {
 
-			super(getActivity(), R.layout.studentlistitem, mData);
-			this.bundle = bundle;
+			super(getActivity(), R.layout.studentlistitem, mViewData);
+			
+			mBundle = bundle;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 
-			if (convertView == null) {
-				convertView = getLayoutInflater(bundle).inflate(
-						R.layout.studentlistitem, parent, false);
+			if(convertView == null) {
+				
+				convertView = getLayoutInflater(mBundle).inflate(R.layout.studentlistitem,
+						                                         parent,
+						                                         false);
 			}
+			
+			final Course course = getItem(position);
+			
 
-			final CourseModel course = ModuleDAO.findStudentCourse(mData.get(position));
+			TextView name = (TextView)convertView.findViewById(R.id.moduleName);
+			TextView time = (TextView)convertView.findViewById(R.id.timeInvested);
+			TextView subtext = (TextView)convertView.findViewById(R.id.subtext);
 
-			TextView name = (TextView) convertView
-					.findViewById(R.id.moduleName);
-			TextView time = (TextView) convertView
-					.findViewById(R.id.timeInvested);
-			TextView subtext = (TextView) convertView
-					.findViewById(R.id.subtext);
-
+			// TODO: Stimmt auch net wirklich...
 			name.setText(course.getName());
-			TimeData timeInvested = StaticModuleData.getStudentData()
-					.getTimeInvestedTotal(course.getId());
+			subtext.setText(course.getLecturer().get(0).getLastName());
 
-			Date startDate = course.getStartDate();
+			
+			TimeData timeInvested = new TimeData();
+			timeInvested.setTimeInHours(123); // <--- TODO: Investierte Zeiten aus unseren Expenditures zusammenzählen...
+			Date startDate = course.getStart();
+			
 			if (startDate != null) {
+				
+				GradientDrawable shape;
+				SharedPreferences settings;
+				
+				// Read settings
+				settings = getActivity().getSharedPreferences(SettingsFragment.FILE_NAME, 0);
+
+				int minutesYellow = 60 * settings.getInt(SettingsFragment.HOURS_YELLOW,
+						                                 SettingsFragment.VAL_HOURS_YELLOW);
+				int minutesGreen = 60 * settings.getInt(SettingsFragment.HOURS_GREEN,
+						                                SettingsFragment.VAL_HOURS_GREEN);
+				int minutesRed = 60 * settings.getInt(SettingsFragment.HOURS_RED,
+						                              SettingsFragment.VAL_HOURS_RED);
+				
 				// Time of the current semester
+				int cp = course.getModule().getCreditPoints();
 				long deltaDate = new Date().getTime() - startDate.getTime();
 				double percentSemester = (deltaDate / (FOUR_MONTHS / 100.0)) / 100.0;
-				int cp = StaticModuleData.findModule(course.getModuleID())
-						.getCreditPoints();
-				SharedPreferences settings = getActivity()
-						.getSharedPreferences(SettingsFragment.FILE_NAME, 0);
-				int minutesYellow = 60 * settings.getInt(
-						SettingsFragment.HOURS_YELLOW,
-						SettingsFragment.VAL_HOURS_YELLOW);
 				double thresholdMinutes = cp * 1800.0 * percentSemester;
-				double deltaMinutes = timeInvested.getTimeInMinutes()
-						- thresholdMinutes;
+				double deltaMinutes = timeInvested.getTimeInMinutes() - thresholdMinutes;
+				
 				int red = 255, green = 255;
-				int minutesGreen = 60 * settings.getInt(
-						SettingsFragment.HOURS_GREEN,
-						SettingsFragment.VAL_HOURS_GREEN);
-				int minutesRed = 60 * settings.getInt(
-						SettingsFragment.HOURS_RED,
-						SettingsFragment.VAL_HOURS_RED);
+				
 				if (deltaMinutes < minutesYellow) {
-					double percentGreen = (minutesYellow-deltaMinutes) / (minutesYellow-minutesRed);
+					
+					double percentGreen = (minutesYellow - deltaMinutes) /
+							              (minutesYellow - minutesRed);
+					
 					percentGreen = Math.abs(percentGreen);
-					percentGreen = percentGreen > 1.0 ? 0.0
-							: 1.0 - percentGreen;
+					percentGreen = percentGreen > 1.0 ? 0.0 : 1.0 - percentGreen;
 					green = (int) (255 * percentGreen);
 					green = green < 0 ? 0 : green;
-				} else {
-					double percentRed = (deltaMinutes-minutesYellow) / (minutesGreen-minutesYellow);
+				}
+				else {
+					
+					double percentRed = (deltaMinutes - minutesYellow) /
+							            (minutesGreen - minutesYellow);
+					
 					percentRed = Math.abs(percentRed);
-					percentRed = percentRed > 1.0 ? 0.0
-							: 1.0 - percentRed;
+					percentRed = percentRed > 1.0 ? 0.0 : 1.0 - percentRed;
 					red = (int) (255 * percentRed);
 					red = red < 0 ? 0 : red;
 				}
-				GradientDrawable shape = (GradientDrawable) getResources()
-						.getDrawable(R.drawable.circle);
+				
+				shape = (GradientDrawable)getResources().getDrawable(R.drawable.circle);
 				shape.setColor(Color.rgb(red, green, 0));
-				time.setCompoundDrawablesWithIntrinsicBounds(null, null, shape,
-						null);
-				String op = "";
-				if (deltaMinutes < 0) {
-					op = "-";
-				} else {
-					op = "+";
-				}
-				TimeData delta = new TimeData();
-				delta.setTimeInMinutes(Math.abs((int) deltaMinutes));
-				time.setText(op + delta.getTimeInHours() + "h");
+				
+				time.setText(String.format("%dh", (int)(deltaMinutes / 60.0)));
+				time.setCompoundDrawablesWithIntrinsicBounds(null,
+						                                     null,
+						                                     shape,
+						                                     null);
 			}
-			subtext.setText(course.getTeacher());
-
+			
 			return convertView;
-		}
-
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.studentfragment, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_add:
-			Intent intent = new Intent(getActivity(), EnterModuleActivity.class);
-			intent.putExtra("fragment", "student");
-			startActivityForResult(intent, REQUEST_NEW);
-			return true;
-		default:
-			return false;
-		}
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View view = inflater
-				.inflate(R.layout.studentfragment, container, false);
-
-		ListView listView = (ListView) view.findViewById(R.id.studentModules);
-
-		listView.setAdapter(new StudentCourseListAdapter(savedInstanceState));
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-
-				Intent intent = new Intent(getActivity(),
-						TimeTrackingActivity.class);
-
-				intent.putExtra("course_id", mAdapter.getItem(position));
-				startActivityForResult(intent, REQUEST_TIMETRACKING);
-			}
-		});
-
-		return view;
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == REQUEST_TIMETRACKING) {
-			mAdapter.notifyDataSetChanged();
-			((ModuleListActivity) getActivity()).refresh();
-		}
-	}
-	
-	protected void displayResponse() {
-		Log.d(TAG, "Number of Courses loaded: "+ ModuleDAO.getStudentCourseIDs());
-		mHasFetchedData = true;
-		mData.addAll(ModuleDAO.getStudentCourseIDs());
-		mAdapter.notifyDataSetChanged();
-		((ModuleListActivity) getActivity()).refresh();
-	}
-	
-	private class StudentCoursesTask extends AsyncTask<Void, Void, List<CourseModel>> {
-
-		@Override
-		protected void onPreExecute() {
-			showProgressDialog(getString(R.string.connection_loading_courses));
-		}
-		
-		@Override
-		protected List<CourseModel> doInBackground(Void... params) {
-			return ModuleDAO.getStudentCourseList();
-		}
-		
-		@Override
-		protected void onPostExecute(List<CourseModel> result) {
-			dismissProgressDialog();
-			displayResponse();
 		}
 	}
 }

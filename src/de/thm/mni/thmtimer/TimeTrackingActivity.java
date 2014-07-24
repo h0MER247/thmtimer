@@ -1,52 +1,88 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.ResourceAccessException;
-
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import de.thm.mni.thmtimer.StopwatchDialog.StopwatchListener;
-import de.thm.mni.thmtimer.util.AbstractAsyncListActivity;
-import de.thm.mni.thmtimer.util.Connection;
+import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.StaticModuleData;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
+import de.thm.thmtimer.entities.Category;
+import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Expenditure;
-import de.thm.thmtimer.entities.User;
 
-public class TimeTrackingActivity extends AbstractAsyncListActivity implements StopwatchListener {
+
+public class TimeTrackingActivity extends Activity implements StopwatchListener, ModuleDAOListener {
 	
-	private final int REQUEST_NEW = 1;
+	private final int REQUEST_ADD_TIMETRACKING = 0;
+	private final int REQUEST_EDIT_TIMETRACKING = 1;
+	
+	private final int DAO_POST_EXPENDITURE = 0;
 	
 	private ArrayAdapter<Expenditure> mAdapter;
 	private List<Expenditure> mTimeTrackingList;
+	
 	private Long mCourseID;
+	private Course mCourse;
 	
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
 		
+		this.setContentView(R.layout.activity_timetracking);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		Bundle extras = getIntent().getExtras();
-		mCourseID = extras.getLong("course_id");
-		mTimeTrackingList = new ArrayList<Expenditure>();
 		
-		mAdapter = new ArrayAdapter<Expenditure>(this, android.R.layout.simple_list_item_1, mTimeTrackingList);
-		setListAdapter(mAdapter);
+		if(mTimeTrackingList == null)
+			mTimeTrackingList = new ArrayList<Expenditure>();
+		
+		if(mAdapter == null)
+			mAdapter = new ExpenditureAdapter(this,
+					                          R.layout.expenditurelistitem,
+					                          mTimeTrackingList);
+		
+		mCourseID = getIntent().getExtras().getLong("course_id");
+		
+		
+		ListView listView = (ListView)findViewById(R.id.expenditureList);
+		listView.setAdapter(mAdapter);
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent,
+					                View view,
+					                int position,
+					                long id) {
+				
+				Toast.makeText(TimeTrackingActivity.this,
+						       "TODO: Editierbarkeit?",
+						       Toast.LENGTH_LONG).show();
+			}
+		});
+		
+		
+		mCourse = ModuleDAO.getStudentCourseByID(mCourseID);
+		
+		mTimeTrackingList.clear();
+		mTimeTrackingList.addAll(ModuleDAO.getStudentExpendituresByCourseID(mCourseID));
+		
+		mAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -55,7 +91,6 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 		super.onCreateOptionsMenu(menu);
 		
 		getMenuInflater().inflate(R.menu.timetrackingactivity, menu);
-		
 		return true;
 	}
 
@@ -64,7 +99,7 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 		
 		switch (item.getItemId()) {
 		
-		case R.id.action_stopwatch:
+		case R.id.action_stopwatch:				
 			StopwatchDialog dialog = new StopwatchDialog();
 			dialog.setListener(this);
 			dialog.show(getFragmentManager(), "STOPWATCH");
@@ -73,7 +108,7 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 		case R.id.action_add:
 			Intent intent = new Intent(this, TrackTimeActivity.class);
 			intent.putExtra("course_id", mCourseID);
-			startActivityForResult(intent, REQUEST_NEW);
+			startActivityForResult(intent, REQUEST_ADD_TIMETRACKING);
 			return true;
 			
 		case android.R.id.home:
@@ -88,13 +123,35 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-		if(resultCode != Activity.RESULT_OK) {
+		if(resultCode != Activity.RESULT_OK)
 			return;
-		}
 		
-		if(requestCode == REQUEST_NEW) {
-			mAdapter.notifyDataSetChanged();
-			setResult(Activity.RESULT_OK);
+		
+		switch(requestCode) {
+		
+		case REQUEST_ADD_TIMETRACKING:
+			Long categoryID = data.getExtras().getLong("category_id");
+			Integer timeInMinutes = data.getExtras().getInt("time");
+			
+			Category category = ModuleDAO.getTimeCategoryByID(categoryID);
+			
+			// Expenditure erstellen
+			Expenditure e = new Expenditure();
+			e.setCategory(category);
+			e.setCourse(mCourse);
+			e.setDescription("TODO"); // TODO
+			e.setDuration(timeInMinutes.shortValue());
+			e.setStart(new Date());
+			e.setUser(ModuleDAO.getUser());
+			e.setId(0);
+			
+			ModuleDAO.beginJob();
+			ModuleDAO.postStudentExpenditureToServer(DAO_POST_EXPENDITURE, e);
+			ModuleDAO.commitJob(this, this);
+			break;
+			
+		case REQUEST_EDIT_TIMETRACKING:
+			break;
 		}
 	}
 
@@ -105,36 +162,76 @@ public class TimeTrackingActivity extends AbstractAsyncListActivity implements S
 		intent.putExtra("course_id", mCourseID);
 		intent.putExtra("stopped_time", timeInMinutes); 
 		
-		startActivityForResult(intent, REQUEST_NEW);
+		startActivityForResult(intent, REQUEST_ADD_TIMETRACKING);
 	}
 	
-	private class TimeTrackingTask extends AsyncTask<Void, Void, List<Expenditure>> {
+	
 
-		@Override
-		protected void onPreExecute() {
-			showLoadingProgressDialog();
+	@Override
+	public void onDAOError(int requestID, String message) {
+		
+		switch(requestID) {
+			
+		case DAO_POST_EXPENDITURE:
+			Toast.makeText(this,
+			           String.format("Fehler beim Speichern der Aktivität: %s", message),
+			           Toast.LENGTH_LONG).show();
+			break;
 		}
+		
+		finish();
+	}
+	
+	@Override
+	public void onDAOFinished() {
+
+		mTimeTrackingList.clear();
+		mTimeTrackingList.addAll(ModuleDAO.getStudentExpendituresByCourseID(mCourseID));
+		
+		mAdapter.notifyDataSetChanged();
+	}
+	
+	
+	
+	/**
+	 * 
+	 */
+	private class ExpenditureAdapter extends ArrayAdapter<Expenditure> {
+
+		public ExpenditureAdapter(Context context,
+				                  int resource,
+				                  List<Expenditure> objects) {
+			
+			super(context, resource, objects);
+		}
+		
 
 		@Override
-		protected List<Expenditure> doInBackground(Void... params) {
-			try {
-				return ModuleDAO.getExpendituresByCourse(mCourseID);
-			} catch (HttpClientErrorException e) {
-				Log.e(TAG, e.getLocalizedMessage(), e);
-				return null;
-			} catch (ResourceAccessException e) {
-				Log.e(TAG, e.getLocalizedMessage(), e);
-				return null;
+		public View getView(int position, View convertView, ViewGroup parent) {
+		
+			if(convertView == null) {
+				
+				convertView = getLayoutInflater().inflate(R.layout.expenditurelistitem,
+						                                  parent,
+						                                  false);
 			}
-		}
 
-		@Override
-		protected void onPostExecute(List<Expenditure> result) {
-			mTimeTrackingList = result;
-			mAdapter.notifyDataSetChanged();
-			dismissProgressDialog();
+			final Expenditure expenditure = getItem(position);
+			
+			TimeData t = new TimeData();
+			t.setTimeInMinutes(expenditure.getDuration());
+			
+			
+			TextView category = (TextView)convertView.findViewById(R.id.expenditureCategory);
+			TextView description = (TextView)convertView.findViewById(R.id.expenditureDescription);
+			TextView duration = (TextView)convertView.findViewById(R.id.expenditureDuration);
+			
+			category.setText(expenditure.getCategory().getName());
+			description.setText(expenditure.getDescription());
+			duration.setText(t.toString());
+			
+			
+			return convertView;
 		}
 	}
-	
-	
 }

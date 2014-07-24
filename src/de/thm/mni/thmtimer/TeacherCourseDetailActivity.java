@@ -1,21 +1,17 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import de.thm.mni.thmtimer.customviews.Legend;
 import de.thm.mni.thmtimer.customviews.LineChart;
 import de.thm.mni.thmtimer.customviews.PieChart;
-import de.thm.mni.thmtimer.model.CourseModel;
-import de.thm.mni.thmtimer.model.TeacherData;
-import de.thm.mni.thmtimer.model.TimeCategory;
-import de.thm.mni.thmtimer.model.TimeData;
-import de.thm.mni.thmtimer.model.TimeStatisticData;
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.StaticModuleData;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
+import de.thm.thmtimer.entities.Category;
+import de.thm.thmtimer.entities.Course;
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,14 +20,19 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TeacherCourseDetailActivity extends FragmentActivity {
+
+public class TeacherCourseDetailActivity extends Activity implements ModuleDAOListener {
+	
+	private final String TAG = TeacherCourseDetailActivity.class.getSimpleName();
+	
+	//private final int DAO_REQUEST_DURATION_PER_CATEGORY = 0; // TODO
+	//private final int DAO_REQUEST_DURATIONS_PER_WEEK = 1; // TODO
 	
 	private Long mCourseID;
-	private TeacherData mData;
-	private ArrayList<TimeStatisticData> mTimeStatistics;
-	private CourseModel mCourse;
+	private Course mCourse;
+	private ArrayList<Category> mTimeCategorys;
 	
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -40,12 +41,17 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.activity_teachercoursedetail);
 		
-		// Kursstatistikdaten holen TODO
-		mCourseID = getIntent().getExtras().getLong("course_id");
 		
-		mData = StaticModuleData.getTeacherData();
-		mCourse = ModuleDAO.findTeacherCourse(mCourseID);
-		mTimeStatistics = mData.getTimeStatistic(mCourseID);
+		if(mTimeCategorys == null)
+			mTimeCategorys = new ArrayList<Category>();
+		
+		
+		mCourseID = getIntent().getExtras().getLong("course_id");
+		mCourse   = ModuleDAO.getTeacherCourseByID(mCourseID);
+		
+		
+		mTimeCategorys.clear();
+		mTimeCategorys.addAll(ModuleDAO.getTimeCategorys());
 		
 		
 		// Kursname setzen
@@ -54,10 +60,14 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 		
 		// Eingeschriebene Studenten setzen
 		TextView enrolledStudents = (TextView)findViewById(R.id.teachercoursedetail_txtEnrolledStudents);
+
 		enrolledStudents.setText(String.format("%s: %d",
 				                               getText(R.string.students),
-                                               mCourse.getStudentCount()));
+                                               mCourse.getUsers().size()));
 		
+		//
+		// TODO: ViewPager verwenden
+		//
 		// Tabs für investierte Zeiten und Historie initialisieren
 		TabHost tabHost = (TabHost) findViewById(R.id.teachercoursedetail_tabHost);
 		TabSpec tab1;
@@ -75,9 +85,10 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 		tab2.setIndicator("History");
 		tabHost.addTab(tab2);
 		
-		// Blubb
-		setupInvestedTimes();
-		setupHistory();
+		// Alle Statistikdaten frisch anfordern
+		//ModuleDAO.beginJob();
+		// TODO: Statistikdaten holen
+		//ModuleDAO.commitJob(this, this);
 	}
 
 	@Override
@@ -95,6 +106,23 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 	
 
 	
+	@Override
+	public void onDAOError(int requestID, String message) {
+		
+		//switch(requestID) {
+		//
+		//}
+	}
+	
+	@Override
+	public void onDAOFinished() {
+		
+		setupInvestedTimes();
+		setupHistory();
+	}
+	
+	
+	
 	private void setupInvestedTimes() {
 		
 		PieChart pieChart       = (PieChart)findViewById(R.id.teachercoursedetail_pieChart);
@@ -102,9 +130,10 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 		
 		
 		// Ermitteln wieviel Zeit insgesamt in diesen Kurs investiert wurde
+		/*
 		Integer totalMinutes = mData.getTimeInvestedTotal(mCourseID).getTimeInMinutes();
 		
-		for (TimeStatisticData t : mTimeStatistics) {
+		for(TimeStatisticData t : mTimeStatistics) {
 
 			// Zeit und Kategorie holen
 			TimeData td = t.getTime();
@@ -119,9 +148,14 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 					                                    t.getTime().toString(),
 					                                    (100.0f / totalMinutes) * td.getTimeInMinutes()));
 		}
+		*/
 	}
 	
 	
+	//
+	// TODO: Serverteam ein Ticket schreiben, da ihre Daten unzureichend sind. Es wird nur die Zeit
+	//       pro Woche insgesamt geliefert, und nicht Zeit pro Woche je Kategorie. :(
+	//
 	private void setupHistory() {
 		
 		LineChart historyChart   = (LineChart)findViewById(R.id.teachercoursedetail_historyChart);
@@ -151,6 +185,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 		//
 		// Im Moment einfach random Daten erzeugen
 		//
+		/*
 		String[] labelsX = new String[12];
 		String[] labelsY = new String[13];
 		
@@ -184,5 +219,6 @@ public class TeacherCourseDetailActivity extends FragmentActivity {
 		
 		historyChart.setLabels(labelsX, labelsY);
 		historyChart.setChartSize(7, 12, 9, 13);
+		*/
 	}
 }

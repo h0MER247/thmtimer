@@ -4,10 +4,7 @@ import org.junit.Before;
 
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.TrackTimeActivity;
-import de.thm.mni.thmtimer.model.TimeCategory;
 import de.thm.mni.thmtimer.model.TimeData;
-import de.thm.mni.thmtimer.model.TimeTracking;
-import de.thm.mni.thmtimer.util.StaticModuleData;
 
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
@@ -44,9 +41,9 @@ public class TrackTimeActivityTest extends ActivityUnitTestCase<TrackTimeActivit
 	
 	public void testEnterTime(){
 		mButton.performClick();
-		TimeCategory category = (TimeCategory) mUsageSpinner.getSelectedItem();
-		TimeTracking data = new TimeTracking(-1l, category.getID(), "Gelernt", time);
-		StaticModuleData.getStudentData().addTimeTracking(mCourseID, data);
+		//TimeCategory category = (TimeCategory) mUsageSpinner.getSelectedItem();
+		//TimeTracking data = new TimeTracking(-1l, category.getID(), "Gelernt", time);
+		//StaticModuleData.getStudentData().addTimeTracking(mCourseID, data);
 	}	
 
 }

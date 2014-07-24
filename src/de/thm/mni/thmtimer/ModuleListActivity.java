@@ -1,8 +1,6 @@
 package de.thm.mni.thmtimer;
-
 import java.lang.reflect.Field;
 import android.app.ActionBar;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,117 +8,98 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 import de.thm.mni.thmtimer.util.FixedSpeedScroller;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.util.TabFactory;
 import de.thm.mni.thmtimer.util.TabPagerAdapter;
 import de.thm.mni.thmtimer.util.ZoomPageTransformer;
+import de.thm.thmtimer.entities.User;
 
 public class ModuleListActivity extends FragmentActivity {
+	private final String TAG = ModuleListActivity.class.getSimpleName();
 	private ViewPager mPager;
 	private TabPagerAdapter mTabAdapter;
 	private ActionBar mActionBar;
 	private StudentFragment mStudentFragment;
 	private TeacherFragment mTeacherFragment;
-	private FrameLayout mFragmentContainer;
-	private boolean mHasTwoPanes = false;
-	protected static final String TAG = ModuleListActivity.class.getSimpleName();
-
-
+	private User mUser;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mStudentFragment = new StudentFragment();
-		mTeacherFragment = new TeacherFragment();
-		mFragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
-
 		setContentView(R.layout.modulelistactivity);
-		getActionBar().setDisplayHomeAsUpEnabled(true);		
-
-		// running on tablet?
-		if (mFragmentContainer != null) {
-			mHasTwoPanes = true;
-		}
-
-		if (mTabAdapter == null) {
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		if(mUser == null)
+			mUser = ModuleDAO.getUser();
+		// Fragmente initialisieren
+		if(mStudentFragment == null)
+			mStudentFragment = new StudentFragment();
+		if((mTeacherFragment == null) && mUser.isLecteur())
+			mTeacherFragment = new TeacherFragment();
+		// TabAdapter
+		if(mTabAdapter == null) {
 			mTabAdapter = new TabPagerAdapter(getSupportFragmentManager(), new TabFactory() {
 				@Override
-				public Fragment firstTab() {
-					return mStudentFragment;
-				}
+				public Fragment firstTab() { return mStudentFragment; }
 				@Override
-				public Fragment secondTab() {
-					if (ModuleDAO.getUser().isLecteur())
-						return mTeacherFragment;
-					return null;
-				}
+				public Fragment secondTab() { return mTeacherFragment; }
 				@Override
-				public int getNumberOfTabs() {
-					if (ModuleDAO.getUser().isLecteur()) {
-						Log.d(TAG, "User is a Teacher, give him two tabs");
-						return 2;
-					}
-					Log.d(TAG, "User is only a student, give him one tab");
-					return 1;
-				}
+				public int getNumberOfTabs() { return mUser.isLecteur() ? 2 : 1; }
 			});
 		}
-		if (mPager == null) {
-			mPager = (ViewPager) findViewById(R.id.pager);
-			mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-				@Override
-				public void onPageSelected(int position) {
-					mActionBar = getActionBar();
-					mActionBar.setSelectedNavigationItem(position);
-				}
-				@Override
-				public void onPageScrollStateChanged(int position) {
-				}
-				@Override
-				public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-				}
-			});
-			mPager.setAdapter(mTabAdapter);
-			mPager.setPageTransformer(true, new ZoomPageTransformer());
+		// ViewPager
+		if(mPager == null) {
+			mPager = (ViewPager)findViewById(R.id.pager);
+			// Custom Scroller
 			try {
 				Field scroller = ViewPager.class.getDeclaredField("mScroller");
 				scroller.setAccessible(true);
 				scroller.set(mPager, new FixedSpeedScroller(this));
-			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
+			catch(NoSuchFieldException e) {
+				Log.d(TAG, e.getLocalizedMessage());
+			}
+			catch(IllegalArgumentException e) {
+				Log.d(TAG, e.getLocalizedMessage());
+			}
+			catch(IllegalAccessException e) {
+				Log.d(TAG, e.getLocalizedMessage());
+			}
+			// PageListener
+			mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+				@Override
+				public void onPageSelected(int position) {
+					//mActionBar = getActionBar();
+					if(mActionBar.getSelectedNavigationIndex() != position)
+						mActionBar.setSelectedNavigationItem(position);
+				}
+				@Override
+				public void onPageScrollStateChanged(int position) {}
+				@Override
+				public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+			});
+			mPager.setPageTransformer(true, new ZoomPageTransformer());
+			mPager.setAdapter(mTabAdapter);
 		}
-		if (mActionBar == null) {
+		// Add Actionbar Tabs if the user is a lecturer
+		if((mActionBar == null) && mUser.isLecteur()) {
 			mActionBar = getActionBar();
 			// Enable Tabs on Action Bar
 			mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 			ActionBar.TabListener tabListener = new ActionBar.TabListener() {
 				@Override
-				public void onTabReselected(android.app.ActionBar.Tab tab, FragmentTransaction ft) {
-				}
-				@Override
 				public void onTabSelected(ActionBar.Tab actionTab, FragmentTransaction ft) {
-					mPager.setCurrentItem(actionTab.getPosition());
+					if(mPager.getCurrentItem() != actionTab.getPosition())
+						mPager.setCurrentItem(actionTab.getPosition());
 				}
 				@Override
-				public void onTabUnselected(android.app.ActionBar.Tab tab, FragmentTransaction ft) {
-				}
+				public void onTabReselected(android.app.ActionBar.Tab tab, FragmentTransaction ft) {}
+				@Override
+				public void onTabUnselected(android.app.ActionBar.Tab tab, FragmentTransaction ft) {}
 			};
-			// Add tabs to actionbar
+			// Add tabs to ActionBar
 			mActionBar.addTab(mActionBar.newTab().setText(getString(R.string.tab1)).setTabListener(tabListener));
 			mActionBar.addTab(mActionBar.newTab().setText(getString(R.string.tab2)).setTabListener(tabListener));
 		}
-	}
-	public void refresh() {
-		mTabAdapter.notifyDataSetChanged();
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -131,30 +110,9 @@ public class ModuleListActivity extends FragmentActivity {
 		}
 		return false;
 	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (mHasTwoPanes) {
-			//showDetailFragment();
+	public void refresh() {
+		if(mTabAdapter != null) {
+			mTabAdapter.notifyDataSetChanged();
 		}
 	}
-	/*
-	private void showDetailFragment() {
-		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-		Fragment fragment = new LeistungErfassenFragment();
-		int pos = getListView().getCheckedItemPosition();
-		if (pos == ListView.INVALID_POSITION) {
-			pos = 0;
-		}
-		long id = mLeistungen.get(pos).getId();
-		Bundle bundle = new Bundle();
-		bundle.putLong("id", id);
-		fragment.setArguments(bundle);
-		fragmentTransaction.replace(R.id.fragment_container, fragment);
-		fragmentTransaction.commit();
-
-	}  */
 }

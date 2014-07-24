@@ -100,4 +100,7 @@
     <string name="connection_unreachable">Server nicht erreichbar</string>
     <string name="connection_loading">Lade. Bitte warten...</string>
 	<string name="connection_loading_courses">Kurse werden geladen…</string>
+    <string name="connection_loading_categories">Lade Zeitkategorien…</string>
+    <string name="connection_loading_expenditures">Lade deine Aktivitätenliste…</string>
+    <string name="connection_saving_expenditures">Speichere deine Aktivitätenliste…</string>
 </resources>

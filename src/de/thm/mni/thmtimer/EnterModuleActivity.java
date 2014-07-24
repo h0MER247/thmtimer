@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MenuItem;
 
 public class EnterModuleActivity extends FragmentActivity {
@@ -20,54 +21,61 @@ public class EnterModuleActivity extends FragmentActivity {
 	private FragmentManager mFragmentManager;
 	private ViewPager mPager;
 	private TabPagerAdapter mPagerAdapter;
-	private String fragment;
-	private Bundle extras;
+	private String mSourceFragment;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
-		extras = getIntent().getExtras();
-		fragment = extras.getString("fragment");
-
-		if (mFragmentManager == null) {
+		
+		setContentView(R.layout.entermoduleactivity);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
+		
+		mSourceFragment = getIntent().getExtras().getString("fragment");
+		
+		if(mFragmentManager == null)
 			mFragmentManager = getSupportFragmentManager();
-		}
-		if (savedInstanceState != null) {
+		
+		if(savedInstanceState != null) {
+			
 			mModuleSearch = (ModuleSearchFragment) mFragmentManager.getFragment(savedInstanceState, "moduleSearch");
 			mModuleDetail = mFragmentManager.getFragment(savedInstanceState, "moduleDetail");
 			mTeacherCreateCourse = mFragmentManager.getFragment(savedInstanceState, "teacherCreateCourse");
 		}
-
-		setContentView(R.layout.entermoduleactivity);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		if (mModuleSearch == null) {
+		
+		if(mModuleSearch == null)
 			mModuleSearch = new ModuleSearchFragment();
-		}
+		
 
 		mPager = (ViewPager) findViewById(R.id.entermodulepager);
 		mPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), new TabFactory() {
 
 			@Override
 			public Fragment firstTab() {
+				
 				return mModuleSearch;
 			}
 
 			@Override
 			public Fragment secondTab() {
-				if(fragment.equals("teacher"))
+				
+				if(mSourceFragment.equals("teacher"))
 					return mTeacherCreateCourse;
-				else if(fragment.equals("student"))
+				else if(mSourceFragment.equals("student"))
 					return mModuleDetail;
+				
 				return null;
 			}
 
 			@Override
 			public int getNumberOfTabs() {
-				if (mModuleDetail == null) {
-					return 1;
-				} else {
-					return 2;
-				}
+				
+				if(mSourceFragment.equals("teacher"))
+					return mTeacherCreateCourse == null ? 1 : 2;
+				else
+					return mModuleDetail == null ? 1 : 2;
 			}
 		});
 		mPager.setAdapter(mPagerAdapter);
@@ -92,10 +100,21 @@ public class EnterModuleActivity extends FragmentActivity {
 	public void openSearch() {
 		mPager.setCurrentItem(0);
 	}
+	
+	public void onEnterCourse(long id) {
+		
+		// TODO
+	}
+	public void onCreateCourse() {
+		
+		// TODO
+	}
+	
 
 	public void closeSearch(long id) {
 
-		if(fragment.equals("teacher")){
+		if(mSourceFragment.equals("teacher")){
+			Log.d("LOG", "OPEN");
 			mTeacherCreateCourse = new TeacherCreateCourseFragment();
 			Bundle b = new Bundle();
 			b.putLong("id", id); // id ist jetzt ne kursid!!!
@@ -105,7 +124,7 @@ public class EnterModuleActivity extends FragmentActivity {
 			mPager.setCurrentItem(1);
 	
 		} 
-		if(fragment.equals("student")){
+		if(mSourceFragment.equals("student")){
 			mModuleDetail = new ModuleDetailFragment();
 			Bundle b = new Bundle();
 			b.putLong("id", id); // id ist jetzt ne kursid!!!

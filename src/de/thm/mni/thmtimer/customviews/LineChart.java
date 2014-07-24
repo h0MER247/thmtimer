@@ -20,14 +20,14 @@ import android.view.View;
 //
 public class LineChart extends View {
 	
-	public final static Integer[] DEFAULT_CHART_LINE_COLORS = { 0xFF0099CC,
+	public final static Integer[] DEFAULT_LINECHART_COLORS = { 0xFF0099CC,
 		                                                        0xFF9933CC,
 		                                                        0xFF669900,
 		                                                        0xFFFF8800,
 		                                                        0xFFCC0000 };
 	
-	private final static Integer DEFAULT_CHART_ORIENTATION_COLOR = 0xFF808080;
-	public final static Integer DEFAULT_CHART_TEXT_COLOR = 0xFF000000;
+	private final static Integer DEFAULT_LINECHART_ORIENTATION_COLOR = 0xFF808080;
+	public final static Integer DEFAULT_LINECHART_TEXT_COLOR = 0xFF000000;
 	
 	private Paint mPaint;
 	
@@ -78,9 +78,9 @@ public class LineChart extends View {
 		
 		setTextSize(22f);
 		setChartSize(10, 30, 9, 9);
-		setChartColors(DEFAULT_CHART_LINE_COLORS,
-				       DEFAULT_CHART_ORIENTATION_COLOR,
-				       DEFAULT_CHART_TEXT_COLOR);
+		setChartColors(DEFAULT_LINECHART_COLORS,
+				       DEFAULT_LINECHART_ORIENTATION_COLOR,
+				       DEFAULT_LINECHART_TEXT_COLOR);
 	}
 	
 	
@@ -168,7 +168,11 @@ public class LineChart extends View {
 	@Override
 	public void draw(Canvas canvas) {
 		
-		if(!mChartData.isEmpty()) {
+		if(mChartData.isEmpty()) {
+			
+			drawNoDataMessage(canvas);
+		}
+		else {
 			
 			if(mBoundsInvalidated) {
 				
@@ -193,6 +197,26 @@ public class LineChart extends View {
 		return (1.0f / mTotalOnY) * valueY;
 	}
 	
+	private void drawNoDataMessage(Canvas canvas) {
+		
+		mDrawingBound = new Rect(getPaddingLeft(),
+				                 getPaddingTop(),
+				                 getWidth() - getPaddingRight(),
+				                 getHeight() - getPaddingBottom());
+		
+		String message = "No chart data available";
+		
+
+		mPaint.setColor(mTextColor);;
+		mPaint.setStyle(Style.FILL);
+		
+		mPaint.getTextBounds(message, 0, message.length(), mTextBounds);
+		
+		canvas.drawText(message,
+				        -mTextBounds.left + ((mDrawingBound.width() - mTextBounds.width()) / 2),
+				        -mTextBounds.top  + ((mDrawingBound.height() - mTextBounds.height()) / 2),
+				        mPaint);
+	}
 	
 	private void drawXAxis(Canvas canvas) {
 		
