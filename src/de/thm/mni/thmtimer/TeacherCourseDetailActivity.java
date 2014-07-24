@@ -1,17 +1,22 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
 
 import de.thm.mni.thmtimer.customviews.Legend;
 import de.thm.mni.thmtimer.customviews.LineChart;
 import de.thm.mni.thmtimer.customviews.PieChart;
+import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.ModuleDAO.Bla;
 import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Category;
 import de.thm.thmtimer.entities.Course;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +30,7 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 	
 	private final String TAG = TeacherCourseDetailActivity.class.getSimpleName();
 	
-	//private final int DAO_REQUEST_DURATION_PER_CATEGORY = 0; // TODO
+	private final int DAO_REQUEST_DURATION_PER_CATEGORY = 0; // TODO
 	//private final int DAO_REQUEST_DURATIONS_PER_WEEK = 1; // TODO
 	
 	private Long mCourseID;
@@ -86,9 +91,10 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 		tabHost.addTab(tab2);
 		
 		// Alle Statistikdaten frisch anfordern
-		//ModuleDAO.beginJob();
+		ModuleDAO.beginJob();
+		ModuleDAO.getDurationPerCategoryFromServer(DAO_REQUEST_DURATION_PER_CATEGORY, mCourseID);
 		// TODO: Statistikdaten holen
-		//ModuleDAO.commitJob(this, this);
+		ModuleDAO.commitJob(this, this);
 	}
 
 	@Override
@@ -109,9 +115,11 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 	@Override
 	public void onDAOError(int requestID, String message) {
 		
-		//switch(requestID) {
-		//
-		//}
+		switch(requestID) {
+		case DAO_REQUEST_DURATION_PER_CATEGORY:
+			Toast.makeText(this, "Hat net geklappt: " + message, Toast.LENGTH_LONG).show();
+			break;
+		}
 	}
 	
 	@Override
@@ -129,7 +137,38 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 		Legend   pieChartLegend = (Legend)  findViewById(R.id.teachercoursedetail_pieChartLegend);
 		
 		
+		/*List<Bla> durations = ModuleDAO.getDurationPerCategory();
+		
+		Log.d("LOG", "Duration Count:" + durations.size());
+		
 		// Ermitteln wieviel Zeit insgesamt in diesen Kurs investiert wurde
+		Integer totalMinutes = 0;
+		
+		for(Bla categoryDuration : durations) {
+			
+			totalMinutes += categoryDuration.getValue();
+		}
+		
+		
+		TimeData timeData = new TimeData();
+		
+		for(Bla categoryDuration : durations) {
+			
+			Integer value     = categoryDuration.getValue();
+			Category category = categoryDuration.getKey();
+			
+			timeData.setTimeInMinutes(value);
+			
+			
+			pieChart.addValue(value.floatValue());
+			
+			pieChartLegend.addLegendLabel(String.format("%s: %sh (%04.1f%%)",
+                                                        category.getName(),
+                                                        timeData.toString(),
+                                                        (100.0f / totalMinutes) * value));
+		}*/
+		
+		
 		/*
 		Integer totalMinutes = mData.getTimeInvestedTotal(mCourseID).getTimeInMinutes();
 		

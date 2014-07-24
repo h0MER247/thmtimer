@@ -1,8 +1,11 @@
 package de.thm.mni.thmtimer.util;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.http.HttpMethod;
@@ -12,6 +15,7 @@ import org.springframework.web.client.ResourceAccessException;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Expenditure;
 import de.thm.thmtimer.entities.Module;
@@ -29,6 +33,35 @@ public class ModuleDAO {
 	private static List<Course> mTeacherCourses;
 	private static List<Category> mTimeCategorys;
 	private static List<Module> mModules;
+	//private static List<Map.Entry<Category, Integer>> mDurationPerCategory;
+	
+	
+	public static class Bla {
+		
+		public Category key;
+		public Integer value;
+		
+		
+	}
+
+	//private static HashMap<Category, Integer> mDurationPerCategory;
+	
+	public static void getDurationPerCategoryFromServer(int requestID, Long courseID) {
+		
+		ServerOperation op = new GET_DURATION_PER_CATEGORY();
+		op.setParameter(courseID);
+		addJob(op, requestID);
+	}
+	
+	/*public static List<Bla> getDurationPerCategory() {
+		
+		return mDurationPerCategory;
+	}*/
+	
+	/*public static void invalidateDurationPerCategory() {
+		
+		mDurationPerCategory = null;
+	}*/
 	
 	
 	
@@ -605,6 +638,48 @@ public class ModuleDAO {
 		public int getDialogMessage() {
 			
 			//TODO: Eigener String dafür
+			return R.string.connection_loading;
+		}
+	};
+	
+	
+	
+	//
+	// Zeiten pro Kategorie anfordern
+	//
+	
+	private static class GET_DURATION_PER_CATEGORY extends ServerOperation {
+
+		private Long mCourseID;
+		
+		@Override
+		public boolean runIf() {
+			
+//			return mDurationPerCategory == null;
+			return true;
+		}
+
+		@Override
+		public void run() {
+			
+			Bla[] durations = Connection.request("/statistics/category/" + mCourseID.toString(),
+					                                                      HttpMethod.GET,
+					                                                      Bla[].class);
+			
+			Log.d("Horst", durations.toString());
+		    //mDurationPerCategory = Arrays.asList(durations);
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+			
+			mCourseID = (Long)parameter[0];			
+		}
+
+		@Override
+		public int getDialogMessage() {
+			
+			// TODO: Eigener String dafür
 			return R.string.connection_loading;
 		}
 	};
