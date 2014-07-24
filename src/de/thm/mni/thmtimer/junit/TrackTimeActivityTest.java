@@ -9,7 +9,6 @@ import de.thm.mni.thmtimer.model.TimeData;
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 public class TrackTimeActivityTest extends ActivityUnitTestCase<TrackTimeActivity> {
@@ -31,7 +30,7 @@ public class TrackTimeActivityTest extends ActivityUnitTestCase<TrackTimeActivit
 		mLaunchIntent = new Intent(getInstrumentation()
                 .getTargetContext(), TrackTimeActivity.class);
         startActivity(mLaunchIntent, null, null);
-        mUsageSpinner = (Spinner) getActivity().findViewById(R.id.usageSpinner);
+        mUsageSpinner = (Spinner) getActivity().findViewById(R.id.categoryEntry);
         mButton = (Button) getActivity().findViewById(R.id.enterTime);  
 	}
 	
@@ -44,6 +43,5 @@ public class TrackTimeActivityTest extends ActivityUnitTestCase<TrackTimeActivit
 		//TimeCategory category = (TimeCategory) mUsageSpinner.getSelectedItem();
 		//TimeTracking data = new TimeTracking(-1l, category.getID(), "Gelernt", time);
 		//StaticModuleData.getStudentData().addTimeTracking(mCourseID, data);
-	}	
-
+	}
 }
