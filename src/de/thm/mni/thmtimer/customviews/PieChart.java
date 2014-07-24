@@ -168,11 +168,6 @@ public class PieChart extends View {
 	
 	private void drawNoDataMessage(Canvas canvas) {
 		
-		mDrawingBound = new RectF(getPaddingLeft(),
-				                  getPaddingTop(),
-				                  getWidth() - getPaddingRight(),
-				                  getHeight() - getPaddingBottom());
-		
 		String message = "No chart data available";
 		
 

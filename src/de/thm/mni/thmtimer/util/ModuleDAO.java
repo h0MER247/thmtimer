@@ -1,26 +1,21 @@
 package de.thm.mni.thmtimer.util;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.http.HttpMethod;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.ResourceAccessException;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Expenditure;
 import de.thm.thmtimer.entities.Module;
 import de.thm.thmtimer.entities.User;
 import de.thm.mni.thmtimer.R;
+import de.thm.mni.thmtimer.model.DurationPerCategory;
 import de.thm.thmtimer.entities.Category;
 
 
@@ -33,35 +28,31 @@ public class ModuleDAO {
 	private static List<Course> mTeacherCourses;
 	private static List<Category> mTimeCategorys;
 	private static List<Module> mModules;
-	//private static List<Map.Entry<Category, Integer>> mDurationPerCategory;
+	private static List<DurationPerCategory> mDurationPerCategory;
 	
 	
-	public static class Bla {
-		
-		public Category key;
-		public Integer value;
-		
-		
-	}
 
-	//private static HashMap<Category, Integer> mDurationPerCategory;
+	//
+	// --------- ZEIT JE KATEGORIE 
+	//
 	
 	public static void getDurationPerCategoryFromServer(int requestID, Long courseID) {
 		
 		ServerOperation op = new GET_DURATION_PER_CATEGORY();
 		op.setParameter(courseID);
+		
 		addJob(op, requestID);
 	}
 	
-	/*public static List<Bla> getDurationPerCategory() {
+	public static List<DurationPerCategory> getDurationPerCategory() {
 		
 		return mDurationPerCategory;
-	}*/
+	}
 	
-	/*public static void invalidateDurationPerCategory() {
+	public static void invalidateDurationPerCategory() {
 		
 		mDurationPerCategory = null;
-	}*/
+	}
 	
 	
 	
@@ -259,6 +250,20 @@ public class ModuleDAO {
 		return mAllCourses;
 	}
 	
+	public static Course searchCourseByID(Long courseID) {
+		
+		if(mAllCourses != null) {
+			
+			for(Course c : mAllCourses) {
+				
+				if(c.getId() == courseID)
+					return c;
+			}
+		}
+		
+		return null;
+	}
+	
 	public static void invalidateFullCourseList() {
 		
 		mAllCourses = null;
@@ -344,8 +349,7 @@ public class ModuleDAO {
 		@Override
 		public int getDialogMessage() {
 			
-			// TODO: Eigener String dafür
-			return R.string.connection_loading;
+			return R.string.connection_loading_user;
 		}
 	};
 	
@@ -599,8 +603,7 @@ public class ModuleDAO {
 		@Override
 		public int getDialogMessage() {
 			
-			//TODO: Eigener String dafür
-			return R.string.connection_loading;
+			return R.string.connection_loading_modules;
 		}
 	};
 	
@@ -637,8 +640,7 @@ public class ModuleDAO {
 		@Override
 		public int getDialogMessage() {
 			
-			//TODO: Eigener String dafür
-			return R.string.connection_loading;
+			return R.string.connection_join_course;
 		}
 	};
 	
@@ -655,19 +657,17 @@ public class ModuleDAO {
 		@Override
 		public boolean runIf() {
 			
-//			return mDurationPerCategory == null;
-			return true;
+			return mDurationPerCategory == null;
 		}
 
 		@Override
 		public void run() {
 			
-			Bla[] durations = Connection.request("/statistics/category/" + mCourseID.toString(),
-					                                                      HttpMethod.GET,
-					                                                      Bla[].class);
+			DurationPerCategory[] durations = Connection.request("/statistics/category/" + mCourseID.toString(),
+					                                             HttpMethod.GET,
+					                                             DurationPerCategory[].class);
 			
-			Log.d("Horst", durations.toString());
-		    //mDurationPerCategory = Arrays.asList(durations);
+		    mDurationPerCategory = Arrays.asList(durations);
 		}
 
 		@Override
@@ -679,8 +679,7 @@ public class ModuleDAO {
 		@Override
 		public int getDialogMessage() {
 			
-			// TODO: Eigener String dafür
-			return R.string.connection_loading;
+			return R.string.connection_loading_statistics;
 		}
 	};
 	
@@ -836,13 +835,7 @@ public class ModuleDAO {
 							publishProgress(job);
 							op.run();
 						}
-		                catch(final HttpClientErrorException e) {
-		                	
-		                	job.setErrorMessage(e.toString());
-		                	publishProgress(job);
-		                    return false;
-		                }
-		                catch(final ResourceAccessException e) {
+		                catch(Exception e) {
 		                	
 		                	job.setErrorMessage(e.toString());
 		                	publishProgress(job);

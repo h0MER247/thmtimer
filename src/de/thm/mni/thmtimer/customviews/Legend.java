@@ -99,6 +99,7 @@ public class Legend extends View {
 	public void addLegendLabel(String label) {
 		
 		mLabels.add(label);
+		invalidate();
 	}
 	
 	
@@ -107,7 +108,7 @@ public class Legend extends View {
 
 	@Override
 	public void draw(Canvas canvas) {
-
+		
 		// Zeichenbereich festlegen
 		mDrawingBounds.set(getPaddingLeft(),
 				           getPaddingTop(),

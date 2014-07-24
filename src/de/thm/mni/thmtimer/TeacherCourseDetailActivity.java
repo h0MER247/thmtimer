@@ -2,21 +2,19 @@ package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import de.thm.mni.thmtimer.customviews.Legend;
 import de.thm.mni.thmtimer.customviews.LineChart;
 import de.thm.mni.thmtimer.customviews.PieChart;
+import de.thm.mni.thmtimer.model.DurationPerCategory;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.ModuleDAO.Bla;
 import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Category;
 import de.thm.thmtimer.entities.Course;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +28,7 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 	
 	private final String TAG = TeacherCourseDetailActivity.class.getSimpleName();
 	
-	private final int DAO_REQUEST_DURATION_PER_CATEGORY = 0; // TODO
+	private final int DAO_REQUEST_DURATION_PER_CATEGORY = 0;
 	//private final int DAO_REQUEST_DURATIONS_PER_WEEK = 1; // TODO
 	
 	private Long mCourseID;
@@ -89,8 +87,16 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 		tab2.setContent(R.id.teachercoursedetail_tabHistory);
 		tab2.setIndicator("History");
 		tabHost.addTab(tab2);
+	}
+	
+	@Override
+	protected void onResume() {
+		
+		super.onResume();
 		
 		// Alle Statistikdaten frisch anfordern
+		ModuleDAO.invalidateDurationPerCategory();
+		
 		ModuleDAO.beginJob();
 		ModuleDAO.getDurationPerCategoryFromServer(DAO_REQUEST_DURATION_PER_CATEGORY, mCourseID);
 		// TODO: Statistikdaten holen
@@ -136,58 +142,35 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 		PieChart pieChart       = (PieChart)findViewById(R.id.teachercoursedetail_pieChart);
 		Legend   pieChartLegend = (Legend)  findViewById(R.id.teachercoursedetail_pieChartLegend);
 		
+		List<DurationPerCategory> durations = ModuleDAO.getDurationPerCategory();
 		
-		/*List<Bla> durations = ModuleDAO.getDurationPerCategory();
-		
-		Log.d("LOG", "Duration Count:" + durations.size());
 		
 		// Ermitteln wieviel Zeit insgesamt in diesen Kurs investiert wurde
 		Integer totalMinutes = 0;
 		
-		for(Bla categoryDuration : durations) {
+		for(DurationPerCategory duration : durations) {
 			
-			totalMinutes += categoryDuration.getValue();
+			totalMinutes += duration.value;
 		}
 		
-		
+		//
+		// Pie Chart mit den Daten befüllen
+		//
 		TimeData timeData = new TimeData();
 		
-		for(Bla categoryDuration : durations) {
+		for(DurationPerCategory duration : durations) {
 			
-			Integer value     = categoryDuration.getValue();
-			Category category = categoryDuration.getKey();
-			
-			timeData.setTimeInMinutes(value);
-			
+			Integer value     = duration.value;
+			Category category = duration.key;
 			
 			pieChart.addValue(value.floatValue());
 			
+			timeData.setTimeInMinutes(value);
 			pieChartLegend.addLegendLabel(String.format("%s: %sh (%04.1f%%)",
                                                         category.getName(),
                                                         timeData.toString(),
                                                         (100.0f / totalMinutes) * value));
-		}*/
-		
-		
-		/*
-		Integer totalMinutes = mData.getTimeInvestedTotal(mCourseID).getTimeInMinutes();
-		
-		for(TimeStatisticData t : mTimeStatistics) {
-
-			// Zeit und Kategorie holen
-			TimeData td = t.getTime();
-			TimeCategory category = StaticModuleData.findTimeCategory(t.getCategoryID());
-			
-			// Zeitwert zum Tortenstück hinzufügen
-			pieChart.addValue((float) td.getTimeInMinutes());
-			
-			// Kategorie zur Legende hinzufügen
-			pieChartLegend.addLegendLabel(String.format("%s: %sh (%04.1f%%)",
-					                                    category.getDescription(),
-					                                    t.getTime().toString(),
-					                                    (100.0f / totalMinutes) * td.getTimeInMinutes()));
 		}
-		*/
 	}
 	
 	
