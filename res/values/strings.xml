@@ -22,6 +22,7 @@
 
     <!-- StudentFragment -->
     <string name="action_add">Add</string>
+    <string name="welcome_new_user">Welcome new user. To join a course press the + symbol in your action bar.</string>
 
     <!-- ModuleDetailFragment -->
     <string name="module_details">Course Detail View</string>

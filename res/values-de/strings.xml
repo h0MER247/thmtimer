@@ -22,7 +22,8 @@
 
     <!-- StudentFragment -->
     <string name="action_add">Neu</string>
-
+    <string name="welcome_new_user">Willkommen neuer Nutzer. Um einem Kurs beizutreten wähle das + Symbol in deiner Aktionsleiste.</string>
+    
     <!-- ModuleDetailFragment -->
     <string name="module_details">Modul Detailansicht</string>
     <string name="enter">Beitreten</string>

@@ -64,10 +64,9 @@ public class StudentFragment extends Fragment implements ModuleDAOListener {
 		
 		if(mViewData.size() == 0) {
 			
-			// TODO
 			Toast.makeText(getActivity(),
-					       "Du scheinst noch keinem Kurs beigetreten zu sein.\nKurse fügst du mit dem + Zeichen hinzu!",
-					       Toast.LENGTH_LONG).show();
+						   getString(R.string.welcome_new_user),
+						   Toast.LENGTH_LONG).show();
 		}
 	}
 	
@@ -162,13 +161,13 @@ public class StudentFragment extends Fragment implements ModuleDAOListener {
 		
 		case DAO_REQUEST_ADD_STUDENT_TO_COURSE:
 			Toast.makeText(getActivity(),
-					       "Fehler beim einschreiben in den Kurs: " + errorMessage,
+					       "Fehler beim Einschreiben in den Kurs: " + errorMessage,
 					       Toast.LENGTH_LONG).show();
 			break;
 			
 		case DAO_REQUEST_STUDENT_COURSELIST:
 			Toast.makeText(getActivity(),
-					       "Fehler beim lesen der Kursliste: " + errorMessage,
+					       "Fehler beim Lesen der Kursliste: " + errorMessage,
 					       Toast.LENGTH_LONG).show();
 			break;
 		}
