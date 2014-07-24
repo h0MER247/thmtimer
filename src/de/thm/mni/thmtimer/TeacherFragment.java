@@ -119,13 +119,7 @@ public class TeacherFragment extends Fragment {
 		
 		if(requestCode == REQUEST_ENTER_MODULE) {
 			
-			// TODO
-			
 			mAdapter.notifyDataSetChanged();
-			
-			/* Fix #11128 */
-			if(getActivity() != null)
-				((ModuleListActivity)getActivity()).refresh();
 		}
 	}
 	

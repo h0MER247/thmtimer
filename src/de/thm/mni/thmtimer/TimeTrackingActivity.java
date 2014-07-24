@@ -112,6 +112,7 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 			return true;
 			
 		case android.R.id.home:
+			setResult(RESULT_OK);
 			finish();
 			return true;
 			

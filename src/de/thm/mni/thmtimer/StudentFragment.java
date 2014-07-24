@@ -24,12 +24,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.thmtimer.entities.Course;
+import de.thm.thmtimer.entities.Expenditure;
 
 
-public class StudentFragment extends Fragment {
+public class StudentFragment extends Fragment implements ModuleDAOListener {
 	
 	private final String TAG = StudentFragment.class.getSimpleName();
+	
+	private final int DAO_REQUEST_ADD_STUDENT_TO_COURSE = 0;
+	private final int DAO_REQUEST_STUDENT_COURSELIST = 1;
 	
 	private final int REQUEST_TIMETRACKING = 1;
 	private final int REQUEST_ADD_COURSE = 2;
@@ -128,30 +133,54 @@ public class StudentFragment extends Fragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-		if(resultCode != Activity.RESULT_OK)
-			return;
-
 		switch(requestCode) {
 		
 		case REQUEST_TIMETRACKING:
-			mAdapter.notifyDataSetChanged();
-			
-			/* Fix #11128 */
-			if(getActivity() != null)
-				((ModuleListActivity)getActivity()).refresh();
+			mAdapter.notifyDataSetChanged(); // Adapter bei TimeTracking immer aktualisieren!!!
 			break;
 			
-		/*
 		case REQUEST_ADD_COURSE:
-			Long courseID = data.getExtras().getLong("course_id");
-			
-			ModuleDAO.beginJob();
-			ModuleDAO.addStudentToCourse(DAO_ADD_STUDENT_TO_COURSE, courseID);
-			ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENT_COURSELIST);
-			ModuleDAO.commitJob(this);
+			if(resultCode == Activity.RESULT_OK) {
+				
+				Long courseID = data.getExtras().getLong("course_id");
+				
+				ModuleDAO.beginJob();
+				ModuleDAO.addStudentToCourse(DAO_REQUEST_ADD_STUDENT_TO_COURSE, courseID);
+				ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENT_COURSELIST);
+				ModuleDAO.commitJob(getActivity(), this);				
+			}
 			break;
-		*/
 		}
+	}
+	
+
+	
+	@Override
+	public void onDAOError(int requestID, String errorMessage) {
+		
+		switch(requestID) {
+		
+		case DAO_REQUEST_ADD_STUDENT_TO_COURSE:
+			Toast.makeText(getActivity(),
+					       "Fehler beim einschreiben in den Kurs: " + errorMessage,
+					       Toast.LENGTH_LONG).show();
+			break;
+			
+		case DAO_REQUEST_STUDENT_COURSELIST:
+			Toast.makeText(getActivity(),
+					       "Fehler beim lesen der Kursliste: " + errorMessage,
+					       Toast.LENGTH_LONG).show();
+			break;
+		}
+	}
+	
+	@Override
+	public void onDAOFinished() {
+		
+		mViewData.clear();
+		mViewData.addAll(ModuleDAO.getStudentCourseList());
+		
+		mAdapter.notifyDataSetChanged();
 	}
 	
 	
@@ -182,20 +211,39 @@ public class StudentFragment extends Fragment {
 						                                         false);
 			}
 			
-			final Course course = getItem(position);
 			
 
 			TextView name = (TextView)convertView.findViewById(R.id.moduleName);
 			TextView time = (TextView)convertView.findViewById(R.id.timeInvested);
 			TextView subtext = (TextView)convertView.findViewById(R.id.subtext);
-
-			// TODO: Stimmt auch net wirklich...
+			
+			final Course course = getItem(position);
+			final List<Expenditure> expenditures;
+			final TimeData timeInvested;
+			
+			
+			//
+			// Aufwände zusammenzählen und somit die investierte Zeit ermitteln
+			//
+			expenditures = ModuleDAO.getStudentExpendituresByCourseID(course.getId());
+			timeInvested = new TimeData();
+			
+			Integer duration = 0;
+			
+			for(Expenditure expenditure : expenditures) {
+				
+				duration += expenditure.getDuration();
+			}
+			
+			timeInvested.setTimeInMinutes(duration);
+			
+			//
+			// Labels belegen
+			//
 			name.setText(course.getName());
 			subtext.setText(course.getLecturer().get(0).getLastName());
-
 			
-			TimeData timeInvested = new TimeData();
-			timeInvested.setTimeInHours(123); // <--- TODO: Investierte Zeiten aus unseren Expenditures zusammenzählen...
+			
 			Date startDate = course.getStart();
 			
 			if (startDate != null) {

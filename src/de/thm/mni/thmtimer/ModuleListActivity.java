@@ -18,7 +18,6 @@ import de.thm.mni.thmtimer.util.ZoomPageTransformer;
 import de.thm.thmtimer.entities.User;
 
 
-
 public class ModuleListActivity extends FragmentActivity {
 	
 	private final String TAG = ModuleListActivity.class.getSimpleName();
@@ -68,7 +67,6 @@ public class ModuleListActivity extends FragmentActivity {
 				public int getNumberOfTabs() { return mUser.isLecteur() ? 2 : 1; }
 			});
 		}
-		
 		
 		// ViewPager
 		if(mPager == null) {
@@ -158,15 +156,5 @@ public class ModuleListActivity extends FragmentActivity {
 		}
 		
 		return false;
-	}
-	
-	
-	
-	public void refresh() {
-		
-		if(mTabAdapter != null) {
-			
-			mTabAdapter.notifyDataSetChanged();
-		}
 	}
 }
