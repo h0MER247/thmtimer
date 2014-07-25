@@ -49,23 +49,18 @@
     <!-- TrackTimeActivity -->
     <string name="action_stopwatch_start">Starte Stoppuhr</string>
     <string name="action_stopwatch_stop">Stoppe Stoppuhr</string>
-    <string name="enter_time_header">Zeit eingeben</string>
-    <string name="enter_time_usage_header">Aktivitäten</string>
-    <string name="enter_time_usage">Aktivität</string>
     <string name="enter_time">Eintragen</string>
     <string name="enter_time_error_format">Zeit im HH:MM Format eingeben!</string>
     <string name="enter_time_error_zerotime">Zeit größer als 00:00 eingeben!</string>
     <string name="enter_time_format">HH:MM</string>
     <string name="enter_time_choose">Wählen</string>
-    <string name="enter_time_choose_header">Zeit wählen</string>
-
-    <!-- TimeTracking Types -->
-    <string name="timetype_lecture">Vorlesung</string>
-    <string name="timetype_practice">Praktikum</string>
-    <string name="timetype_homework">Hausarbeit</string>
-    <string name="timetype_preparation">Vorbereitung</string>
-    <string name="timetype_other">Sonstiges</string>
-
+    <string name="enter_time_choose_header">Wähle eine Zeit</string>
+    <string name="enter_time_duration">Dauer:</string>
+    <string name="enter_time_category">Kategorie:</string>
+    <string name="enter_time_description">Beschreibung:</string>
+    <string name="expenditure_enter_header">Zeit eintragen</string>
+    <string name="expenditure_list_header">Aufwandliste</string>
+    
     <!-- TeacherCourseDetailActivity -->
     <string name="hours">Stunden</string>
     <string name="courselist">Kursliste</string>

@@ -1,14 +1,18 @@
 package de.thm.mni.thmtimer;
 
+import java.util.List;
+
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.Category;
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
@@ -19,6 +23,7 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 	private Spinner mCategory;
 	private EditText mDescription;
 	private Button mChooseButton;
+	private List<Category> mCategorys;
 	
 
 	@Override
@@ -29,18 +34,20 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		setContentView(R.layout.tracktimeactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		
 		Bundle extras = getIntent().getExtras();
-
+		
+		
+		mCategorys = ModuleDAO.getTimeCategorys();
+		
 		
 		// Textfeld für den Zeiteintrag
 		mDuration = (EditText) findViewById(R.id.durationEntry);
 		
 		// Kategorie
 		mCategory = (Spinner)findViewById(R.id.categoryEntry);
-		mCategory.setAdapter(new ArrayAdapter<Category>(this,
-				                                        android.R.layout.simple_spinner_dropdown_item,
-				                                        ModuleDAO.getTimeCategorys()));
+		mCategory.setAdapter(new CategoryAdapter(this,
+				                                 R.layout.categorydropdownitem,
+				                                 mCategorys));
 		
 		// Beschreibung
 		mDescription = (EditText)findViewById(R.id.descriptionEntry);
@@ -169,5 +176,46 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		time.setTimeInMinutes((hourOfDay * 60) + minute);
 		
 		mDuration.setText(time.toString());
+	}
+	
+	
+	/**
+	 * 
+	 *
+	 */
+	private class CategoryAdapter extends ArrayAdapter<Category> {
+		
+		public CategoryAdapter(Context context,
+				               int resource,
+				               List<Category> objects) {
+			
+			super(context, resource, objects);
+		}
+		
+		
+		@Override
+		public View getDropDownView(int position, View convertView, ViewGroup parent) {
+			
+			return getView(position, convertView, parent);
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+		
+			if(convertView == null) {
+				
+				convertView = getLayoutInflater().inflate(R.layout.categorydropdownitem,
+						                                  parent,
+						                                  false);
+			}
+			
+			TextView category = (TextView)convertView.findViewById(R.id.categorySpinnerText);
+			
+			// Setze Kategorienamen
+			category.setText(getItem(position).getName());
+			
+			
+			return convertView;
+		}
 	}
 }

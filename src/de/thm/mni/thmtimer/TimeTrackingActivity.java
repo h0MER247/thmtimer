@@ -208,6 +208,7 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 	
 	/**
 	 * 
+	 * 
 	 */
 	private class ExpenditureAdapter extends ArrayAdapter<Expenditure> {
 
@@ -218,7 +219,7 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 			super(context, resource, objects);
 		}
 		
-
+		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 		

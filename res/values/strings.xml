@@ -49,23 +49,18 @@
     <!-- TrackTimeActivity -->
     <string name="action_stopwatch_start">Start Stopwatch</string>
     <string name="action_stopwatch_stop">Stop Stopwatch</string>
-    <string name="enter_time_header">Enter time</string>
-    <string name="enter_time_usage_header">Activities</string>
-    <string name="enter_time_usage">Activity</string>
     <string name="enter_time">Enter</string>
     <string name="enter_time_error_format">Enter a time in HH:MM format!</string>
     <string name="enter_time_error_zerotime">Enter a time greater than 00:00!</string>
     <string name="enter_time_format">HH:MM</string>
     <string name="enter_time_choose">Choose</string>
-    <string name="enter_time_choose_header">Choose a Time</string>
+    <string name="enter_time_choose_header">Choose a time</string>
+    <string name="enter_time_duration">Duration:</string>
+    <string name="enter_time_category">Category:</string>
+    <string name="enter_time_description">Description:</string>
+    <string name="expenditure_enter_header">Enter a time</string>
+    <string name="expenditure_list_header">Expenditures</string>
     
-    <!-- TimeTracking Types -->
-    <string name="timetype_lecture">Lecture</string>
-    <string name="timetype_practice">Practice</string>
-    <string name="timetype_homework">Homework</string>
-    <string name="timetype_preparation">Preparation</string>
-    <string name="timetype_other">Other</string>
-
     <!-- TeacherCourseDetailActivity -->
     <string name="hours">Hours</string>
     <string name="courselist">Course list</string>

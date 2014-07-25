@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/durationEntry"
         android:layout_alignRight="@+id/categoryEntry"
-        android:layout_alignTop="@+id/textView1"
+        android:layout_alignTop="@+id/categoryText"
         android:text="@string/enter_time_choose" />
 
     <Button
@@ -25,12 +25,12 @@
         android:text="@string/enter_time" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/categoryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Aufgewendete Zeit:"
+        android:text="@string/enter_time_duration"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -40,15 +40,15 @@
         android:layout_alignLeft="@+id/durationEntry"
         android:layout_below="@+id/durationEntry"
         android:layout_marginTop="20dp"
-        android:text="Kategorie:"
+        android:text="@string/enter_time_category"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
         android:id="@+id/durationEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
+        android:layout_alignLeft="@+id/categoryText"
+        android:layout_below="@+id/categoryText"
         android:ems="10"
         android:hint="@string/enter_time_format"
         android:inputType="time">
@@ -82,7 +82,7 @@
         android:layout_alignLeft="@+id/categoryEntry"
         android:layout_below="@+id/categoryEntry"
         android:layout_marginTop="20dp"
-        android:text="Beschreibung:"
+        android:text="@string/enter_time_description"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
