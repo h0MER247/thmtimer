@@ -86,11 +86,11 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 				}
 				
 				// Der Server mag scheinbar Zeiten größer als 24h nicht...
-				if(duration.getTimeInMinutes() > 24 * 60) {
+				if(duration.getTimeInMinutes() >= 24 * 60) {
 					
 					// TODO
 					Toast.makeText(TrackTimeActivity.this,
-							       "Zeit zu groß",
+							       getString(R.string.enter_time_error_time_too_big),
 							       Toast.LENGTH_LONG).show();
 					return;
 				}

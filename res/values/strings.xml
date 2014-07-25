@@ -52,12 +52,14 @@
     <string name="enter_time">Enter</string>
     <string name="enter_time_error_format">Enter a time in HH:MM format!</string>
     <string name="enter_time_error_zerotime">Enter a time greater than 00:00!</string>
+    <string name="enter_time_error_time_too_big">Enter a time less than 24:00!</string>
     <string name="enter_time_format">HH:MM</string>
     <string name="enter_time_choose">Choose</string>
     <string name="enter_time_choose_header">Choose a time</string>
     <string name="enter_time_duration">Duration:</string>
     <string name="enter_time_category">Category:</string>
     <string name="enter_time_description">Description:</string>
+    <string name="enter_time_description_hint">Please enter a description…</string>
     <string name="expenditure_enter_header">Enter a time</string>
     <string name="expenditure_list_header">Expenditures</string>
     

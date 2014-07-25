@@ -73,6 +73,7 @@
         android:layout_marginBottom="10dp"
         android:ems="10"
         android:gravity="center_vertical|top|left"
+        android:hint="@string/enter_time_description_hint"
         android:inputType="textMultiLine" />
 
     <TextView
