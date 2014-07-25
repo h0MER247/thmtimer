@@ -1,5 +1,8 @@
 package de.thm.mni.thmtimer;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import de.thm.mni.thmtimer.model.TimeData;
@@ -19,11 +22,23 @@ import android.widget.*;
 
 public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTimeSetListener {
 	
+	// Dauer
 	private EditText mDuration;
+	private TimeData mDurationData;
+	
+	// Startzeit
+	private EditText mStartTime;
+	private Date mStartTimeData;
+	private SimpleDateFormat mStartTimeFormat;
+	
+	// Kategorie
 	private Spinner mCategory;
+	private List<Category> mCategorys;
+	
+	// Beschreibung
 	private EditText mDescription;
 	private Button mChooseButton;
-	private List<Category> mCategorys;
+	
 	
 
 	@Override
@@ -36,12 +51,21 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		
 		Bundle extras = getIntent().getExtras();
 		
-		
 		mCategorys = ModuleDAO.getTimeCategorys();
+		mDurationData = new TimeData();
+		
+		
+		mStartTimeFormat = (SimpleDateFormat)SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT,
+				                                                                  SimpleDateFormat.SHORT);
+		mStartTimeFormat.setLenient(true);
 		
 		
 		// Textfeld für den Zeiteintrag
-		mDuration = (EditText) findViewById(R.id.durationEntry);
+		mDuration = (EditText)findViewById(R.id.durationEntry);
+		
+		// Startzeit
+		mStartTime = (EditText)findViewById(R.id.startTimeEntry);
+		mStartTime.setHint(mStartTimeFormat.toLocalizedPattern());
 		
 		// Kategorie
 		mCategory = (Spinner)findViewById(R.id.categoryEntry);
@@ -59,39 +83,36 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 			@Override
 			public void onClick(View view) {
 				
-				TimeData duration = new TimeData();
-
-				try {
-					
-					duration.parseString(mDuration.getText().toString());
-				}
-				catch(IllegalArgumentException e) {
+				if(!isDurationValid()) {
 					
 					Toast.makeText(TrackTimeActivity.this,
-							       getString(R.string.enter_time_error_format),
-							       Toast.LENGTH_LONG).show();
+						           getString(R.string.enter_time_duration_invalid),
+						           Toast.LENGTH_LONG).show();
 					
 					mDuration.requestFocus();
 					return;
 				}
 				
-				if(duration.getTimeInMinutes() == 0) {
+				if(mStartTime.length() == 0)
+					generateStartTime();
+				
+				if(!isStartTimeValid()) {
 					
 					Toast.makeText(TrackTimeActivity.this,
-							       getString(R.string.enter_time_error_zerotime),
+							       getString(R.string.enter_time_starttime_invalid_format),
 							       Toast.LENGTH_LONG).show();
-				
-					mDuration.requestFocus();
+					
+					mStartTime.requestFocus();
 					return;
 				}
 				
-				// Der Server mag scheinbar Zeiten größer als 24h nicht...
-				if(duration.getTimeInMinutes() >= 24 * 60) {
+				if(!isStartTimeConsistent()) {
 					
-					// TODO
 					Toast.makeText(TrackTimeActivity.this,
-							       getString(R.string.enter_time_error_time_too_big),
-							       Toast.LENGTH_LONG).show();
+						           getString(R.string.enter_time_starttime_invalid_consistency),
+						           Toast.LENGTH_LONG).show();
+					
+					mStartTime.requestFocus();
 					return;
 				}
 				
@@ -99,17 +120,18 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 				Category category = (Category)mCategory.getSelectedItem();
 						
 				Intent result = new Intent();
+				result.putExtra("duration", mDurationData.getTimeInMinutes());
+				result.putExtra("start_time", mStartTimeData.getTime());
 				result.putExtra("category_id", category.getId());
-				result.putExtra("duration", duration.getTimeInMinutes());
 				result.putExtra("description", mDescription.getText().toString());
-						
+				
 				setResult(Activity.RESULT_OK, result);
 				finish();
 			}
 		});
 
 		// Button zum Wählen der Zeit
-		mChooseButton = (Button) findViewById(R.id.chooseTime);
+		mChooseButton = (Button) findViewById(R.id.chooseDuration);
 		mChooseButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -118,16 +140,10 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 				Integer hours = 0;
 				Integer minutes = 0;
 				
-				try {
-
-					TimeData duration = new TimeData();
-					duration.parseString(mDuration.getText().toString());
+				if(isDurationValid()) {
 					
-					hours   = Math.min(duration.getTimeInMinutes() / 60, 23);
-					minutes = Math.min(duration.getTimeInMinutes() - (hours * 60), 59);
-				}
-				catch(IllegalArgumentException e) {
-					
+					hours   = Math.min(mDurationData.getTimeInMinutes() / 60, 23);
+					minutes = Math.min(mDurationData.getTimeInMinutes() - (hours * 60), 59);
 				}
 				
 				TimePickerDialog picker = new TimePickerDialog(TrackTimeActivity.this,
@@ -147,9 +163,13 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 			TimeData t = new TimeData();
 			t.setTimeInMinutes(extras.getInt("stopped_time"));
 
+			Date d = new Date(extras.getLong("start_time"));
+			mStartTime.setText(mStartTimeFormat.format(d));
+			
 			mDuration.setText(t.toString());
 			mDuration.setEnabled(false);
-			mChooseButton.setEnabled(false);
+			mStartTime.setEnabled(false);
+			mChooseButton.setVisibility(View.INVISIBLE);
 			
 			mDescription.requestFocus();
 		}
@@ -177,6 +197,48 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		
 		mDuration.setText(time.toString());
 	}
+	
+	
+	
+	private boolean isDurationValid() {
+		
+		try {
+		
+			mDurationData.parseString(mDuration.getText().toString());
+		}
+		catch(IllegalArgumentException e) {} 
+		
+		return mDurationData.getTimeInMinutes() > 0 &&
+			   mDurationData.getTimeInMinutes() < 24 * 60;
+	}
+	
+	private boolean isStartTimeValid() {
+		
+		try {
+			
+			mStartTimeData = mStartTimeFormat.parse(mStartTime.getText().toString());
+		}
+		catch(ParseException e) {}
+		
+		return mStartTimeData != null;
+	}
+	
+	private boolean isStartTimeConsistent() {
+		
+		Date now = new Date();
+		
+		// Der Server nimmt Expenditures nicht an, die dieses Kriterium nicht erfüllen!
+		return mStartTimeData.getTime() + (60000l * mDurationData.getTimeInMinutes()) <= now.getTime();
+	}
+	
+	private void generateStartTime() {
+		
+		Date t = new Date();
+		t.setTime(t.getTime() - (60000l * mDurationData.getTimeInMinutes()));
+		
+		mStartTime.setText(mStartTimeFormat.format(t));
+	}
+	
 	
 	
 	/**

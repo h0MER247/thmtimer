@@ -50,18 +50,19 @@
     <string name="action_stopwatch_start">Starte Stoppuhr</string>
     <string name="action_stopwatch_stop">Stoppe Stoppuhr</string>
     <string name="enter_time">Eintragen</string>
-    <string name="enter_time_error_format">Zeit im HH:MM Format eingeben!</string>
-    <string name="enter_time_error_zerotime">Zeit größer als 00:00 eingeben!</string>
-    <string name="enter_time_error_time_too_big">Zeit kleiner als 24:00 eingeben!</string>
-    <string name="enter_time_format">HH:MM</string>
+    <string name="enter_time_duration_invalid">Dauer zwischen 0 und 24 Stunden im HH:mm Format eingeben!</string>
+    <string name="enter_time_starttime_invalid_format">Prüfe das Format des Startzeitpunkts!</string>
+    <string name="enter_time_starttime_invalid_consistency">Der Startzeitpunkt macht in Bezug zur Dauer keinen Sinn!</string>
+    <string name="enter_time_format">HH:mm</string>
     <string name="enter_time_choose">Wählen</string>
-    <string name="enter_time_choose_header">Wähle eine Zeit</string>
+    <string name="enter_time_choose_header">Setze Dauer auf:</string>
     <string name="enter_time_duration">Dauer:</string>
     <string name="enter_time_category">Kategorie:</string>
     <string name="enter_time_description">Beschreibung:</string>
     <string name="enter_time_description_hint">Bitte eine Beschreibung eingeben…</string>
+    <string name="enter_time_starttime">Gestartet am/um:</string>
     <string name="expenditure_enter_header">Zeit eintragen</string>
-    <string name="expenditure_list_header">Aufwandliste</string>
+    <string name="expenditure_list_header">Aufwandsliste</string>
     
     <!-- TeacherCourseDetailActivity -->
     <string name="hours">Stunden</string>

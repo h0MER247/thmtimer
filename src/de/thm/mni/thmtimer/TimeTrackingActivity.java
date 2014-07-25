@@ -1,5 +1,6 @@
 package de.thm.mni.thmtimer;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,6 +71,7 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 					                int position,
 					                long id) {
 				
+				// TODO
 				Toast.makeText(TimeTrackingActivity.this,
 						       "TODO: Editierbarkeit?",
 						       Toast.LENGTH_LONG).show();
@@ -127,33 +129,24 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 		if(resultCode != Activity.RESULT_OK)
 			return;
 		
-		
 		switch(requestCode) {
 		
 		case REQUEST_ADD_TIMETRACKING:
 			Long categoryID    = data.getExtras().getLong("category_id");
 			Integer duration   = data.getExtras().getInt("duration");
 			String description = data.getExtras().getString("description");
+			Long startTime     = data.getExtras().getLong("start_time");
 			
 			Category category = ModuleDAO.getTimeCategoryByID(categoryID);
 			
 			// Expenditure erstellen
 			Expenditure e = new Expenditure();
+			
 			e.setCategory(category);
 			e.setCourse(mCourse);
 			e.setDescription(description);
 			e.setDuration(duration.shortValue());
-			
-			//
-			// Bugfix: Scheinbar erwartet der Server, dass setStart() auf einen Wert gesetzt wird, der mindestens so weit
-			//         in der Vergangenheit liegt, wie die aktuelle Uhrzeit minus der  eingetragene Dauer. Das würde die
-			//         sporadisch auftretenden "Bad Request"-Fehlermeldungen erklären... Ich werde es weiter beobachten.
-			//
-			Date d = new Date();
-			d.setTime(d.getTime() - (60000l * duration));
-			e.setStart(d);
-			//e.setStart(new Date());
-			
+			e.setStart(new Date(startTime));
 			e.setUser(ModuleDAO.getUser());
 			e.setId(0);
 			
@@ -169,11 +162,12 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 	}
 
 	@Override
-	public void onStoppedTime(Integer timeInMinutes) {
+	public void onStoppedTime(Date startTime, Integer timeInMinutes) {
 		
 		Intent intent = new Intent(this, TrackTimeActivity.class);
 		intent.putExtra("course_id", mCourseID);
-		intent.putExtra("stopped_time", timeInMinutes); 
+		intent.putExtra("stopped_time", timeInMinutes);
+		intent.putExtra("start_time", startTime.getTime());
 		
 		startActivityForResult(intent, REQUEST_ADD_TIMETRACKING);
 	}
@@ -236,13 +230,18 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 			t.setTimeInMinutes(expenditure.getDuration());
 			
 			
-			TextView category = (TextView)convertView.findViewById(R.id.expenditureCategory);
-			TextView description = (TextView)convertView.findViewById(R.id.expenditureDescription);
-			TextView duration = (TextView)convertView.findViewById(R.id.expenditureDuration);
+			TextView categoryView  = (TextView)convertView.findViewById(R.id.expenditureCategory);
+			TextView startDateView = (TextView)convertView.findViewById(R.id.expenditureStart);
+			TextView durationView  = (TextView)convertView.findViewById(R.id.expenditureDuration);
 			
-			category.setText(expenditure.getCategory().getName());
-			description.setText(expenditure.getDescription());
-			duration.setText(t.toString());
+			String category  = expenditure.getCategory().getName();
+			String startDate = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT,
+					                                                SimpleDateFormat.SHORT).format(expenditure.getStart());
+			String duration  = t.toString();
+			
+			categoryView.setText(category);
+			startDateView.setText(startDate);
+			durationView.setText(duration);
 			
 			
 			return convertView;

@@ -1,5 +1,6 @@
 package de.thm.mni.thmtimer;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,7 +18,7 @@ public class StopwatchDialog extends DialogFragment {
 	
 	public interface StopwatchListener {
 		
-		public void onStoppedTime(Integer timeInMinutes);
+		public void onStoppedTime(Date startTime, Integer timeInMinutes);
 	}
 	
 	private StopwatchListener mListener;
@@ -27,6 +28,7 @@ public class StopwatchDialog extends DialogFragment {
 	private Long mTimeStart;
 	private Boolean mRunning;
 	private Boolean mStarted;
+	private Date mStartTime;
 	
 	
 	public StopwatchDialog() {
@@ -139,7 +141,7 @@ public class StopwatchDialog extends DialogFragment {
 				
 					Integer timeInMinutes = Math.max(1, (int)(getTime() / 60l));
 					
-					mListener.onStoppedTime(timeInMinutes);
+					mListener.onStoppedTime(mStartTime, timeInMinutes);
 					dismiss();
 				}
 			}
@@ -150,6 +152,9 @@ public class StopwatchDialog extends DialogFragment {
 	
 	
 	private void startTimer() {
+		
+		if(!mStarted)
+			mStartTime = new Date();
 		
 		mTimeStart = System.currentTimeMillis();
 		
@@ -192,7 +197,7 @@ public class StopwatchDialog extends DialogFragment {
 				
 				time = getTime();
 				hours = time / 3600l;
-				time -= hours * 3600;
+				time -= hours * 3600l;
 				minutes = time / 60l;
 				time -= minutes * 60l;
 				seconds = time;
