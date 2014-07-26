@@ -436,15 +436,9 @@ public class ModuleDAO {
 		@Override
 		public void run() {
 			
-			/*
-			// TODO: Warten bis das Serverteam den Bug gefixed hat und die Liste abrufbar ist
 			Course[] Courses = Connection.request("/courses/lecture/" + Connection.getUsername(),
-					                                        HttpMethod.GET,
-					                                        Course[].class);
-			*/
-			Course[] Courses = Connection.request("/courses/user/" + Connection.getUsername(),
-					                                   HttpMethod.GET,
-					                                   Course[].class);
+					                              HttpMethod.GET,
+					                              Course[].class);
 			
 			mTeacherCourses = Arrays.asList(Courses);
 		}
