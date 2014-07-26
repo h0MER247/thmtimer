@@ -1,60 +1,68 @@
 package de.thm.mni.thmtimer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
 
-import de.thm.mni.thmtimer.customviews.Legend;
-import de.thm.mni.thmtimer.customviews.LineChart;
-import de.thm.mni.thmtimer.customviews.PieChart;
-import de.thm.mni.thmtimer.model.DurationPerCategory;
-import de.thm.mni.thmtimer.model.TimeData;
+import de.thm.mni.thmtimer.util.DepthPageTransformer;
+import de.thm.mni.thmtimer.util.FixedSpeedScroller;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.mni.thmtimer.util.ModuleDAOListener;
-import de.thm.thmtimer.entities.Category;
 import de.thm.thmtimer.entities.Course;
-import android.app.Activity;
-import android.content.res.Configuration;
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TabHost;
-import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class TeacherCourseDetailActivity extends Activity implements ModuleDAOListener {
+public class TeacherCourseDetailActivity extends FragmentActivity implements ModuleDAOListener {
 	
 	private final String TAG = TeacherCourseDetailActivity.class.getSimpleName();
 	
 	private final int DAO_REQUEST_DURATION_PER_CATEGORY = 0;
 	//private final int DAO_REQUEST_DURATIONS_PER_WEEK = 1; // TODO
 	
+	private Fragment mLineChart;
+	private Fragment mPieChart;
+	
 	private Long mCourseID;
 	private Course mCourse;
-	private ArrayList<Category> mTimeCategorys;
+	
+	private ViewPager mPager;
+	private FragmentPagerAdapter mPagerAdapter;
+	
+	private ActionBar mActionBar;
+	
 	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-
+		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.teachercoursedetailactivity);
 		
 		
-		if(mTimeCategorys == null)
-			mTimeCategorys = new ArrayList<Category>();
+		if(savedInstanceState != null) {
+			
+			mLineChart = getSupportFragmentManager().getFragment(savedInstanceState, "linechart");
+			mPieChart  = getSupportFragmentManager().getFragment(savedInstanceState, "piechart");
+		}
+		
+		if(mPieChart == null)
+			mPieChart = new TeacherCourseDetailPiechartFragment();
+		
+		if(mLineChart == null)
+			mLineChart = new TeacherCourseDetailLinechartFragment();
 		
 		
 		mCourseID = getIntent().getExtras().getLong("course_id");
 		mCourse   = ModuleDAO.getTeacherCourseByID(mCourseID);
-		
-		
-		mTimeCategorys.clear();
-		mTimeCategorys.addAll(ModuleDAO.getTimeCategorys());
 		
 		
 		// Kursname setzen
@@ -63,31 +71,96 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 		
 		// Eingeschriebene Studenten setzen
 		TextView enrolledStudents = (TextView)findViewById(R.id.teachercoursedetail_txtEnrolledStudents);
-
 		enrolledStudents.setText(String.format("%s: %d",
 				                               getText(R.string.students),
                                                mCourse.getUsers().size()));
 		
-		//
-		// TODO: ViewPager verwenden
-		//
-		// Tabs für investierte Zeiten und Historie initialisieren
-		TabHost tabHost = (TabHost) findViewById(R.id.teachercoursedetail_tabHost);
-		TabSpec tab1;
-		TabSpec tab2;
+		// Viewpager initialisieren
+		mPager = (ViewPager)findViewById(R.id.teachercoursedetail_viewPager);
 		
-		tabHost.setup();
+		if(mPagerAdapter == null) {
+			
+			mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+
+				@Override
+				public Fragment getItem(int position) {
+					
+					if(position == 0)
+						return mPieChart;
+					else 
+						return mLineChart;
+				}
+
+				@Override
+				public int getCount() {
+
+					return 2;
+				}
+			};
+		}
 		
-		tab1 = tabHost.newTabSpec("tab1");
-		tab1.setContent(R.id.teachercoursedetail_tabInvestedTimes);
-		tab1.setIndicator("Invested Times");
-		tabHost.addTab(tab1);
+		if(mPager != null) {
+			
+			mPager.setAdapter(mPagerAdapter);
+			mPager.setPageTransformer(true, new DepthPageTransformer());
+			
+			// PageListener
+			mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+				@Override
+				public void onPageSelected(int position) {
+					
+					if(mActionBar.getSelectedNavigationIndex() != position)
+						mActionBar.setSelectedNavigationItem(position);
+				}
+
+				@Override
+				public void onPageScrollStateChanged(int position) {}
+
+				@Override
+				public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+			});
+			
+			try {
+				
+				Field scroller = ViewPager.class.getDeclaredField("mScroller");
+				scroller.setAccessible(true);
+				scroller.set(mPager, new FixedSpeedScroller(this));
+			}
+			catch (NoSuchFieldException e) {}
+			catch (IllegalArgumentException e) {}
+			catch (IllegalAccessException e) {}
+		}
 		
-		tab2 = tabHost.newTabSpec("tab2");
-		tab2.setContent(R.id.teachercoursedetail_tabHistory);
-		tab2.setIndicator("History");
-		tabHost.addTab(tab2);
+		
+		// ActionBar Tabs hinzufügen
+		if(mActionBar == null) {
+				
+			mActionBar = getActionBar();
+			mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+			
+			ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+				
+				@Override
+				public void onTabSelected(ActionBar.Tab actionTab, FragmentTransaction ft) {
+					
+					if(mPager.getCurrentItem() != actionTab.getPosition())
+						mPager.setCurrentItem(actionTab.getPosition());
+				}
+				
+				@Override
+				public void onTabReselected(android.app.ActionBar.Tab tab, FragmentTransaction ft) {}
+				
+				@Override
+				public void onTabUnselected(android.app.ActionBar.Tab tab, FragmentTransaction ft) {}
+			};
+			
+			mActionBar.addTab(mActionBar.newTab().setText("Pie Chart").setTabListener(tabListener));
+			mActionBar.addTab(mActionBar.newTab().setText("Line Chart").setTabListener(tabListener));
+		}
 	}
+	
+
 	
 	@Override
 	protected void onResume() {
@@ -102,7 +175,7 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 		// TODO: Statistikdaten holen
 		ModuleDAO.commitJob(this, this);
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -114,6 +187,20 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 		}
 
 		return false;
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		
+		super.onSaveInstanceState(outState);
+	
+		getSupportFragmentManager().putFragment(outState,
+				                                "linechart",
+				                                mLineChart);
+		
+		getSupportFragmentManager().putFragment(outState,
+				                                "piechart",
+				                                mPieChart);
 	}
 	
 
@@ -131,116 +218,7 @@ public class TeacherCourseDetailActivity extends Activity implements ModuleDAOLi
 	@Override
 	public void onDAOFinished() {
 		
-		setupInvestedTimes();
-		setupHistory();
-	}
-	
-	
-	
-	private void setupInvestedTimes() {
-		
-		PieChart pieChart       = (PieChart)findViewById(R.id.teachercoursedetail_pieChart);
-		Legend   pieChartLegend = (Legend)  findViewById(R.id.teachercoursedetail_pieChartLegend);
-		
-		List<DurationPerCategory> durations = ModuleDAO.getDurationPerCategory();
-		
-		
-		// Ermitteln wieviel Zeit insgesamt in diesen Kurs investiert wurde
-		Integer totalMinutes = 0;
-		
-		for(DurationPerCategory duration : durations) {
-			
-			totalMinutes += duration.value;
-		}
-		
-		//
-		// Pie Chart mit den Daten befüllen
-		//
-		TimeData timeData = new TimeData();
-		
-		for(DurationPerCategory duration : durations) {
-			
-			Integer value     = duration.value;
-			Category category = duration.key;
-			
-			pieChart.addValue(value.floatValue());
-			
-			timeData.setTimeInMinutes(value);
-			pieChartLegend.addLegendLabel(String.format("%s: %sh (%04.1f%%)",
-                                                        category.getName(),
-                                                        timeData.toString(),
-                                                        (100.0f / totalMinutes) * value));
-		}
-	}
-	
-	
-	//
-	// TODO: Serverteam ein Ticket schreiben, da ihre Daten unzureichend sind. Es wird nur die Zeit
-	//       pro Woche insgesamt geliefert, und nicht Zeit pro Woche je Kategorie. :(
-	//
-	private void setupHistory() {
-		
-		LineChart historyChart   = (LineChart)findViewById(R.id.teachercoursedetail_historyChart);
-		Legend    historyLegend  = (Legend)   findViewById(R.id.teachercoursedetail_historyLegend);
-		Button    categoryToggle = (Button)   findViewById(R.id.teachercoursedetail_btnCategoryToggle);
-		
-		
-		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			
-			historyLegend.setDrawSideBySide(false);
-		}
-		else {
-			
-			historyLegend.setDrawSideBySide(true);
-			
-			categoryToggle.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View arg0) {
-					
-					Toast.makeText(getApplication(), "ToDo: Möglichkeit einzelne Kategorien ein-/auszublenden", Toast.LENGTH_LONG).show();
-				}
-			});
-		}
-		
-		
-		//
-		// Im Moment einfach random Daten erzeugen
-		//
-		/*
-		String[] labelsX = new String[12];
-		String[] labelsY = new String[13];
-		
-		for(int i = 0; i < 12; i++)
-			labelsX[i] = String.format("KW %d", 18 + i);
-		
-		for(int i = 0; i < 13; i++)
-			labelsY[i] = String.format("%d h", i);
-		
-		
-		ArrayList<Float> data;
-		Random rnd = new Random();
-		
-		for(long id = 0;
-				 id < 5;
-				 id++) {
-			
-			TimeCategory category = StaticModuleData.findTimeCategory(id);
-			data = new ArrayList<Float>();
-			
-			for(int i = 0;
-					i < 12;
-					i++) {
-				
-				data.add(rnd.nextFloat() * 12f);
-			}
-			
-			historyChart.addChartSeries(data);
-			historyLegend.addLegendLabel(category.getDescription());
-		}
-		
-		historyChart.setLabels(labelsX, labelsY);
-		historyChart.setChartSize(7, 12, 9, 13);
-		*/
+		((TeacherCourseDetailPiechartFragment)mPieChart).updateChart();
+		((TeacherCourseDetailLinechartFragment)mLineChart).updateChart();
 	}
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:activatedBackgroundIndicator"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:weightSum="1.0" >
+
+    <de.thm.mni.thmtimer.customviews.LineChart
+        android:id="@+id/teachercoursedetail_historyChart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7" />
+    
+    <de.thm.mni.thmtimer.customviews.Legend
+        android:id="@+id/teachercoursedetail_historyLegend"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.1" />
+    
+    <Button
+        android:id="@+id/teachercoursedetail_btnCategoryToggle"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.2"
+        android:text="@string/category_toggle" />
+
+</LinearLayout>

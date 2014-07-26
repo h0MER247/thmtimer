@@ -20,91 +20,11 @@
         android:layout_below="@+id/teachercoursedetail_txtCourseName"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TabHost
-        android:id="@+id/teachercoursedetail_tabHost"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/teachercoursedetail_txtEnrolledStudents" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-            </TabWidget>
-
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-                
-                <LinearLayout
-                    android:id="@+id/teachercoursedetail_tabHistory"
-				    android:layout_width="match_parent"
-				    android:layout_height="match_parent"
-				    android:background="?android:activatedBackgroundIndicator"
-				    android:orientation="vertical"
-				    android:weightSum="1.0" >
-				
-				    <de.thm.mni.thmtimer.customviews.LineChart
-				        android:id="@+id/teachercoursedetail_historyChart"
-				        android:layout_width="match_parent"
-				        android:layout_height="0dp"
-				        android:layout_weight="0.7"
-				        android:padding="10dp" />
-				    
-				    <de.thm.mni.thmtimer.customviews.Legend
-				        android:id="@+id/teachercoursedetail_historyLegend"
-				        android:layout_width="match_parent"
-				        android:layout_height="0dp"
-				        android:layout_marginTop="10dp"
-				        android:layout_weight="0.1"
-				        android:paddingLeft="10dp"
-				        android:paddingRight="10dp" />
-				    
-				    <Button
-				        android:id="@+id/teachercoursedetail_btnCategoryToggle"
-				        style="@style/ButtonStyle"
-				        android:layout_width="match_parent"
-				        android:layout_height="0dp"
-				        android:layout_marginTop="10dp"
-				        android:layout_weight="0.2"
-				        android:text="@string/category_toggle" />
-
-				</LinearLayout>
-				
-				<LinearLayout
-				    
-				    android:id="@+id/teachercoursedetail_tabInvestedTimes"
-				    android:layout_width="match_parent"
-				    android:layout_height="match_parent"
-				    android:background="?android:activatedBackgroundIndicator"
-				    android:orientation="vertical"
-				    android:weightSum="1.0" >
-
-				    <de.thm.mni.thmtimer.customviews.PieChart
-				        android:id="@+id/teachercoursedetail_pieChart"
-				        android:layout_width="match_parent"
-				        android:layout_height="0dp"
-				        android:layout_marginTop="10dp"
-				        android:layout_weight="0.7"
-				        android:padding="10dp" />
-
-				    <de.thm.mni.thmtimer.customviews.Legend
-				        android:id="@+id/teachercoursedetail_pieChartLegend"
-				        android:layout_width="match_parent"
-				        android:layout_height="0dp"
-				        android:layout_weight="0.3"
-				        android:padding="10dp" />
-
-				</LinearLayout>
-            </FrameLayout>
-        </LinearLayout>
-    </TabHost>
+	<android.support.v4.view.ViewPager
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/teachercoursedetail_viewPager"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@+id/teachercoursedetail_txtEnrolledStudents" />
 
 </RelativeLayout>
