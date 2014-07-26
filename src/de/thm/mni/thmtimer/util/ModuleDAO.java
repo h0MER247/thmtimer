@@ -21,14 +21,14 @@ import de.thm.thmtimer.entities.Category;
 
 public class ModuleDAO {
 	
-	private static User mUser;
-	private static List<Course> mAllCourses;
-	private static List<Course> mStudentCourses;
-	private static List<Expenditure> mStudentExpenditures;
-	private static List<Course> mTeacherCourses;
-	private static List<Category> mTimeCategorys;
-	private static List<Module> mModules;
-	private static List<DurationPerCategory> mDurationPerCategory;
+	private static User mUser = null;
+	private static List<Course> mAllCourses = null;
+	private static List<Course> mStudentCourses = null;
+	private static List<Expenditure> mStudentExpenditures = null;
+	private static List<Course> mTeacherCourses = null;
+	private static List<Category> mTimeCategorys = null;
+	private static List<Module> mModules = null;
+	private static List<DurationPerCategory> mDurationPerCategory = null;
 	
 	
 
