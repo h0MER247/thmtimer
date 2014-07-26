@@ -68,6 +68,8 @@ public class StudentFragment extends Fragment implements ModuleDAOListener {
 						   getString(R.string.welcome_new_user),
 						   Toast.LENGTH_LONG).show();
 		}
+		
+		ModuleDAO.setNewContext(getActivity(), this);
 	}
 	
 	

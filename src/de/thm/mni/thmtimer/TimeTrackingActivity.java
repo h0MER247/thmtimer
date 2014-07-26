@@ -85,6 +85,8 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 		mTimeTrackingList.addAll(ModuleDAO.getStudentExpendituresByCourseID(mCourseID));
 		
 		mAdapter.notifyDataSetChanged();
+		
+		ModuleDAO.setNewContext(this, this);
 	}
 
 	@Override

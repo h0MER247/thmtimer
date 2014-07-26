@@ -89,6 +89,8 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 				doLogin();
 			}
 		});
+		
+		ModuleDAO.setNewContext(this, this);
 	}
 	
 	@Override

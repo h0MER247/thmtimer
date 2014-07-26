@@ -3,7 +3,6 @@ package de.thm.mni.thmtimer.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.springframework.http.HttpMethod;
 
@@ -38,10 +37,10 @@ public class ModuleDAO {
 	
 	public static void getDurationPerCategoryFromServer(int requestID, Long courseID) {
 		
-		ServerOperation op = new GET_DURATION_PER_CATEGORY();
+		ServerOperation op = new GET_DURATION_PER_CATEGORY(requestID);
 		op.setParameter(courseID);
 		
-		addJob(op, requestID);
+		addJob(op);
 	}
 	
 	public static List<DurationPerCategory> getDurationPerCategory() {
@@ -62,7 +61,7 @@ public class ModuleDAO {
 	
 	public static void getModuleListFromServer(int requestID) {
 		
-		addJob(new GET_MODULES(), requestID);
+		addJob(new GET_MODULES(requestID));
 	}
 	
 	public static List<Module> getModuleList() {
@@ -97,7 +96,7 @@ public class ModuleDAO {
 	
 	public static void getUserFromServer(int requestID) {
 		
-		addJob(new GET_USER(), requestID);
+		addJob(new GET_USER(requestID));
 	}
 	
 	public static User getUser() {
@@ -118,7 +117,7 @@ public class ModuleDAO {
 	
 	public static void getTimeCategorysFromServer(int requestID) {
 		
-		addJob(new GET_TIMECATEGORYS(), requestID);
+		addJob(new GET_TIMECATEGORYS(requestID));
 	}
 	
 	public static List<Category> getTimeCategorys() {
@@ -153,10 +152,10 @@ public class ModuleDAO {
 	
 	public static void addStudentToCourse(int requestID, Long courseID) {
 		
-		ServerOperation op = new ADD_STUDENT_TO_COURSE();
+		ServerOperation op = new ADD_STUDENT_TO_COURSE(requestID);
 		op.setParameter(courseID);
 		
-		addJob(op, requestID);
+		addJob(op);
 	}
 	
 	
@@ -167,7 +166,7 @@ public class ModuleDAO {
 	
 	public static void getStudentCourseListFromServer(int requestID) {
 		
-		addJob(new GET_STUDENTCOURSELIST(), requestID);
+		addJob(new GET_STUDENTCOURSELIST(requestID));
 	}
 	
 	public static List<Course> getStudentCourseList() {
@@ -204,7 +203,7 @@ public class ModuleDAO {
 	
 	public static void getTeacherCourseListFromServer(int requestID) {
 		
-		addJob(new GET_TEACHERCOURSELIST(), requestID);
+		addJob(new GET_TEACHERCOURSELIST(requestID));
 	}
 	
 	public static List<Course> getTeacherCourseList() {
@@ -242,7 +241,7 @@ public class ModuleDAO {
 	
 	public static void getFullCourseListFromServer(int requestID) {
 		
-		addJob(new GET_FULLCOURSELIST(), requestID);
+		addJob(new GET_FULLCOURSELIST(requestID));
 	}
 	
 	public static List<Course> getFullCourseList() {
@@ -277,15 +276,15 @@ public class ModuleDAO {
 	
 	public static void getStudentExpendituresFromServer(int requestID) {
 
-		addJob(new GET_ALL_EXPENDITURES(), requestID);
+		addJob(new GET_ALL_EXPENDITURES(requestID));
 	}
 	
 	public static void postStudentExpenditureToServer(int requestID, Expenditure expenditure) {
 		
-		ServerOperation op = new POST_EXPENDITURE();
+		ServerOperation op = new POST_EXPENDITURE(requestID);
 		op.setParameter(expenditure);
 		
-		addJob(op, requestID);
+		addJob(op);
 	}
 	
 	public static List<Expenditure> getStudentExpendituresByCourseID(Long courseID) {
@@ -327,6 +326,12 @@ public class ModuleDAO {
 	//
 	private static class GET_USER extends ServerOperation {
 		
+		public GET_USER(int requestID) {
+			
+			super(requestID);
+		}
+		
+
 		@Override
 		public boolean runIf() {
 			
@@ -359,6 +364,12 @@ public class ModuleDAO {
 	//
 	private static class GET_TIMECATEGORYS extends ServerOperation {
 		
+		public GET_TIMECATEGORYS(int requestID) {
+			
+			super(requestID);
+		}
+		
+
 		@Override
 		public boolean runIf() {
 			
@@ -393,6 +404,12 @@ public class ModuleDAO {
 	//
 	private static class GET_STUDENTCOURSELIST extends ServerOperation {
 		
+		public GET_STUDENTCOURSELIST(int requestID) {
+			
+			super(requestID);
+		}
+		
+
 		@Override
 		public boolean runIf() {
 			
@@ -427,6 +444,12 @@ public class ModuleDAO {
 	//
 	private static class GET_TEACHERCOURSELIST extends ServerOperation {
 		
+		public GET_TEACHERCOURSELIST(int requestID) {
+			
+			super(requestID);
+		}
+		
+
 		@Override
 		public boolean runIf() {
 			
@@ -435,10 +458,14 @@ public class ModuleDAO {
 		
 		@Override
 		public void run() {
-			
+			/*
 			Course[] Courses = Connection.request("/courses/lecture/" + Connection.getUsername(),
 					                              HttpMethod.GET,
 					                              Course[].class);
+					                              */
+			Course[] Courses = Connection.request("/courses/user/" + Connection.getUsername(),
+                    HttpMethod.GET,
+                    Course[].class);
 			
 			mTeacherCourses = Arrays.asList(Courses);
 		}
@@ -461,6 +488,12 @@ public class ModuleDAO {
 	//
 	private static class GET_FULLCOURSELIST extends ServerOperation {
 		
+		public GET_FULLCOURSELIST(int requestID) {
+			
+			super(requestID);
+		}
+		
+
 		@Override
 		public boolean runIf() {
 			
@@ -496,6 +529,12 @@ public class ModuleDAO {
 	private static class POST_EXPENDITURE extends ServerOperation {
 		
 		private Expenditure mExpenditure;
+		
+		public POST_EXPENDITURE(int requestID) {
+			
+			super(requestID);
+		}
+		
 		
 		@Override
 		public boolean runIf() {
@@ -536,6 +575,11 @@ public class ModuleDAO {
 	//
 	private static class GET_ALL_EXPENDITURES extends ServerOperation {
 		
+		public GET_ALL_EXPENDITURES(int requestID) {
+			
+			super(requestID);
+		}
+
 		@Override
 		public boolean runIf() {
 			
@@ -573,6 +617,12 @@ public class ModuleDAO {
 	//
 	private static class GET_MODULES extends ServerOperation {
 
+		public GET_MODULES(int requestID) {
+			
+			super(requestID);
+		}
+		
+
 		@Override
 		public boolean runIf() {
 
@@ -608,6 +658,12 @@ public class ModuleDAO {
 	private static class ADD_STUDENT_TO_COURSE extends ServerOperation {
 		
 		private Long mCourseID;
+		
+		public ADD_STUDENT_TO_COURSE(int requestID) {
+			
+			super(requestID);
+		}
+		
 		
 		@Override
 		public boolean runIf() {
@@ -645,9 +701,15 @@ public class ModuleDAO {
 	//
 	
 	private static class GET_DURATION_PER_CATEGORY extends ServerOperation {
-
+		
 		private Long mCourseID;
 		
+		public GET_DURATION_PER_CATEGORY(int requestID) {
+			
+			super(requestID);
+		}
+		
+
 		@Override
 		public boolean runIf() {
 			
@@ -677,43 +739,51 @@ public class ModuleDAO {
 		}
 	};
 	
-	
-	
 	// TODO: Mehr ServerOperations unterstützen
 	
 
+	
+	
+	
+	
+	
 	// ---------------------------------------------------------------------------------------------
+
+
+
+	
 	
 	
 	
 	private static abstract class ServerOperation {
 		
-		public abstract boolean runIf();
+		private int     mRequestID;
+		private String  mErrorMessage;
+		private boolean mFailed;
 		
-		public abstract void run();
-		public abstract void setParameter(Object... parameter);
-		
-		public abstract int getDialogMessage();
-	}
-	
-	private static class ServerJob {
-		
-		private ServerOperation mOperation;
-		private int mRequestID;
-		private boolean mOk;
-		private String mErrorMessage;
-		
-		public ServerJob(ServerOperation operation, int requestID) {
+		public ServerOperation(Integer requestID) {
 			
-			mOperation = operation;
 			mRequestID = requestID;
 			
-			mOk = true;
+			mErrorMessage = "";
+			mFailed = false;
 		}
 		
-		public ServerOperation getOperation() { 
+		
+		public void setFailed(String error) {
 			
-			return mOperation;
+			mErrorMessage = error;
+			mFailed = true;
+		}
+		
+		public boolean hasFailed() {
+			
+			return mFailed;
+		}
+		
+		public String getErrorMessage() {
+			
+			return mErrorMessage;
 		}
 		
 		public int getRequestID() {
@@ -721,20 +791,23 @@ public class ModuleDAO {
 			return mRequestID;
 		}
 		
-		public void setErrorMessage(String msg) {
-			
-			mErrorMessage = msg;
-			mOk = false;
-		}
 		
-		public String getErrorMessage() {
-			
-			return mErrorMessage;
-		}
+		/* Hier zurückgeben, was gelten muss damit run() aufgerufen wird */
+		public abstract boolean runIf();
+		
+		/* Hier Logik implementieren, welche mit dem Server kommuniziert, etc. */
+		public abstract void run();
+		
+		/* Hier Parameter holen, die für run() benötigt werden */
+		public abstract void setParameter(Object... parameter);
+		
+		/* Hier die Meldung für das ProgressDialog als R.string.xyz zurückgeben */
+		public abstract int getDialogMessage();
 	}
 	
-	private static ArrayList<ServerJob> mJobs;
-	private static AsyncTask<ServerJob, ServerJob, Boolean> mJobWorker;
+	private static ArrayList<ServerOperation> mJobs;
+	private static WorkerTask mJobWorker;
+	
 	
 	
 	/**
@@ -742,25 +815,10 @@ public class ModuleDAO {
 	 */
 	public static void beginJob() {
 		
-		if((mJobs != null) && (mJobWorker != null)) {
-			
-			try {
-				
-				//
-				// Der Job wird aus irgendwelchen Gründen noch verarbeitet. Wir warten einfach
-				// bis er fertig ist.
-				//
-				mJobWorker.get();
-			}
-			catch (InterruptedException e) {
-				
-			}
-			catch (ExecutionException e) {
-				
-			}
-		}
+		if(mJobs != null)
+			throw new IllegalArgumentException("A job is still pending!");
 		
-		mJobs = new ArrayList<ServerJob>();
+		mJobs = new ArrayList<ServerOperation>();
 	}
 	
 	
@@ -769,113 +827,185 @@ public class ModuleDAO {
 	 * 
 	 * @param operation
 	 *    Gewünschte Operation die ausgeführt werden soll
-	 * @param requestID
-	 *    Eine requestID welche im Fehlerfall benötigt wird. Sollte beim commiten
-	 *    ein Fehler auftreten, wird in der Activity onDAOError() mit der entsprechenden
-	 *    requestID aufgerufen, und man kann dann entsprechend auf den Fehler reagieren.
 	 */
-	private static void addJob(ServerOperation operation, int requestID) {
+	private static void addJob(ServerOperation operation) {
 		
 		if(mJobs == null)
 			throw new IllegalArgumentException("Start a job with beginJob() first!");
 		
-		mJobs.add(new ServerJob(operation, requestID));
+		mJobs.add(operation);
 	}
 	
 	
 	/**
 	 * Jobs ausführen
-	 * 
+	 *
+	 * @param ctx
+	 *   Kontext (bei Activity: this, bei Fragment: getActivity())
+	 * @param listener
+	 *   Listener um Fehlermeldungen zu bekommen und benachrichtigt zu werden, wenn der
+	 *   Job erfolgreich abgeschlossen wurde.
+	 */	
+	public static void commitJob(Context context, ModuleDAOListener listener) {
+		
+		if(mJobs == null)
+			throw new IllegalArgumentException("Can't commit an unstarted job! Start one with beginJob().");
+		
+		if(context == null)
+			throw new IllegalArgumentException("ModuleDAO needs a context to display the progressdialog! (The context is 'this' on activitys and 'getActivity()' on fragments)");
+		
+		if(listener == null)
+			throw new IllegalArgumentException("Give ModuleDAO a listener!");
+		
+		if(mJobs.size() > 0) {
+		
+			mJobWorker = new WorkerTask(context, listener);
+			mJobWorker.execute(mJobs.toArray(new ServerOperation[mJobs.size()]));
+		}
+	}
+	
+	
+	/**
+	 * Neuen Kontext für den Job bereitstellen
+	 *
 	 * @param ctx
 	 *   Kontext (bei Activity: this, bei Fragment: getActivity())
 	 * @param listener
 	 *   Listener um Fehlermeldungen zu bekommen und benachrichtigt zu werden, wenn der
 	 *   Job erfolgreich abgeschlossen wurde.
 	 */
-	public static void commitJob(final Context ctx, final ModuleDAOListener listener) {
+	public static void setNewContext(Context context, ModuleDAOListener listener) {
 		
-		if(mJobs == null)
-			throw new IllegalArgumentException("Can't commit an unstarted job! Start one with beginJob().");
+		if(listener == null)
+			throw new IllegalArgumentException("Give ModuleDAO a listener!");
 		
-		if(mJobs.size() == 0)
-			return;
-		
-		
-		mJobWorker = new AsyncTask<ServerJob, ServerJob, Boolean>() {
+		if((mJobs != null) && (mJobWorker != null)) {
 			
-			private ProgressDialog mDialog;
+			mJobWorker.setNewContext(context, listener);
+		}
+	}	
+	
+	
+	/**
+	 * WorkerTask: Führt alle Jobs im Hintergrund aus und zeigt dabei einen ProgressDialog an
+	 * 
+	 */
+	private static class WorkerTask extends AsyncTask<ServerOperation, ServerOperation, Boolean> {
+		
+		private Context mContext, mNewContext;
+		private ModuleDAOListener mListener, mNewListener;
+		private Boolean mContextChanged;
+		private ProgressDialog mDialog;
+		
+		
+		public WorkerTask(Context context, ModuleDAOListener listener) {
 			
-			@Override
-			protected void onPreExecute() {
-				
-				mDialog = new ProgressDialog(ctx);
-				
-				mDialog.setCancelable(false);
-				mDialog.setCanceledOnTouchOutside(false);
-				mDialog.setIndeterminate(true);
-			}
+			mContext  = context;
+			mListener = listener;
+			
+			mContextChanged = false;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			
+			createProgressDialog();
+		}
 
-			@Override
-			protected Boolean doInBackground(ServerJob... params) {
+		@Override
+		protected Boolean doInBackground(ServerOperation... params) {
+			
+			for(ServerOperation op : params) {
 				
-				for(ServerJob job : params) {
+				if(op.runIf()) {
 					
-					ServerOperation op = job.getOperation();
-					
-					if(op.runIf()) {
+					try {
 						
-						try {
-							
-							publishProgress(job);
-							op.run();
-						}
-		                catch(Exception e) {
-		                	
-		                	job.setErrorMessage(e.toString());
-		                	publishProgress(job);
-		                    return false;
-		                }
+						publishProgress(op);
+						op.run();
 					}
+	                catch(Exception e) {
+	                	
+	                	op.setFailed(e.toString());
+	                	publishProgress(op);
+	                	
+	                    return false;
+	                }
 				}
-				
-				return true;
 			}
 			
-	        @Override
-	        protected void onProgressUpdate(ServerJob... values) {
-	        	
-	            super.onProgressUpdate(values);
-	            
-	            ServerJob job = values[0];
-	            
-	            if(job.mOk) {
-	            	
-	            	mDialog.setMessage(ctx.getResources().getString(job.getOperation().getDialogMessage()));
-	            	
-	            	if(!mDialog.isShowing())
-	            		mDialog.show();
-	            }
-	            else {
-	            	
-	            	if(listener != null) 
-	            		listener.onDAOError(job.getRequestID(), job.getErrorMessage());
-	            }
-	        }
-	        
-			protected void onPostExecute(Boolean result) {
-						
-				mJobs = null;
-				
-				if(result && (listener != null))
-					listener.onDAOFinished();
-				
-				if((mDialog != null) && mDialog.isShowing())
-					mDialog.dismiss();
-				
-				mDialog = null;
-			}
-		};
+			return true;
+		}
 		
-		mJobWorker.execute(mJobs.toArray(new ServerJob[mJobs.size()]));
+        @Override
+        protected void onProgressUpdate(ServerOperation... values) {
+        	
+            super.onProgressUpdate(values);
+            
+            ServerOperation op = values[0];
+            
+        	checkContext();
+            
+            if(op.hasFailed()) {
+            	
+            	if(mListener != null) 
+            		mListener.onDAOError(op.getRequestID(), op.getErrorMessage());
+            }
+            else {
+            	
+            	mDialog.setMessage(mContext.getResources().getString(op.getDialogMessage()));
+            	
+            	if(!mDialog.isShowing())
+            		mDialog.show();
+            }
+        }
+        
+		protected void onPostExecute(Boolean result) {
+					
+			mJobs = null;
+			
+			checkContext();
+			
+			if(result && (mListener != null))
+				mListener.onDAOFinished();
+				
+			if((mDialog != null) && mDialog.isShowing())
+				mDialog.dismiss();
+			
+			mDialog = null;
+		}
+		
+		
+		
+		public void setNewContext(Context context, ModuleDAOListener listener) {
+			
+			mNewContext  = context;
+			mNewListener = listener;
+			
+			mContextChanged = true;
+		}
+		
+		private void checkContext() {
+
+			if(mContextChanged) {
+				
+				mContext  = mNewContext;
+				mListener = mNewListener;
+				
+				if(getStatus() == AsyncTask.Status.RUNNING)
+					createProgressDialog();
+				
+				mContextChanged = false;
+			}
+		}
+		
+		private void createProgressDialog() {
+			
+			mDialog = new ProgressDialog(mContext);
+			
+			mDialog.setCancelable(false);
+			mDialog.setCanceledOnTouchOutside(false);
+			mDialog.setIndeterminate(true);
+		}
 	}
 }

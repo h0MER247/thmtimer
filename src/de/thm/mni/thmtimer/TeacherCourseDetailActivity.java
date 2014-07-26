@@ -158,6 +158,8 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 			mActionBar.addTab(mActionBar.newTab().setText("Pie Chart").setTabListener(tabListener));
 			mActionBar.addTab(mActionBar.newTab().setText("Line Chart").setTabListener(tabListener));
 		}
+		
+		ModuleDAO.setNewContext(this, this);
 	}
 	
 
