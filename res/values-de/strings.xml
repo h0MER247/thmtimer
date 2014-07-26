@@ -84,9 +84,10 @@
     <string name="stopwatch_action_resume">Fortsetzen</string>
     <string name="stopwatch_action_stop">Stopp</string>
     <string name="stopwatch_abort_header">Achtung</string>
-    <string name="stopwatch_abort_message">Möchten Sie die Zeiterfassung wirklich abbrechen?</string>
+    <string name="stopwatch_abort_message">Möchtest du die Zeiterfassung wirklich abbrechen?</string>
     <string name="stopwatch_abort_positive">Ja</string>
     <string name="stopwatch_abort_negative">Nein</string>
+    <string name="stopwatch_stopped_less_than_one_minute">Zeiten kleiner als eine Minute können nicht gespeichert werden. Möchtest du die Zeiterfassung abbrechen?</string>
 
     <!-- SettingsFragment -->
     <string name="settingUsername">Benutzername merken</string>

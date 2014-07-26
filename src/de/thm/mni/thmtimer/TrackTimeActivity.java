@@ -13,6 +13,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -161,8 +162,9 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		if(extras.containsKey("stopped_time")) {
 			
 			TimeData t = new TimeData();
-			t.setTimeInMinutes(extras.getInt("stopped_time"));
-
+			t.setTimeInMinutes(extras.getInt("stopped_time") / 60);
+			Log.d("LOG", "STOPPED: " + extras.getInt("stopped_time"));
+			
 			Date d = new Date(extras.getLong("start_time"));
 			mStartTime.setText(mStartTimeFormat.format(d));
 			

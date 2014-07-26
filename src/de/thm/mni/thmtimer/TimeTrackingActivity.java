@@ -162,12 +162,12 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 	}
 
 	@Override
-	public void onStoppedTime(Date startTime, Integer timeInMinutes) {
+	public void onStoppedTime(Long startTime, Integer timeInSeconds) {
 		
 		Intent intent = new Intent(this, TrackTimeActivity.class);
 		intent.putExtra("course_id", mCourseID);
-		intent.putExtra("stopped_time", timeInMinutes);
-		intent.putExtra("start_time", startTime.getTime());
+		intent.putExtra("stopped_time", timeInSeconds);
+		intent.putExtra("start_time", startTime);
 		
 		startActivityForResult(intent, REQUEST_ADD_TIMETRACKING);
 	}

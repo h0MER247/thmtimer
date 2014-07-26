@@ -22,7 +22,7 @@
 
     <!-- StudentFragment -->
     <string name="action_add">Add</string>
-    <string name="welcome_new_user">Welcome new user. To join a course press the + symbol in your action bar.</string>
+    <string name="welcome_new_user">To join a course press the + symbol in your action bar.</string>
 
     <!-- ModuleDetailFragment -->
     <string name="module_details">Course Detail View</string>
@@ -93,6 +93,7 @@
     <string name="stopwatch_abort_message">Do you really want to abort the time measurement?</string>
     <string name="stopwatch_abort_positive">Yes</string>
     <string name="stopwatch_abort_negative">No</string>
+    <string name="stopwatch_stopped_less_than_one_minute">Times less than one minute can\'t be saved. Do you want to abort the time measurement?</string>
     
     <!-- SettingsFragment -->
     <string name="settingUsername">Remember Username</string>
