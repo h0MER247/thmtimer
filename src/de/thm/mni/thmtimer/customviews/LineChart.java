@@ -2,6 +2,7 @@ package de.thm.mni.thmtimer.customviews;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -10,7 +11,6 @@ import android.graphics.Region;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -41,6 +41,7 @@ public class LineChart extends View {
 	private String[] mLabelsY;
 	private String[] mLabelsX;
 	private ArrayList<ArrayList<Float>> mChartData;
+	private ArrayList<Float> mSeriesData;
 	
 	// Größen des sichtbaren Charts
 	private boolean mBoundsInvalidated;
@@ -166,6 +167,30 @@ public class LineChart extends View {
 		mBoundsInvalidated = true;		
 		invalidate();
 	}
+	
+	// Alternative Möglichkeit dem Chart Daten bereitzustellen
+	public void beginChartSeries() {
+		
+		mSeriesData = new ArrayList<Float>();
+	}
+	
+	public void addValueToChartSeries(Float value) {
+		
+		if(mSeriesData == null)
+			throw new IllegalArgumentException("You have to start a chart series first with beginChartSeries()");
+		
+		mSeriesData.add(value);
+	}
+	
+	public void endChartSeries() {
+		
+		if(mSeriesData == null)
+			throw new IllegalArgumentException("You have to start a chart series first with beginChartSeries()");
+		
+		if(mSeriesData.size() > 0)
+			addChartSeries(mSeriesData);
+	}
+	
 	
 	
 	//
@@ -468,6 +493,7 @@ public class LineChart extends View {
 	//
 	// Funktionen zum Scrollen des Charts
 	//
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		
