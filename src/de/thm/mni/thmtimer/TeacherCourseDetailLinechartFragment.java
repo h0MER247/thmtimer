@@ -7,6 +7,7 @@ import de.thm.mni.thmtimer.customviews.Legend;
 import de.thm.mni.thmtimer.customviews.LineChart;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.Category;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -53,6 +54,12 @@ public class TeacherCourseDetailLinechartFragment extends Fragment {
 	}
 	
 	public void updateChart() {
+		
+		int orientation = getResources().getConfiguration().orientation;
+		
+		
+		// Je nach Drehung des Screens die Legende anpassen
+		mLegend.setDrawSideBySide(orientation == Configuration.ORIENTATION_PORTRAIT);
 		
 		//
 		// Im Moment einfach random Daten erzeugen
