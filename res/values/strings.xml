@@ -75,7 +75,8 @@
     <string name="history">History</string>
     <string name="timeframe">Timeframe</string>
     <string name="showAverage">Show average</string>
-    <string name="showTotal">Show total</string>
+    <string name="hideAverage">Hide average</string>
+    <string name="average">Average</string>
     <string name="selectCategories">Select categories</string>
 	
 	<!-- TeacherCreateCourse -->

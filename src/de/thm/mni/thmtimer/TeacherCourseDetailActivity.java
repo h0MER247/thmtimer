@@ -65,6 +65,8 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 		mCourseID = getIntent().getExtras().getLong("course_id");
 		mCourse   = ModuleDAO.getTeacherCourseByID(mCourseID);
 		
+		// Zufallsdaten für den Linechart erzeugen
+		((TeacherCourseDetailLinechartFragment)mLineChart).createRandomData();
 		
 		// Kursname setzen
 		TextView courseName = (TextView)findViewById(R.id.teachercoursedetail_txtCourseName);

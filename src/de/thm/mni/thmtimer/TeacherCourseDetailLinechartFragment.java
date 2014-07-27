@@ -1,5 +1,6 @@
 package de.thm.mni.thmtimer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -25,12 +26,19 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		public Category category;
 		public Integer  week;
 		public Float    investedTime;
+		
+		public ChartClickableData(Category category, Integer week, Float investedTime) {
+			
+			this.category = category;
+			this.week = week;
+			this.investedTime = investedTime;
+		}
 	}
 	
 	private LineChart mLineChart;
 	private Legend mLegend;
 	private Boolean mShowAverage;
-	
+	private ArrayList<ArrayList<ChartClickableData>> mRandomData;
 	
 	
 	@Override
@@ -40,7 +48,6 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		
 		mShowAverage = false;
 	}
-	private boolean scale=false;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +67,7 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 
 				mShowAverage = !mShowAverage;
 				
-				averageOrTotal.setText(mShowAverage ? R.string.showTotal :
+				averageOrTotal.setText(mShowAverage ? R.string.hideAverage :
 					                                  R.string.showAverage);
 				
 				updateChart();
@@ -73,16 +80,72 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 			@Override
 			public void onClick(View v) {
 				
-				scale = !scale;
-				
-				if(scale)
-					mLineChart.setScaleXY(2, 2);
-				else
-					mLineChart.setScaleXY(1, 1);
+				Toast.makeText(getActivity(), "TODO", Toast.LENGTH_LONG).show();
 			}
 		});
 		
 		return view;
+	}
+	
+	
+	
+	@Override
+	public void onDataPointClicked(Object data) {
+		
+		ChartClickableData myData = (ChartClickableData)data;
+
+		String week, category, time;
+		
+
+		// Week String
+		week = String.format("KW %d", myData.week);
+		
+		// Category String
+		if(myData.category == null)
+			category = "Average of all categories";
+		else
+			category = myData.category.getName();
+		
+		// Time String
+		TimeData t = new TimeData();
+		t.setTimeInMinutes((int)(myData.investedTime * 60f));
+		time = String.format("Invested Time: %s", t.toString());
+		
+		//
+		// Daten anzeigen
+		//
+		Toast.makeText(getActivity(),
+				       String.format("%s\n%s\n%s", week, category, time),
+				       Toast.LENGTH_LONG).show();
+	}
+	
+	
+	public void createRandomData() {
+		
+		final int STUDENT_COUNT = 35;
+		
+		/*
+		 * Zufallsdaten generieren, bis Server die Daten liefern kann
+		 */
+		mRandomData = new ArrayList<ArrayList<ChartClickableData>>();
+		
+		Random rnd = new Random();
+		List<Category> categories = ModuleDAO.getTimeCategorys();
+		
+		for(Category c : categories) {
+			
+			ArrayList<ChartClickableData> randomData = new ArrayList<ChartClickableData>();
+			
+			for(int kw = 0;
+					kw < 54;
+					kw++) {
+				
+				// 7 Tage pro Woche, 12 Studen maximal pro Student... Whatever ^^
+				randomData.add(new ChartClickableData(c, kw, rnd.nextFloat() * (7f * 12f * STUDENT_COUNT)));
+			}
+			
+			mRandomData.add(randomData);
+		}
 	}
 	
 	
@@ -92,74 +155,116 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		mLineChart.setGrabTouch(enableGrab);
 	}
 	
+	// TODO: Anpassen sobald echte Daten vom Server vorliegen
+	public Float getAverageFromWeek(int week) {
+		
+		Float valueTotal = 0f;
+		int   numValues  = 0;
+		
+		for(ArrayList<ChartClickableData> data : mRandomData) {
+			
+			valueTotal += data.get(week).investedTime;
+			
+			numValues++;
+		}
+		
+		return valueTotal / numValues;
+	}
+	
+	
 	public void updateChart() {
 		
 		int orientation = getResources().getConfiguration().orientation;
 		
-		
-		// Je nach Drehung des Screens die Legende anpassen
-		mLegend.setDrawSideBySide(orientation == Configuration.ORIENTATION_PORTRAIT);
-		
+		// Daten löschen
 		mLegend.clearData();
 		mLineChart.clearData();
 		
+		// Legende konfigurieren
+		mLegend.setDrawSideBySide(orientation == Configuration.ORIENTATION_PORTRAIT);
 		
 		
 		//
-		// Im Moment einfach random Daten erzeugen
+		// Chart und Legende füllen
 		//
-		String[] labelsX = new String[30];
-		String[] labelsY = new String[24 + 1];
+		int maxTime = 0;
+		int maxWeek = 0;
 		
-		for(int i = 0; i < labelsX.length; i++)
-			labelsX[i] = String.format("KW %d", 18 + i);
+		for(ArrayList<ChartClickableData> randomData : mRandomData) {
+			
+			if(randomData.size() > maxWeek)
+				maxWeek = randomData.size();
+			
+			// Legende mit Kategorie füllen
+			mLegend.addLegendLabel(randomData.get(0).category.getName());
+			
+			//
+			// Linechart aufbauen
+			//
+			
+			mLineChart.beginSeries();
+			for(ChartClickableData data : randomData) {
+				
+				mLineChart.addValueToSeries(data.investedTime, data);
+				
+				if(data.investedTime > maxTime)
+					maxTime = data.investedTime.intValue();
+			}
+			mLineChart.endSeries();
+		}
 		
-		for(int i = 0; i < labelsY.length; i++)
-			labelsY[i] = String.format("%d h", i);
-		
-		List<Category> categorys = ModuleDAO.getTimeCategorys();
-		
-		
-		Random rnd = new Random();
-		
-		for(Category category : categorys) {
+		//
+		// Durchschnitt anzeigen
+		//
+		if(mShowAverage) {
 
 			mLineChart.beginSeries();
 			
-			for(int i = 0;
-					i < labelsX.length;
-					i++) {
-
-				ChartClickableData d = new ChartClickableData();
-				d.category = category;
-				d.week     = 18 + i;
-				d.investedTime = rnd.nextFloat() * (labelsY.length - 1);
+			for(int kw = 0;
+					kw < 54;
+					kw++) {
 				
-				mLineChart.addValueToSeries(d.investedTime, d);
+				ChartClickableData x = new ChartClickableData(null, kw, getAverageFromWeek(kw));
+				
+				mLineChart.addValueToSeries(x.investedTime, x);
 			}
 			
 			mLineChart.endSeries();
-			mLegend.addLegendLabel(category.getName());
+			mLegend.addLegendLabel(getString(R.string.average));
+		}
+		
+		//
+		// Labels erzeugen
+		//
+		String labelsX[] = new String[maxWeek];
+		String labelsY[] = new String[maxTime];
+		
+		for(int i = 0;
+				i < maxWeek;
+				i++) {
+			
+			labelsX[i] = String.format("KW %d", i);
+		}
+		for(int i = 0;
+				i < maxTime;
+				i++) {
+			
+			labelsY[i] = String.format("%d h", i);
 		}
 		
 		mLineChart.setLabels(labelsX, labelsY);
+		
+		
+		//
+		// Chartgröße festlegen
+		//
 		mLineChart.setChartSize(7, labelsX.length, 12, labelsY.length);
+		mLineChart.setScaleXY(1, labelsY.length / 12);
+		
+		
+		//
+		// DataPointOnClickListener setzen
+		//
 		mLineChart.setDataPointOnClickListener(this);
-	}
-
-	@Override
-	public void onDataPointClicked(Object data) {
-		
-		ChartClickableData myData = (ChartClickableData)data;
-		
-		TimeData t = new TimeData();
-		t.setTimeInMinutes((int)(myData.investedTime * 60f));
-		
-		Toast.makeText(getActivity(),
-				       String.format("Week: %d\nCategory: %s\nInvested Time: %s",
-				    		         myData.week,
-				    		         myData.category.getName(),
-				    		         t.toString()),
-				       Toast.LENGTH_LONG).show();
 	}
 }

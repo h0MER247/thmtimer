@@ -583,6 +583,8 @@ public class LineChart extends View {
 				                    mTotalYAxisBound.top,
 				                    mTotalXAxisBound.right,
 				                    mVisibleChartBound.bottom);
+		
+		checkScrollBounds();
 	}
 	
 	
@@ -632,18 +634,7 @@ public class LineChart extends View {
 			mScrollCurrent.set(mScrollStart.x + (event.getX() - mTouchPosition.x),
 					           mScrollStart.y + (event.getY() - mTouchPosition.y));
 			
-			// Scrolling auf tatsächliche Chartgröße begrenzen
-			if((mScrollCurrent.x + (mTotalChartBound.width() / mScaleX)) < mVisibleChartBound.width())
-				mScrollCurrent.x = mVisibleChartBound.width() - (mTotalChartBound.width() / mScaleX);
-			
-			if(mScrollCurrent.x > 0f)
-				mScrollCurrent.x = 0f;
-			
-			if(mScrollCurrent.y + mTotalChartBound.bottom > (mTotalChartBound.height() / mScaleY))
-				mScrollCurrent.y = (mTotalChartBound.height() / mScaleY) - mTotalChartBound.bottom;
-				
-			if(mScrollCurrent.y < 0f)
-				mScrollCurrent.y = 0f;
+			checkScrollBounds();
 			
 			mScrolling = true;
 			invalidate();
@@ -668,6 +659,22 @@ public class LineChart extends View {
 		}
 		
 		return true;
+	}
+	
+	private void checkScrollBounds() {
+		
+		// Scrolling auf tatsächliche Chartgröße begrenzen
+		if((mScrollCurrent.x + (mTotalChartBound.width() / mScaleX)) < mVisibleChartBound.width())
+			mScrollCurrent.x = mVisibleChartBound.width() - (mTotalChartBound.width() / mScaleX);
+		
+		if(mScrollCurrent.x > 0f)
+			mScrollCurrent.x = 0f;
+		
+		if(mScrollCurrent.y + mTotalChartBound.bottom > (mTotalChartBound.height() / mScaleY))
+			mScrollCurrent.y = (mTotalChartBound.height() / mScaleY) - mTotalChartBound.bottom;
+			
+		if(mScrollCurrent.y < 0f)
+			mScrollCurrent.y = 0f;
 	}
 	
 	private void handleClick(int x, int y) {
