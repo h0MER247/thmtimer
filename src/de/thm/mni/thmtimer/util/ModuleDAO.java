@@ -287,6 +287,14 @@ public class ModuleDAO {
 		addJob(op);
 	}
 	
+	public static void putStudentExpenditureToServer(int requestID, Expenditure expenditure) {
+		
+		ServerOperation op = new PUT_EXPENDITURE(requestID);
+		op.setParameter(expenditure);
+		
+		addJob(op);
+	}
+	
 	public static List<Expenditure> getStudentExpendituresByCourseID(Long courseID) {
 		
 		ArrayList<Expenditure> ret = new ArrayList<Expenditure>();
@@ -301,6 +309,20 @@ public class ModuleDAO {
 		}
 		
 		return ret;
+	}
+	
+	public static Expenditure getStudentExpenditureByID(Long expenditureID) {
+		
+		if(mStudentExpenditures != null) {
+			
+			for(Expenditure e : mStudentExpenditures) {
+				
+				if(e.getId() == expenditureID)
+					return e;
+			}
+		}
+		
+		return null;
 	}
 	
 	public static void invalidateStudentExpenditures() {
@@ -552,7 +574,7 @@ public class ModuleDAO {
 			
 			if(mStudentExpenditures == null)
 				mStudentExpenditures = new ArrayList<Expenditure>();
-			
+
 			mStudentExpenditures.add(expenditure);
 		}
 
@@ -568,6 +590,62 @@ public class ModuleDAO {
 			return R.string.connection_saving_expenditures;
 		}
 	};
+	
+	
+	//
+	// Aufwandseintrag editieren
+	//
+	private static class PUT_EXPENDITURE extends ServerOperation {
+		
+		private Expenditure mExpenditure;
+		
+		public PUT_EXPENDITURE(int requestID) {
+			
+			super(requestID);
+		}
+		
+
+		@Override
+		public boolean runIf() {
+			
+			return true;
+		}
+
+		@Override
+		public void run() {
+			
+			Expenditure expenditure = Connection.request("/expenditures/" + mExpenditure.getId(),
+					                                     HttpMethod.PUT,
+					                                     mExpenditure,
+					                                     Expenditure.class);
+			
+			// Dieses Expenditure in unserer lokalen Liste editieren
+			for(int i = 0;
+					i < mStudentExpenditures.size();
+					i++) {
+				
+				Expenditure e = mStudentExpenditures.get(i);
+				
+				if(e.getId() == expenditure.getId()) {
+					
+					mStudentExpenditures.set(i, expenditure);
+					break;
+				}
+			}
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+			
+			mExpenditure = (Expenditure)parameter[0];
+		}
+
+		@Override
+		public int getDialogMessage() {
+			
+			return R.string.connection_saving_expenditures;
+		}
+	}
 	
 
 	//

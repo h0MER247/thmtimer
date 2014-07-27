@@ -33,6 +33,7 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 	private final int REQUEST_EDIT_TIMETRACKING = 1;
 	
 	private final int DAO_POST_EXPENDITURE = 0;
+	private final int DAO_PUT_EXPENDITURE = 1;
 	
 	private ArrayAdapter<Expenditure> mAdapter;
 	private List<Expenditure> mTimeTrackingList;
@@ -44,7 +45,8 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
+		ModuleDAO.setNewContext(this, this);
 		
 		this.setContentView(R.layout.timetrackingactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -71,10 +73,11 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 					                int position,
 					                long id) {
 				
-				// TODO
-				Toast.makeText(TimeTrackingActivity.this,
-						       "TODO: Editierbarkeit?",
-						       Toast.LENGTH_LONG).show();
+				Intent intent = new Intent(TimeTrackingActivity.this,
+						                   TrackTimeActivity.class);
+				intent.putExtra("expenditure_id", mAdapter.getItem(position).getId());
+				
+				startActivityForResult(intent, REQUEST_EDIT_TIMETRACKING);
 			}
 		});
 		
@@ -85,8 +88,6 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 		mTimeTrackingList.addAll(ModuleDAO.getStudentExpendituresByCourseID(mCourseID));
 		
 		mAdapter.notifyDataSetChanged();
-		
-		ModuleDAO.setNewContext(this, this);
 	}
 
 	@Override
@@ -111,7 +112,6 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 			
 		case R.id.action_add:
 			Intent intent = new Intent(this, TrackTimeActivity.class);
-			intent.putExtra("course_id", mCourseID);
 			startActivityForResult(intent, REQUEST_ADD_TIMETRACKING);
 			return true;
 			
@@ -134,10 +134,12 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 		switch(requestCode) {
 		
 		case REQUEST_ADD_TIMETRACKING:
+		case REQUEST_EDIT_TIMETRACKING:
 			Long categoryID    = data.getExtras().getLong("category_id");
 			Integer duration   = data.getExtras().getInt("duration");
 			String description = data.getExtras().getString("description");
 			Long startTime     = data.getExtras().getLong("start_time");
+			Long expenditureID = data.getExtras().getLong("expenditure_id");
 			
 			Category category = ModuleDAO.getTimeCategoryByID(categoryID);
 			
@@ -150,15 +152,15 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 			e.setDuration(duration.shortValue());
 			e.setStart(new Date(startTime));
 			e.setUser(ModuleDAO.getUser());
-			e.setId(0);
+			e.setId(expenditureID);
 			
 			// Expenditure speichern
 			ModuleDAO.beginJob();
-			ModuleDAO.postStudentExpenditureToServer(DAO_POST_EXPENDITURE, e);
+			if(requestCode == REQUEST_ADD_TIMETRACKING)
+				ModuleDAO.postStudentExpenditureToServer(DAO_POST_EXPENDITURE, e);
+			else
+				ModuleDAO.putStudentExpenditureToServer(DAO_PUT_EXPENDITURE, e);
 			ModuleDAO.commitJob(this, this);
-			break;
-			
-		case REQUEST_EDIT_TIMETRACKING:
 			break;
 		}
 	}
@@ -183,8 +185,14 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 			
 		case DAO_POST_EXPENDITURE:
 			Toast.makeText(this,
-			           String.format("Fehler beim Speichern der Aktivität: %s", message),
-			           Toast.LENGTH_LONG).show();
+			               String.format("Fehler beim Speichern der Aktivität: %s", message),
+			               Toast.LENGTH_LONG).show();
+			break;
+			
+		case DAO_PUT_EXPENDITURE:
+			Toast.makeText(this,
+			               String.format("Fehler beim Editieren der Aktivität: %s", message),
+			               Toast.LENGTH_LONG).show();
 			break;
 		}
 		

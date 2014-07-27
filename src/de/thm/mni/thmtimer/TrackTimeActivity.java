@@ -8,12 +8,12 @@ import java.util.List;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.Category;
+import de.thm.thmtimer.entities.Expenditure;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +22,10 @@ import android.widget.*;
 
 
 public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTimeSetListener {
+	
+	// Editiermodus
+	private boolean mEditMode;
+	private long mExpenditureID;
 	
 	// Dauer
 	private EditText mDuration;
@@ -34,6 +38,7 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 	
 	// Kategorie
 	private Spinner mCategory;
+	private CategoryAdapter mCategoryAdapter;
 	private List<Category> mCategorys;
 	
 	// Beschreibung
@@ -70,9 +75,10 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		
 		// Kategorie
 		mCategory = (Spinner)findViewById(R.id.categoryEntry);
-		mCategory.setAdapter(new CategoryAdapter(this,
-				                                 R.layout.categorydropdownitem,
-				                                 mCategorys));
+		mCategoryAdapter = new CategoryAdapter(this,
+				                               R.layout.categorydropdownitem,
+				                               mCategorys);
+		mCategory.setAdapter(mCategoryAdapter);
 		
 		// Beschreibung
 		mDescription = (EditText)findViewById(R.id.descriptionEntry);
@@ -125,6 +131,7 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 				result.putExtra("start_time", mStartTimeData.getTime());
 				result.putExtra("category_id", category.getId());
 				result.putExtra("description", mDescription.getText().toString());
+				result.putExtra("expenditure_id", mEditMode ? mExpenditureID : 0);
 				
 				setResult(Activity.RESULT_OK, result);
 				finish();
@@ -163,7 +170,6 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 			
 			TimeData t = new TimeData();
 			t.setTimeInMinutes(extras.getInt("stopped_time") / 60);
-			Log.d("LOG", "STOPPED: " + extras.getInt("stopped_time"));
 			
 			Date d = new Date(extras.getLong("start_time"));
 			mStartTime.setText(mStartTimeFormat.format(d));
@@ -174,6 +180,27 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 			mChooseButton.setVisibility(View.INVISIBLE);
 			
 			mDescription.requestFocus();
+		}
+		
+		// Editieren der Expenditure?
+		mEditMode = extras.containsKey("expenditure_id");
+		
+		if(mEditMode) {
+			
+			mExpenditureID = extras.getLong("expenditure_id");
+			
+			
+			Expenditure e = ModuleDAO.getStudentExpenditureByID(mExpenditureID);
+			
+			TimeData t = new TimeData();
+			t.setTimeInMinutes((int)e.getDuration());
+			
+			mDuration.setText(t.toString());
+			mStartTime.setText(mStartTimeFormat.format(e.getStart()));
+			mCategory.setSelection(mCategoryAdapter.getPosition(e.getCategory()));
+			mDescription.setText(e.getDescription());
+			
+			mDuration.requestFocus();
 		}
 	}
 
