@@ -102,6 +102,14 @@ public class PieChart extends View {
 		invalidate();
 	}
 	
+	public void clearData() {
+		
+		mValues.clear();
+		mGradients.clear();
+		
+		invalidate();
+	}
+	
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {

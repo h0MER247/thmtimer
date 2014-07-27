@@ -10,6 +10,7 @@ import android.graphics.Region;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -135,6 +136,8 @@ public class LineChart extends View {
 		setChartColors(DEFAULT_LINECHART_COLORS,
 				       DEFAULT_LINECHART_ORIENTATION_COLOR,
 				       DEFAULT_LINECHART_TEXT_COLOR);
+		
+		setScaleXY(1, 1);
 	}
 	
 	
@@ -201,7 +204,7 @@ public class LineChart extends View {
 	}
 	
 	private String getLabelY(int y) {
-		
+
 		return (y < mLabelsY.length) ? mLabelsY[y] : "";
 	}
 
@@ -232,7 +235,14 @@ public class LineChart extends View {
 			mChartData.add(mSeries);
 		}
 		
-		mBoundsInvalidated = true;
+		invalidate();
+	}
+	
+	public void clearData() {
+		
+		mChartData.clear();
+		mLastClickedDataPoint = null;
+		
 		invalidate();
 	}
 	
@@ -254,6 +264,17 @@ public class LineChart extends View {
 	public void setGrabTouch(boolean enableGrab) {
 		
 		mGrabTouch = enableGrab;
+	}
+	
+	private int mScaleY;
+	private int mScaleX;
+	public void setScaleXY(int scaleX, int scaleY) {
+		
+		mScaleX = scaleX;
+		mScaleY = scaleY;
+		
+		mBoundsInvalidated = true;
+		invalidate();
 	}
 	
 	
@@ -287,12 +308,14 @@ public class LineChart extends View {
 	
 	private float getRelativePosX(float valueX) {
 		
-		return (1.0f / mTotalOnX) * valueX;
+		//return (1.0f / mTotalOnX) * valueX;
+		return (1.0f / (mTotalOnX * mScaleX)) * valueX;
 	}
 	
 	private float getRelativePosY(float valueY) {
 		
-		return (1.0f / mTotalOnY) * valueY;
+		//return (1.0f / mTotalOnY) * valueY;
+		return (1.0f / (mTotalOnY * mScaleY)) * valueY;
 	}
 	
 	private void drawNoDataMessage(Canvas canvas) {
@@ -327,7 +350,7 @@ public class LineChart extends View {
 		
 		for(int i = 0;
 				i < mTotalOnX;
-				i++) {
+				i += mScaleX) {
 			
 			mPaint.getTextBounds(getLabelX(i), 0, getLabelX(i).length(), mTextBounds);
 			
@@ -352,7 +375,7 @@ public class LineChart extends View {
 		
 		for(int i = 0;
 				i < mTotalOnY;
-				i++) {
+				i += mScaleY) {
 			
 			y  = getRelativePosY(i) * mTotalYAxisBound.height();
 			y -= mScrollCurrent.y;
@@ -378,7 +401,7 @@ public class LineChart extends View {
 		
 		for(int i = 0;
 				i < mTotalOnY;
-				i++) {
+				i += mScaleY) {
 			
 			y  = getRelativePosY(i) * mTotalYAxisBound.height();
 			y -= mScrollCurrent.y;
@@ -519,6 +542,7 @@ public class LineChart extends View {
 		maxHeightXAxis += EXTRA_PAD;
 		
 		
+		
 		//
 		// Bounding Boxen für alle Bereiche des Graphen erstellen
 		//
@@ -609,14 +633,14 @@ public class LineChart extends View {
 					           mScrollStart.y + (event.getY() - mTouchPosition.y));
 			
 			// Scrolling auf tatsächliche Chartgröße begrenzen
-			if(mScrollCurrent.x + mTotalChartBound.width() < mVisibleChartBound.width())
-				mScrollCurrent.x = mVisibleChartBound.width() - mTotalChartBound.width();
+			if((mScrollCurrent.x + (mTotalChartBound.width() / mScaleX)) < mVisibleChartBound.width())
+				mScrollCurrent.x = mVisibleChartBound.width() - (mTotalChartBound.width() / mScaleX);
 			
 			if(mScrollCurrent.x > 0f)
 				mScrollCurrent.x = 0f;
 			
-			if(mScrollCurrent.y + mTotalChartBound.bottom > mTotalChartBound.height())
-				mScrollCurrent.y = mTotalChartBound.height() - mTotalChartBound.bottom;
+			if(mScrollCurrent.y + mTotalChartBound.bottom > (mTotalChartBound.height() / mScaleY))
+				mScrollCurrent.y = (mTotalChartBound.height() / mScaleY) - mTotalChartBound.bottom;
 				
 			if(mScrollCurrent.y < 0f)
 				mScrollCurrent.y = 0f;

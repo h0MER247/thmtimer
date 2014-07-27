@@ -76,6 +76,7 @@
     <string name="timeframe">Timeframe</string>
     <string name="showAverage">Show average</string>
     <string name="showTotal">Show total</string>
+    <string name="selectCategories">Select categories</string>
 	
 	<!-- TeacherCreateCourse -->
 	<string name="create">create</string>

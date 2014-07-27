@@ -32,13 +32,15 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 	private Boolean mShowAverage;
 	
 	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
 		
 		mShowAverage = false;
 	}
+	private boolean scale=false;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +67,21 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 			}
 		});
 		
+		Button selectCategories = (Button)view.findViewById(R.id.teachercoursedetail_btnSelectCategories);
+		selectCategories.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				scale = !scale;
+				
+				if(scale)
+					mLineChart.setScaleXY(2, 2);
+				else
+					mLineChart.setScaleXY(1, 1);
+			}
+		});
+		
 		return view;
 	}
 	
@@ -83,11 +100,16 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		// Je nach Drehung des Screens die Legende anpassen
 		mLegend.setDrawSideBySide(orientation == Configuration.ORIENTATION_PORTRAIT);
 		
+		mLegend.clearData();
+		mLineChart.clearData();
+		
+		
+		
 		//
 		// Im Moment einfach random Daten erzeugen
 		//
 		String[] labelsX = new String[30];
-		String[] labelsY = new String[12 + 1];
+		String[] labelsY = new String[24 + 1];
 		
 		for(int i = 0; i < labelsX.length; i++)
 			labelsX[i] = String.format("KW %d", 18 + i);
@@ -111,7 +133,7 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 				ChartClickableData d = new ChartClickableData();
 				d.category = category;
 				d.week     = 18 + i;
-				d.investedTime = rnd.nextFloat() * 12f;
+				d.investedTime = rnd.nextFloat() * (labelsY.length - 1);
 				
 				mLineChart.addValueToSeries(d.investedTime, d);
 			}
@@ -121,7 +143,7 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		}
 		
 		mLineChart.setLabels(labelsX, labelsY);
-		mLineChart.setChartSize(7, labelsX.length, 9, labelsY.length);
+		mLineChart.setChartSize(7, labelsX.length, 12, labelsY.length);
 		mLineChart.setDataPointOnClickListener(this);
 	}
 

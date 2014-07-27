@@ -76,6 +76,7 @@
     <string name="timeframe">Zeitraum</string>
     <string name="showAverage">Durchschnitt anzeigen</string>
     <string name="showTotal">Gesamtzeit anzeigen</string>
+    <string name="selectCategories">Kategorien wählen</string>
     
     <!-- Stopwatch -->
     <string name="stopwatch_header">Stoppuhr</string>

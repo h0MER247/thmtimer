@@ -105,6 +105,11 @@ public class Legend extends View {
 		invalidate();
 	}
 	
+	public void clearData() {
+		
+		mLabels.clear();
+		invalidate();
+	}
 	
 	
 	
