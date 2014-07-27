@@ -1,7 +1,12 @@
 package de.thm.mni.thmtimer;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import de.thm.mni.thmtimer.customviews.Legend;
 import de.thm.mni.thmtimer.customviews.LineChart;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.thmtimer.entities.Category;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -41,32 +46,17 @@ public class TeacherCourseDetailLinechartFragment extends Fragment {
 	}
 	
 	
-	public void updateChart() {
+	
+	public void setGrabTouch(boolean enableGrab) {
 		
-		/*
-		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			
-			historyLegend.setDrawSideBySide(false);
-		}
-		else {
-			
-			historyLegend.setDrawSideBySide(true);
-			
-			categoryToggle.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View arg0) {
-					
-					Toast.makeText(getApplication(), "ToDo: Möglichkeit einzelne Kategorien ein-/auszublenden", Toast.LENGTH_LONG).show();
-				}
-			});
-		}
-		*/
+		mLineChart.setGrabTouch(enableGrab);
+	}
+	
+	public void updateChart() {
 		
 		//
 		// Im Moment einfach random Daten erzeugen
 		//
-		/*
 		String[] labelsX = new String[12];
 		String[] labelsY = new String[13];
 		
@@ -80,26 +70,25 @@ public class TeacherCourseDetailLinechartFragment extends Fragment {
 		ArrayList<Float> data;
 		Random rnd = new Random();
 		
-		for(long id = 0;
-				 id < 5;
+		for(long id = 1;
+				 id < 3;
 				 id++) {
 			
-			TimeCategory category = StaticModuleData.findTimeCategory(id);
+			Category category = ModuleDAO.getTimeCategoryByID(id);
 			data = new ArrayList<Float>();
 			
 			for(int i = 0;
-					i < 12;
+					i <= 12;
 					i++) {
 				
 				data.add(rnd.nextFloat() * 12f);
 			}
 			
-			historyChart.addChartSeries(data);
-			historyLegend.addLegendLabel(category.getDescription());
+			mLineChart.addChartSeries(data);
+			mLegend.addLegendLabel(category.getName());
 		}
 		
-		historyChart.setLabels(labelsX, labelsY);
-		historyChart.setChartSize(7, 12, 9, 13);
-		*/
+		mLineChart.setLabels(labelsX, labelsY);
+		mLineChart.setChartSize(7, 12, 9, 13);
 	}
 }

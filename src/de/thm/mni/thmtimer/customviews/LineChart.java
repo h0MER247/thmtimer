@@ -10,6 +10,7 @@ import android.graphics.Region;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -57,6 +58,7 @@ public class LineChart extends View {
 	private PointF mTouchPosition;
 	private PointF mScrollStart;
 	private PointF mScrollCurrent;
+	private boolean mGrabTouch;
 	
 	
 	
@@ -76,6 +78,7 @@ public class LineChart extends View {
 		
 		mTextBounds = new Rect();
 		
+		setGrabTouch(false);
 		setTextSize(22f);
 		setChartSize(10, 30, 9, 9);
 		setChartColors(DEFAULT_LINECHART_COLORS,
@@ -99,6 +102,7 @@ public class LineChart extends View {
 		mTotalOnY   = totalOnY;
 		
 		mBoundsInvalidated = true;
+		invalidate();
 	}
 
 	
@@ -110,6 +114,7 @@ public class LineChart extends View {
 		mPaint.setTextSize(textSize);
 		
 		mBoundsInvalidated = true;
+		invalidate();
 	}
 	
 	
@@ -123,6 +128,7 @@ public class LineChart extends View {
 		mChartColors = chartColors;
 		mChartOrientationColor = chartOrientationColor;
 		mTextColor = textColor;
+		invalidate();
 	}
 	
 	
@@ -136,6 +142,7 @@ public class LineChart extends View {
 		mLabelsY = labelsY;
 		
 		mBoundsInvalidated = true;
+		invalidate();
 	}
 	
 	private String getLabelX(int x) {
@@ -156,8 +163,19 @@ public class LineChart extends View {
 		
 		mChartData.add(values);
 		
-		mBoundsInvalidated = true;
+		mBoundsInvalidated = true;		
+		invalidate();
 	}
+	
+	
+	//
+	// Parents davon abhalten unsere TouchsEvents zu klauen
+	//
+	public void setGrabTouch(boolean enableGrab) {
+		
+		mGrabTouch = enableGrab;
+	}
+	
 	
 	
 	
@@ -356,6 +374,7 @@ public class LineChart extends View {
 		super.onSizeChanged(w, h, oldw, oldh);
 		
 		mBoundsInvalidated = true;
+		invalidate();
 	}
 	
 	@Override
@@ -364,6 +383,7 @@ public class LineChart extends View {
 		super.setPadding(left, top, right, bottom);
 		
 		mBoundsInvalidated = true;
+		invalidate();
 	}
 
 
@@ -445,16 +465,34 @@ public class LineChart extends View {
 	}
 	
 	
-	
 	//
 	// Funktionen zum Scrollen des Charts
 	//
-	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		
 		if(mBoundsInvalidated)
 			return false;
+		
+		if(mGrabTouch) {
+			
+			switch(event.getAction()) {
+			
+			case MotionEvent.ACTION_MOVE: 
+				getParent().requestDisallowInterceptTouchEvent(true);
+		        break;
+		        
+		    case MotionEvent.ACTION_UP:
+		    case MotionEvent.ACTION_CANCEL:
+		    	getParent().requestDisallowInterceptTouchEvent(false);
+		        break;
+			}
+		}
+		else {
+			
+			getParent().requestDisallowInterceptTouchEvent(false);
+		}
+		
 		
 		switch(event.getAction()) {
 		

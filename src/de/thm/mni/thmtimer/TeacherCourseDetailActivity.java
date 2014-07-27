@@ -112,6 +112,8 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 					
 					if(mActionBar.getSelectedNavigationIndex() != position)
 						mActionBar.setSelectedNavigationItem(position);
+					
+					((TeacherCourseDetailLinechartFragment)mLineChart).setGrabTouch(position == 1);
 				}
 
 				@Override
@@ -162,7 +164,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 		ModuleDAO.setNewContext(this, this);
 	}
 	
-
+	
 	
 	@Override
 	protected void onResume() {

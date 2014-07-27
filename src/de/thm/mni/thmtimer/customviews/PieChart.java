@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class PieChart extends View {
@@ -102,6 +103,11 @@ public class PieChart extends View {
 	}
 	
 	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		
+		return false;
+	}
 	
 	@Override
 	public void draw(Canvas canvas) {

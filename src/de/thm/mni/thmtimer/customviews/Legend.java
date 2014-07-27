@@ -70,6 +70,7 @@ public class Legend extends View {
 	public void setTextSize(Float textSize) {
 		
 		mPaint.setTextSize(textSize);
+		invalidate();
 	}
 	
 	
@@ -81,6 +82,7 @@ public class Legend extends View {
 		
 		mElementColors = elementColors;
 		mTextColor = textColor;
+		invalidate();
 	}
 	
 	
@@ -90,6 +92,7 @@ public class Legend extends View {
 	public void setDrawSideBySide(Boolean drawSideBySide) {
 		
 		mDrawSideBySide = drawSideBySide;
+		invalidate();
 	}
 	
 	
