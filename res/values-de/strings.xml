@@ -74,8 +74,9 @@
     <string name="course_details">Kurs Details</string>
     <string name="history">Historie</string>
     <string name="timeframe">Zeitraum</string>
-    <string name="category_toggle">Kategorien ein/ausblenden</string>
-
+    <string name="showAverage">Durchschnitt anzeigen</string>
+    <string name="showTotal">Gesamtzeit anzeigen</string>
+    
     <!-- Stopwatch -->
     <string name="stopwatch_header">Stoppuhr</string>
     <string name="stopwatch_zerotime">00:00:00</string>

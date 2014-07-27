@@ -2,7 +2,6 @@ package de.thm.mni.thmtimer.customviews;
 
 import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -17,9 +16,49 @@ import android.view.View;
 
 
 //
-// Zweite Version...
+// Dritte Version...
 //
 public class LineChart extends View {
+	
+	public interface DataPointOnClickListener {
+		
+		public void onDataPointClicked(Object data);
+	}
+	
+	private class DataPoint {
+		
+		private Float  mValue;
+		private Object mData;
+		private Boolean mIsClicked;
+		
+		public DataPoint(Float value, Object data) {
+			
+			mValue = value;
+			mData  = data;
+			mIsClicked = false;
+		}
+		
+		public Float getValue() { return mValue; }
+		public Object getData() { return mData; }
+		
+		public Boolean isClicked() { return mIsClicked; }
+		public void setIsClicked(Boolean isClicked) { mIsClicked = isClicked; }
+	}
+	
+	private class ClickableDataPoint {
+		
+		private DataPoint mDataPoint;
+		private Rect mHitBox;
+		
+		public ClickableDataPoint(DataPoint dataPoint, Rect hitBox) {
+			
+			mDataPoint = dataPoint;
+			mHitBox = hitBox;
+		}
+		
+		public DataPoint getDataPoint() { return mDataPoint; }
+		public Rect getHitBox() { return mHitBox; }
+	}
 	
 	public final static Integer[] DEFAULT_LINECHART_COLORS = { 0xFF0099CC,
 		                                                        0xFF9933CC,
@@ -40,8 +79,8 @@ public class LineChart extends View {
 	// Labels und Chartwerte
 	private String[] mLabelsY;
 	private String[] mLabelsX;
-	private ArrayList<ArrayList<Float>> mChartData;
-	private ArrayList<Float> mSeriesData;
+	private ArrayList<ArrayList<DataPoint>> mChartData;
+	private ArrayList<DataPoint> mSeries;
 	
 	// Größen des sichtbaren Charts
 	private boolean mBoundsInvalidated;
@@ -60,7 +99,13 @@ public class LineChart extends View {
 	private PointF mScrollStart;
 	private PointF mScrollCurrent;
 	private boolean mGrabTouch;
+	private boolean mScrolling;
 	
+	// Klickbare Datenpunkte
+	private final int CLICKABLE_BOX_SIZE = 16;
+	private ArrayList<ClickableDataPoint> mClickableDataPoints;
+	private DataPoint mLastClickedDataPoint;
+	private DataPointOnClickListener mListener;
 	
 	
 	public LineChart(Context context,
@@ -71,13 +116,18 @@ public class LineChart extends View {
 		
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		
-		mChartData = new ArrayList<ArrayList<Float>>();
+		mChartData = new ArrayList<ArrayList<DataPoint>>();
+		
+		mClickableDataPoints = new ArrayList<ClickableDataPoint>();
+		mLastClickedDataPoint = null;
+		mListener = null;
 		
 		mTouchPosition = new PointF();
 		mScrollStart   = new PointF();
 		mScrollCurrent = new PointF();
 		
 		mTextBounds = new Rect();
+		mScrolling = false;
 		
 		setGrabTouch(false);
 		setTextSize(22f);
@@ -86,7 +136,6 @@ public class LineChart extends View {
 				       DEFAULT_LINECHART_ORIENTATION_COLOR,
 				       DEFAULT_LINECHART_TEXT_COLOR);
 	}
-	
 	
 	
 	//
@@ -160,37 +209,43 @@ public class LineChart extends View {
 	//
 	// Chartdaten
 	//
-	public void addChartSeries(ArrayList<Float> values) {
+	public void beginSeries() {
 		
-		mChartData.add(values);
+		mSeries = new ArrayList<DataPoint>();
+	}
+	
+	public void addValueToSeries(Float value, Object data) {
 		
-		mBoundsInvalidated = true;		
+		if(mSeries == null)
+			throw new IllegalArgumentException("You have to start a chart series first with beginChartSeries()");
+				
+		mSeries.add(new DataPoint(value, data));
+	}
+	
+	public void endSeries() {
+		
+		if(mSeries == null)
+			throw new IllegalArgumentException("You have to start a chart series first with beginChartSeries()");
+		
+		if(mSeries.size() > 0) {
+			
+			mChartData.add(mSeries);
+		}
+		
+		mBoundsInvalidated = true;
 		invalidate();
 	}
 	
-	// Alternative Möglichkeit dem Chart Daten bereitzustellen
-	public void beginChartSeries() {
-		
-		mSeriesData = new ArrayList<Float>();
-	}
 	
-	public void addValueToChartSeries(Float value) {
+	//
+	// Datapoint Listener
+	//
+	public void setDataPointOnClickListener(DataPointOnClickListener listener) {
 		
-		if(mSeriesData == null)
-			throw new IllegalArgumentException("You have to start a chart series first with beginChartSeries()");
+		mListener = listener;
 		
-		mSeriesData.add(value);
+		invalidate();
 	}
-	
-	public void endChartSeries() {
-		
-		if(mSeriesData == null)
-			throw new IllegalArgumentException("You have to start a chart series first with beginChartSeries()");
-		
-		if(mSeriesData.size() > 0)
-			addChartSeries(mSeriesData);
-	}
-	
 	
 	
 	//
@@ -342,7 +397,7 @@ public class LineChart extends View {
 		
 		int colorIdx = 0;
 		
-		for(ArrayList<Float> chartData : mChartData) {
+		for(ArrayList<DataPoint> chartData : mChartData) {
 			
 			Float x0 = 0f;
 			Float y0 = 0f;
@@ -355,12 +410,14 @@ public class LineChart extends View {
 					i < chartData.size();
 					i++) {
 				
+				DataPoint data = chartData.get(i);
+				
+				
 				x1  = ((getRelativePosX(i) + getRelativePosX(i + 1)) / 2f) * mTotalXAxisBound.width();
 				x1 += mScrollCurrent.x;
 				
-				y1  = getRelativePosY(chartData.get(i)) * mTotalYAxisBound.height();
+				y1  = getRelativePosY(data.getValue()) * mTotalYAxisBound.height();
 				y1 -= mScrollCurrent.y;
-				
 				
 				if(i > 0) {
 
@@ -376,8 +433,23 @@ public class LineChart extends View {
 				mPaint.setStyle(Style.FILL);
 				canvas.drawCircle(mVisibleChartBound.left + x1.intValue(),
 						          mVisibleChartBound.bottom - y1.intValue(),
-						          5f,
+						          data.isClicked() ? 12f : 6f,
 						          mPaint);
+				
+				// Neues Feature: Klickbare Datenpunkte
+				if((mListener != null) && !mScrolling) {
+					
+					if(mVisibleChartBound.contains(mVisibleChartBound.left + x1.intValue(),
+							                       mVisibleChartBound.bottom - y1.intValue())) {
+						
+						Rect hitbox = new Rect(mVisibleChartBound.left + x1.intValue() - CLICKABLE_BOX_SIZE,
+								               mVisibleChartBound.bottom - y1.intValue() - CLICKABLE_BOX_SIZE,
+								               mVisibleChartBound.left + x1.intValue() + CLICKABLE_BOX_SIZE,
+								               mVisibleChartBound.bottom - y1.intValue() + CLICKABLE_BOX_SIZE);
+						
+						mClickableDataPoints.add(new ClickableDataPoint(data, hitbox));
+					}	
+				}
 				
 				x0 = x1;
 				y0 = y1;
@@ -490,16 +562,18 @@ public class LineChart extends View {
 	}
 	
 	
+	
+		
 	//
 	// Funktionen zum Scrollen des Charts
 	//
-	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		
 		if(mBoundsInvalidated)
 			return false;
-		
+
+		// Parents abhalten uns TouchEvents zu klauen
 		if(mGrabTouch) {
 			
 			switch(event.getAction()) {
@@ -509,6 +583,7 @@ public class LineChart extends View {
 		        break;
 		        
 		    case MotionEvent.ACTION_UP:
+				performClick();
 		    case MotionEvent.ACTION_CANCEL:
 		    	getParent().requestDisallowInterceptTouchEvent(false);
 		        break;
@@ -519,7 +594,7 @@ public class LineChart extends View {
 			getParent().requestDisallowInterceptTouchEvent(false);
 		}
 		
-		
+		// Scrollen / Klicken
 		switch(event.getAction()) {
 		
 		case MotionEvent.ACTION_DOWN:
@@ -530,7 +605,6 @@ public class LineChart extends View {
 			break;
 			
 		case MotionEvent.ACTION_MOVE:
-		case MotionEvent.ACTION_UP:
 			mScrollCurrent.set(mScrollStart.x + (event.getX() - mTouchPosition.x),
 					           mScrollStart.y + (event.getY() - mTouchPosition.y));
 			
@@ -547,10 +621,52 @@ public class LineChart extends View {
 			if(mScrollCurrent.y < 0f)
 				mScrollCurrent.y = 0f;
 			
+			mScrolling = true;
 			invalidate();
 			break;
+			
+		case MotionEvent.ACTION_UP:
+			if(mScrolling) {
+				
+				mScrolling = false;			
+				
+				if(mClickableDataPoints.size() > 0)
+					mClickableDataPoints.clear();
+				
+				invalidate();
+			}
+			else {
+				
+				if(mListener != null)
+					handleClick((int)event.getX(),
+							    (int)event.getY());
+			}
 		}
 		
 		return true;
+	}
+	
+	private void handleClick(int x, int y) {
+		
+		for(ClickableDataPoint point : mClickableDataPoints) {
+			
+			if(point.getHitBox().contains(x, y)) {
+				
+				DataPoint p = point.getDataPoint();
+				
+				p.setIsClicked(true);
+				mListener.onDataPointClicked(p.getData());
+				
+				if(mLastClickedDataPoint != null) {
+
+					if(p != mLastClickedDataPoint)
+						mLastClickedDataPoint.setIsClicked(false);
+				}
+				mLastClickedDataPoint = p;
+				
+				invalidate();
+				break;
+			}
+		}
 	}
 }

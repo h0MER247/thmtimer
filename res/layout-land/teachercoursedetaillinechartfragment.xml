@@ -23,18 +23,18 @@
             android:id="@+id/teachercoursedetail_historyLegend"
             android:layout_width="match_parent"
             android:layout_height="176dp"
-            android:layout_above="@+id/teachercoursedetail_btnCategoryToggle"
+            android:layout_above="@+id/teachercoursedetail_btnAverageTotal"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true" />
 
         <Button
-            android:id="@+id/teachercoursedetail_btnCategoryToggle"
+            android:id="@+id/teachercoursedetail_btnAverageTotal"
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:text="@string/category_toggle" />
+            android:text="@string/showAverage" />
     </RelativeLayout>
     
 </LinearLayout>

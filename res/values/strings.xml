@@ -74,7 +74,8 @@
 	<string name="course_details">Course details</string>
     <string name="history">History</string>
     <string name="timeframe">Timeframe</string>
-    <string name="category_toggle">Show/Hide Categorys</string>
+    <string name="showAverage">Show average</string>
+    <string name="showTotal">Show total</string>
 	
 	<!-- TeacherCreateCourse -->
 	<string name="create">create</string>

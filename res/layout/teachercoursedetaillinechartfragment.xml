@@ -21,12 +21,12 @@
         android:layout_weight="0.1" />
     
     <Button
-        android:id="@+id/teachercoursedetail_btnCategoryToggle"
+        android:id="@+id/teachercoursedetail_btnAverageTotal"
         style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_weight="0.2"
-        android:text="@string/category_toggle" />
+        android:text="@string/showAverage" />
 
 </LinearLayout>
