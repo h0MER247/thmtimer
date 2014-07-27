@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/durationEntry"
         android:layout_alignRight="@+id/categoryEntry"
-        android:layout_below="@+id/categoryText"
+        android:layout_alignTop="@+id/textView4"
         android:text="@string/enter_time_choose" />
 
     <Button
@@ -25,7 +25,7 @@
         android:text="@string/enter_time" />
 
     <TextView
-        android:id="@+id/categoryText"
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -37,8 +37,8 @@
         android:id="@+id/durationEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/categoryText"
-        android:layout_below="@+id/categoryText"
+        android:layout_alignLeft="@+id/textView4"
+        android:layout_below="@+id/textView4"
         android:ems="10"
         android:hint="@string/enter_time_format"
         android:inputType="time" >

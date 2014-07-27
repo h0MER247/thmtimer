@@ -55,6 +55,7 @@
     <string name="enter_time_starttime_invalid_consistency">The start time makes no sense in respect to the duration you entered!</string>
     <string name="enter_time_format">HH:mm</string>
     <string name="enter_time_choose">Choose</string>
+    <string name="enter_time_choose_landscape">Choose Duration</string>
     <string name="enter_time_choose_header">Set duration to:</string>
     <string name="enter_time_duration">Duration:</string>
     <string name="enter_time_category">Category:</string>
