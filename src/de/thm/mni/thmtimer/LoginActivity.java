@@ -43,6 +43,8 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		ModuleDAO.setNewContext(this, this);
+		
 		this.setContentView(R.layout.loginactivity);
 		
 		mSharedPref = getSharedPreferences(SettingsFragment.FILE_NAME,
@@ -89,8 +91,6 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 				doLogin();
 			}
 		});
-		
-		ModuleDAO.setNewContext(this, this);
 	}
 	
 	@Override

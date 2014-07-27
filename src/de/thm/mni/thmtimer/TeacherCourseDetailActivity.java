@@ -43,6 +43,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+		ModuleDAO.setNewContext(this, this);
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.teachercoursedetailactivity);
@@ -160,8 +161,6 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 			mActionBar.addTab(mActionBar.newTab().setText("Pie Chart").setTabListener(tabListener));
 			mActionBar.addTab(mActionBar.newTab().setText("Line Chart").setTabListener(tabListener));
 		}
-		
-		ModuleDAO.setNewContext(this, this);
 	}
 	
 	

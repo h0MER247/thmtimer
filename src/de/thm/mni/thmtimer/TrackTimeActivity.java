@@ -166,7 +166,7 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		});
 
 		// Zeitdaten von der Stoppuhr
-		if(extras.containsKey("stopped_time")) {
+		if((extras != null) && extras.containsKey("stopped_time")) {
 			
 			TimeData t = new TimeData();
 			t.setTimeInMinutes(extras.getInt("stopped_time") / 60);
@@ -183,7 +183,7 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		}
 		
 		// Editieren der Expenditure?
-		mEditMode = extras.containsKey("expenditure_id");
+		mEditMode = (extras != null) && extras.containsKey("expenditure_id");
 		
 		if(mEditMode) {
 			
