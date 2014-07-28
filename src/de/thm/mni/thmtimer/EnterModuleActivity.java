@@ -122,9 +122,19 @@ public class EnterModuleActivity extends FragmentActivity {
 		finish();
 	}
 	
-	public void onCreateCourse() {
+	public void onCreateCourse(Long termID, Long moduleID,
+			String name, Long startDate, String description) {
 		
-		// TODO
+		Intent result = new Intent();
+		result.putExtra("termID", termID);
+		result.putExtra("moduleID", moduleID);
+		result.putExtra("name", name);
+		result.putExtra("startDate", startDate);
+		result.putExtra("description", description);
+		
+		setResult(Activity.RESULT_OK, result);
+		
+		finish();
 	}
 	
 	

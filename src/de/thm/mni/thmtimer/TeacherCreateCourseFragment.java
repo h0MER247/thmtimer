@@ -16,60 +16,60 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class TeacherCreateCourseFragment extends Fragment{
+public class TeacherCreateCourseFragment extends Fragment {
 
 	private TextView mName;
-	private EditText mCourseName, mTeacher, mStartDate;
+	private EditText mCourseName, mDescription, mStartDate;
 	private Button mCreate;
-	private String courseName, teacher, sdate;
-	private Long id;
+	private String courseName, description, sdate;
+	private Long mModuleID;
 	private java.util.Date date;
 
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-		View view = (View)inflater.inflate(R.layout.teachercreatecourse, container, false);
+		View view = (View) inflater.inflate(R.layout.teachercreatecourse,
+				container, false);
 
 		// get views
 		mName = (TextView) view.findViewById(R.id.name);
-		mCourseName = (EditText)view.findViewById(R.id.courseName);
-		mTeacher = (EditText)view.findViewById(R.id.teacher);
-		mStartDate = (EditText)view.findViewById(R.id.startDate);
-		mCreate = (Button)view.findViewById(R.id.crate);
+		mCourseName = (EditText) view.findViewById(R.id.courseName);
+		mDescription = (EditText) view.findViewById(R.id.description);
+		mStartDate = (EditText) view.findViewById(R.id.startDate);
+		mCreate = (Button) view.findViewById(R.id.crate);
 
-		id = getArguments().getLong("id", -1);
-		Module m = ModuleDAO.getModuleByID(id);
-		//Module module = StaticModuleData.findModule(id);	
+		mModuleID = getArguments().getLong("id", -1);
+		Module m = ModuleDAO.getModuleByID(mModuleID);
+		// Module module = StaticModuleData.findModule(id);
 
-		mCourseName.setText(m.getName());		
+		mCourseName.setText(m.getName());
 
 		mCreate.setOnClickListener(new OnClickListener() {
 			@SuppressLint("SimpleDateFormat")
 			@Override
 			public void onClick(View arg0) {
 				courseName = mCourseName.getText().toString();
-				teacher = mTeacher.getText().toString();
+				description = mDescription.getText().toString();
 				sdate = mStartDate.getText().toString();
 				SimpleDateFormat sdfToDate = new SimpleDateFormat(
-						"dd.MM.yyyy HH:mm:ss");
+						"dd.MM.yyyy");
 				try {
 					date = sdfToDate.parse(sdate);
 				} catch (java.text.ParseException e) {
 					e.printStackTrace();
 				}
-
-				// TODO: Add server callback
-				/*Course course = new Course(100l, id, courseName, teacher, 0);
-				course.setStartDate(date);
-				StaticModuleData.getCourseList().add(course);*/
+				if(courseName.equals("")||courseName==null)
+					return;
+				if(description.equals("")||description==null)
+					return;
+				if(date==null)
+					return;
+				EnterModuleActivity activity = (EnterModuleActivity) getActivity();
+				ModuleDAO.getTermList().get(0).getId();
+				activity.onCreateCourse(ModuleDAO.getTermList().get(0).getId(),
+						mModuleID, courseName, date.getTime(), description);
 			}
 		});
-
 
 		return view;
 	}
