@@ -1,4 +1,5 @@
 package de.thm.mni.thmtimer;
+
 import java.lang.reflect.Field;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -23,6 +24,7 @@ public class ModuleListActivity extends FragmentActivity {
 	private StudentFragment mStudentFragment;
 	private TeacherFragment mTeacherFragment;
 	private User mUser;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
