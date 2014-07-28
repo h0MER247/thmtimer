@@ -16,7 +16,9 @@ import de.thm.mni.thmtimer.util.TabPagerAdapter;
 import de.thm.mni.thmtimer.util.ZoomPageTransformer;
 import de.thm.thmtimer.entities.User;
 
+
 public class ModuleListActivity extends FragmentActivity {
+	
 	private final String TAG = ModuleListActivity.class.getSimpleName();
 	private ViewPager mPager;
 	private TabPagerAdapter mTabAdapter;
@@ -27,16 +29,21 @@ public class ModuleListActivity extends FragmentActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.modulelistactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		if(mUser == null)
 			mUser = ModuleDAO.getUser();
+		
 		// Fragmente initialisieren
 		if(mStudentFragment == null)
 			mStudentFragment = new StudentFragment();
+		
 		if((mTeacherFragment == null) && mUser.isLecteur())
 			mTeacherFragment = new TeacherFragment();
+		
 		// TabAdapter
 		if(mTabAdapter == null) {
 			mTabAdapter = new TabPagerAdapter(getSupportFragmentManager(), new TabFactory() {
@@ -48,6 +55,7 @@ public class ModuleListActivity extends FragmentActivity {
 				public int getNumberOfTabs() { return mUser.isLecteur() ? 2 : 1; }
 			});
 		}
+
 		// ViewPager
 		if(mPager == null) {
 			mPager = (ViewPager)findViewById(R.id.pager);
@@ -112,9 +120,5 @@ public class ModuleListActivity extends FragmentActivity {
 		}
 		return false;
 	}
-	public void refresh() {
-		if(mTabAdapter != null) {
-			mTabAdapter.notifyDataSetChanged();
-		}
-	}
+
 }

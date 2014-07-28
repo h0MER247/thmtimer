@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:activatedBackgroundIndicator"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:weightSum="1.0" >
+
+    <de.thm.mni.thmtimer.customviews.LineChart
+        android:id="@+id/teachercoursedetail_historyChart"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="0.60" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="0.40" >
+
+        <de.thm.mni.thmtimer.customviews.Legend
+            android:id="@+id/teachercoursedetail_historyLegend"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_above="@+id/teachercoursedetail_btnAverageTotal"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
+
+        <Button
+            android:id="@+id/teachercoursedetail_btnSelectCategories"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/selectCategories" />
+
+        <Button
+            android:id="@+id/teachercoursedetail_btnAverageTotal"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/teachercoursedetail_btnSelectCategories"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/showAverage" />
+
+    </RelativeLayout>
+    
+</LinearLayout>

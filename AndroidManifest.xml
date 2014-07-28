@@ -33,11 +33,11 @@
         </activity>
         <activity
             android:name="de.thm.mni.thmtimer.TimeTrackingActivity"
-            android:label="@string/enter_time_usage_header" >
+            android:label="@string/expenditure_list_header" >
         </activity>
         <activity
             android:name="de.thm.mni.thmtimer.TrackTimeActivity"
-            android:label="@string/enter_time_header" >
+            android:label="@string/expenditure_enter_header" >
         </activity>
         <activity
             android:name="de.thm.mni.thmtimer.TeacherCourseDetailActivity"

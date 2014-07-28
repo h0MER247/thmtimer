@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:activatedBackgroundIndicator"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:weightSum="1.0" >
+
+    <de.thm.mni.thmtimer.customviews.LineChart
+        android:id="@+id/teachercoursedetail_historyChart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7" />
+    
+    <de.thm.mni.thmtimer.customviews.Legend
+        android:id="@+id/teachercoursedetail_historyLegend"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.1" />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.2">
+    
+	    <Button
+	        android:id="@+id/teachercoursedetail_btnAverageTotal"
+	        style="@style/ButtonStyle"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentTop="true"
+	        android:text="@string/showAverage" />
+
+	    <Button
+	        android:id="@+id/teachercoursedetail_btnSelectCategories"
+	        style="@style/ButtonStyle"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignParentTop="true"
+	        android:text="@string/selectCategories" />
+	    
+    </RelativeLayout>
+
+</LinearLayout>

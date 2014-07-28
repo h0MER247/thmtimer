@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +34,7 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 	private final int DAO_REQUEST_TIMECATEGORYS = 3;
 	private final int DAO_REQUEST_EXPENDITURES = 4;
 	private final int DAO_REQUEST_MODULELIST = 5;
+	private final int DAO_REQUEST_FULL_COURSELIST = 6;
 	
 	private SharedPreferences mSharedPref;
 	
@@ -43,6 +43,8 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		ModuleDAO.setNewContext(this, this);
+		
 		this.setContentView(R.layout.loginactivity);
 		
 		mSharedPref = getSharedPreferences(SettingsFragment.FILE_NAME,
@@ -156,10 +158,15 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 			Toast.makeText(this,
     	                   String.format("Fehler beim Laden der Modulliste: %s", message),
     	                   Toast.LENGTH_LONG).show();
+			
+		case DAO_REQUEST_FULL_COURSELIST:
+			Toast.makeText(this,
+    	                   String.format("Fehler beim Laden der gesamten Kursliste: %s", message),
+    	                   Toast.LENGTH_LONG).show();
 			break;
 		}
 		
-		// TODO: Was jetzt?!
+		// TODO: Was jetzt?
 	}
 	
 	@Override
@@ -209,6 +216,7 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 			Connection.setUsername(username);			
 			Connection.setPassword(password);
 			
+			ModuleDAO.invalidateDurationPerCategory();
 			ModuleDAO.invalidateFullCourseList();
 			ModuleDAO.invalidateModules();
 			ModuleDAO.invalidateStudentCourseList();
@@ -222,11 +230,12 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 			//
 			ModuleDAO.beginJob();
 			ModuleDAO.getUserFromServer(DAO_REQUEST_USER);
+			ModuleDAO.getFullCourseListFromServer(DAO_REQUEST_FULL_COURSELIST);
 			ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENTCOURSELIST);
 			ModuleDAO.getTeacherCourseListFromServer(DAO_REQUEST_TEACHERCOURSELIST);
-			ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
-			ModuleDAO.getStudentExpendituresFromServer(DAO_REQUEST_EXPENDITURES);
 			ModuleDAO.getModuleListFromServer(DAO_REQUEST_MODULELIST);
+			ModuleDAO.getStudentExpendituresFromServer(DAO_REQUEST_EXPENDITURES);
+			ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
 			ModuleDAO.commitJob(this, this);
 		}
 	}

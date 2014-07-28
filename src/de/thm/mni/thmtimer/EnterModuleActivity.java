@@ -6,6 +6,8 @@ import de.thm.mni.thmtimer.util.DepthPageTransformer;
 import de.thm.mni.thmtimer.util.FixedSpeedScroller;
 import de.thm.mni.thmtimer.util.TabFactory;
 import de.thm.mni.thmtimer.util.TabPagerAdapter;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -16,8 +18,11 @@ import android.view.MenuItem;
 
 public class EnterModuleActivity extends FragmentActivity {
 
-	private Fragment mModuleDetail, mTeacherCreateCourse;
+	private ModuleDetailFragment mModuleDetail;
+	private TeacherCreateCourseFragment mTeacherCreateCourse;
 	private ModuleSearchFragment mModuleSearch;
+	private CourseSearchFragment mCourseSearch;
+	
 	private FragmentManager mFragmentManager;
 	private ViewPager mPager;
 	private TabPagerAdapter mPagerAdapter;
@@ -40,13 +45,21 @@ public class EnterModuleActivity extends FragmentActivity {
 		
 		if(savedInstanceState != null) {
 			
-			mModuleSearch = (ModuleSearchFragment) mFragmentManager.getFragment(savedInstanceState, "moduleSearch");
-			mModuleDetail = mFragmentManager.getFragment(savedInstanceState, "moduleDetail");
-			mTeacherCreateCourse = mFragmentManager.getFragment(savedInstanceState, "teacherCreateCourse");
+			mModuleSearch = (ModuleSearchFragment)mFragmentManager.getFragment(savedInstanceState, "moduleSearch");
+			mModuleDetail = (ModuleDetailFragment)mFragmentManager.getFragment(savedInstanceState, "moduleDetail");
+			mTeacherCreateCourse = (TeacherCreateCourseFragment)mFragmentManager.getFragment(savedInstanceState, "teacherCreateCourse");
 		}
 		
-		if(mModuleSearch == null)
-			mModuleSearch = new ModuleSearchFragment();
+		if(mSourceFragment.equals("teacher")) {
+		
+			if(mModuleSearch == null)
+				mModuleSearch = new ModuleSearchFragment();
+		}
+		else {
+			
+			if(mCourseSearch == null)
+				mCourseSearch = new CourseSearchFragment();
+		}
 		
 
 		mPager = (ViewPager) findViewById(R.id.entermodulepager);
@@ -55,7 +68,10 @@ public class EnterModuleActivity extends FragmentActivity {
 			@Override
 			public Fragment firstTab() {
 				
-				return mModuleSearch;
+				if(mSourceFragment.equals("teacher"))
+					return mModuleSearch;
+				else
+					return mCourseSearch;
 			}
 
 			@Override
@@ -63,52 +79,54 @@ public class EnterModuleActivity extends FragmentActivity {
 				
 				if(mSourceFragment.equals("teacher"))
 					return mTeacherCreateCourse;
-				else if(mSourceFragment.equals("student"))
+				else
 					return mModuleDetail;
-				
-				return null;
 			}
 
 			@Override
 			public int getNumberOfTabs() {
 				
 				if(mSourceFragment.equals("teacher"))
-					return mTeacherCreateCourse == null ? 1 : 2;
+					return (mTeacherCreateCourse == null) ? 1 : 2;
 				else
-					return mModuleDetail == null ? 1 : 2;
+					return (mModuleDetail == null) ? 1 : 2;
 			}
 		});
 		mPager.setAdapter(mPagerAdapter);
 		mPager.setPageTransformer(true, new DepthPageTransformer());
+		
 		try {
+			
 			Field scroller = ViewPager.class.getDeclaredField("mScroller");
 			scroller.setAccessible(true);
 			scroller.set(mPager, new FixedSpeedScroller(this));
-		} catch (NoSuchFieldException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-
+		catch (NoSuchFieldException e) {}
+		catch (IllegalArgumentException e) {}
+		catch (IllegalAccessException e) {}
 	}
 
 	public void openSearch() {
+		
 		mPager.setCurrentItem(0);
 	}
 	
-	public void onEnterCourse(long id) {
+	
+	public void onEnterCourse(Long courseID) {
 		
-		// TODO
+		Intent result = new Intent();
+		result.putExtra("course_id", courseID);
+		
+		setResult(Activity.RESULT_OK, result);
+		
+		finish();
 	}
+	
 	public void onCreateCourse() {
 		
 		// TODO
 	}
+	
 	
 
 	public void closeSearch(long id) {
@@ -125,6 +143,7 @@ public class EnterModuleActivity extends FragmentActivity {
 	
 		} 
 		if(mSourceFragment.equals("student")){
+			
 			mModuleDetail = new ModuleDetailFragment();
 			Bundle b = new Bundle();
 			b.putLong("id", id); // id ist jetzt ne kursid!!!
@@ -176,6 +195,11 @@ public class EnterModuleActivity extends FragmentActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		mModuleSearch.clearFilter();
+		
+		if(mModuleSearch != null)
+			mModuleSearch.clearFilter();
+		
+		if(mCourseSearch != null)
+			mCourseSearch.clearFilter();
 	}
 }

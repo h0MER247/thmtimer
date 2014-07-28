@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/enter_time_duration"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/durationEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView4"
+        android:layout_below="@+id/textView4"
+        android:ems="10"
+        android:hint="@string/enter_time_format"
+        android:inputType="time" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/startTimeEntry"
+        android:layout_below="@+id/startTimeEntry"
+        android:layout_marginTop="15dp"
+        android:text="@string/enter_time_category"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/startTimeEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignRight="@+id/durationEntry"
+        android:layout_below="@+id/textView1"
+        android:ems="10"
+        android:inputType="text" />
+
+    <Spinner
+        android:id="@+id/categoryEntry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/startTimeEntry"
+        android:layout_below="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/durationEntry"
+        android:layout_below="@+id/durationEntry"
+        android:layout_marginTop="15dp"
+        android:text="@string/enter_time_starttime"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/chooseDuration"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/categoryEntry"
+        android:layout_alignLeft="@+id/descriptionEntry"
+        android:text="Choose Duration" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView4"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/durationEntry"
+        android:text="@string/enter_time_description"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/descriptionEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/chooseDuration"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignTop="@+id/durationEntry"
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:gravity="center_vertical|top|left"
+        android:hint="@string/enter_time_description_hint"
+        android:inputType="textMultiLine"
+        android:maxLines="4" />
+
+    <Button
+        android:id="@+id/enterTime"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/chooseDuration"
+        android:layout_alignBottom="@+id/chooseDuration"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/chooseDuration"
+        android:text="@string/enter_time" />
+
+</RelativeLayout>

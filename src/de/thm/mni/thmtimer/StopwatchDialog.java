@@ -1,5 +1,6 @@
 package de.thm.mni.thmtimer;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,16 +18,16 @@ public class StopwatchDialog extends DialogFragment {
 	
 	public interface StopwatchListener {
 		
-		public void onStoppedTime(Integer timeInMinutes);
+		public void onStoppedTime(Long startTime, Integer timeInSeconds);
 	}
 	
 	private StopwatchListener mListener;
 	private TextView mTimeView;
 	private Timer mTimer;
-	private Long mTimeMemory;
-	private Long mTimeStart;
+	private Integer mTime;
 	private Boolean mRunning;
 	private Boolean mStarted;
+	private Date mStartTime;
 	
 	
 	public StopwatchDialog() {
@@ -35,7 +36,8 @@ public class StopwatchDialog extends DialogFragment {
 
 		setCancelable(false);
 		
-		mTimeMemory = 0l;
+		mTime = 0;
+		
 		mRunning = false;
 		mStarted = false;
 	}
@@ -46,7 +48,7 @@ public class StopwatchDialog extends DialogFragment {
 			                 ViewGroup container,
 			                 Bundle savedInstanceState) {
 		
-		View v = inflater.inflate(R.layout.fragment_stopwatch, null);
+		View v = inflater.inflate(R.layout.stopwatchfragment, null);
 		Button b;
 		
 		
@@ -83,35 +85,8 @@ public class StopwatchDialog extends DialogFragment {
 			public void onClick(View v) {
 				
 				if(mStarted) {
-				
-					AlertDialog alert = new AlertDialog.Builder(getActivity()).create();
-						
-					alert.setIcon(android.R.drawable.ic_dialog_alert);
-					alert.setTitle(R.string.stopwatch_abort_header);
-					alert.setMessage(getString(R.string.stopwatch_abort_message));
 					
-					alert.setButton(DialogInterface.BUTTON_POSITIVE,
-							        getString(R.string.stopwatch_abort_positive),
-							        new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							
-							stopTimer();
-							dismiss();
-						}
-					});
-					
-					alert.setButton(DialogInterface.BUTTON_NEGATIVE,
-							        getString(R.string.stopwatch_abort_negative),
-							        new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-						}
-					});
-					
-					alert.show();
+					showAbortDialog(R.string.stopwatch_abort_message);
 				}
 				else {
 					
@@ -135,12 +110,17 @@ public class StopwatchDialog extends DialogFragment {
 				
 				if(mStarted) {
 				
-					stopTimer();
-				
-					Integer timeInMinutes = Math.max(1, (int)(getTime() / 60l));
-					
-					mListener.onStoppedTime(timeInMinutes);
-					dismiss();
+					if(mTime < 60) {
+						
+						showAbortDialog(R.string.stopwatch_stopped_less_than_one_minute);
+					}
+					else {
+						
+						stopTimer();
+						
+						mListener.onStoppedTime(mStartTime.getTime(), mTime);
+						dismiss();
+					}
 				}
 			}
 		});
@@ -151,7 +131,8 @@ public class StopwatchDialog extends DialogFragment {
 	
 	private void startTimer() {
 		
-		mTimeStart = System.currentTimeMillis();
+		if(!mStarted)
+			mStartTime = new Date();
 		
 		mRunning = true;
 		mStarted = true;
@@ -164,6 +145,7 @@ public class StopwatchDialog extends DialogFragment {
 				
 				if(mRunning) {
 					
+					mTime++;
 					onUpdateUI();
 				}
 			}
@@ -173,13 +155,42 @@ public class StopwatchDialog extends DialogFragment {
 	
 	private void stopTimer() {
 		
-		mTimeMemory = getTime();
-			
 		mRunning = false;
 		mTimer.cancel();
 	}
 	
 	
+	private void showAbortDialog(int stringID) {
+		
+		AlertDialog alert = new AlertDialog.Builder(getActivity()).create();
+		
+		alert.setIcon(android.R.drawable.ic_dialog_alert);
+		alert.setTitle(R.string.stopwatch_abort_header);
+		alert.setMessage(getString(stringID));
+		
+		alert.setButton(DialogInterface.BUTTON_POSITIVE,
+				        getString(R.string.stopwatch_abort_positive),
+				        new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+				stopTimer();
+				dismiss();
+			}
+		});
+		
+		alert.setButton(DialogInterface.BUTTON_NEGATIVE,
+				        getString(R.string.stopwatch_abort_negative),
+				        new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		});
+		
+		alert.show();
+	}
 	
 	private void onUpdateUI() {
 		
@@ -188,13 +199,13 @@ public class StopwatchDialog extends DialogFragment {
 			@Override
 			public void run() {
 				
-				Long time, hours, minutes, seconds;
+				Integer time, hours, minutes, seconds;
 				
-				time = getTime();
-				hours = time / 3600l;
+				time = mTime;
+				hours = time / 3600;
 				time -= hours * 3600;
-				minutes = time / 60l;
-				time -= minutes * 60l;
+				minutes = time / 60;
+				time -= minutes * 60;
 				seconds = time;
 				
 				mTimeView.setText(String.format("%02d:%02d:%02d",
@@ -203,11 +214,6 @@ public class StopwatchDialog extends DialogFragment {
 						                        seconds));
 			}
 		});
-	}
-	
-	private Long getTime() {
-		
-		return mTimeMemory + ((System.currentTimeMillis() - mTimeStart) / 1000l);
 	}
 	
 	public void setListener(StopwatchListener listener) {

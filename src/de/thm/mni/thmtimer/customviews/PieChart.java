@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class PieChart extends View {
@@ -101,7 +102,20 @@ public class PieChart extends View {
 		invalidate();
 	}
 	
+	public void clearData() {
+		
+		mValues.clear();
+		mGradients.clear();
+		
+		invalidate();
+	}
 	
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		
+		return false;
+	}
 	
 	@Override
 	public void draw(Canvas canvas) {
@@ -167,11 +181,6 @@ public class PieChart extends View {
 	}
 	
 	private void drawNoDataMessage(Canvas canvas) {
-		
-		mDrawingBound = new RectF(getPaddingLeft(),
-				                  getPaddingTop(),
-				                  getWidth() - getPaddingRight(),
-				                  getHeight() - getPaddingBottom());
 		
 		String message = "No chart data available";
 		

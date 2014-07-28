@@ -22,6 +22,7 @@
 
     <!-- StudentFragment -->
     <string name="action_add">Add</string>
+    <string name="welcome_new_user">To join a course press the + symbol in your action bar.</string>
 
     <!-- ModuleDetailFragment -->
     <string name="module_details">Course Detail View</string>
@@ -48,23 +49,22 @@
     <!-- TrackTimeActivity -->
     <string name="action_stopwatch_start">Start Stopwatch</string>
     <string name="action_stopwatch_stop">Stop Stopwatch</string>
-    <string name="enter_time_header">Enter time</string>
-    <string name="enter_time_usage_header">Activities</string>
-    <string name="enter_time_usage">Activity</string>
     <string name="enter_time">Enter</string>
-    <string name="enter_time_error_format">Enter a time in HH:MM format!</string>
-    <string name="enter_time_error_zerotime">Enter a time greater than 00:00!</string>
-    <string name="enter_time_format">HH:MM</string>
+    <string name="enter_time_duration_invalid">Enter a duration between 0 and 24 hours in HH:mm format!</string>
+    <string name="enter_time_starttime_invalid_format">Check the format for your start time!</string>
+    <string name="enter_time_starttime_invalid_consistency">The start time makes no sense in respect to the duration you entered!</string>
+    <string name="enter_time_format">HH:mm</string>
     <string name="enter_time_choose">Choose</string>
-    <string name="enter_time_choose_header">Choose a Time</string>
+    <string name="enter_time_choose_landscape">Choose Duration</string>
+    <string name="enter_time_choose_header">Set duration to:</string>
+    <string name="enter_time_duration">Duration:</string>
+    <string name="enter_time_category">Category:</string>
+    <string name="enter_time_description">Description:</string>
+    <string name="enter_time_description_hint">Please enter a description…</string>
+    <string name="enter_time_starttime">Started at:</string>
+    <string name="expenditure_enter_header">Enter a time</string>
+    <string name="expenditure_list_header">Expenditures</string>
     
-    <!-- TimeTracking Types -->
-    <string name="timetype_lecture">Lecture</string>
-    <string name="timetype_practice">Practice</string>
-    <string name="timetype_homework">Homework</string>
-    <string name="timetype_preparation">Preparation</string>
-    <string name="timetype_other">Other</string>
-
     <!-- TeacherCourseDetailActivity -->
     <string name="hours">Hours</string>
     <string name="courselist">Course list</string>
@@ -74,7 +74,10 @@
 	<string name="course_details">Course details</string>
     <string name="history">History</string>
     <string name="timeframe">Timeframe</string>
-    <string name="category_toggle">Show/Hide Categorys</string>
+    <string name="showAverage">Show average</string>
+    <string name="hideAverage">Hide average</string>
+    <string name="average">Average</string>
+    <string name="selectCategories">Select categories</string>
 	
 	<!-- TeacherCreateCourse -->
 	<string name="create">create</string>
@@ -94,6 +97,7 @@
     <string name="stopwatch_abort_message">Do you really want to abort the time measurement?</string>
     <string name="stopwatch_abort_positive">Yes</string>
     <string name="stopwatch_abort_negative">No</string>
+    <string name="stopwatch_stopped_less_than_one_minute">Times less than one minute can\'t be saved. Do you want to abort the time measurement?</string>
     
     <!-- SettingsFragment -->
     <string name="settingUsername">Remember Username</string>
@@ -103,10 +107,14 @@
     <string name="confirm">Confirm</string>
     
     <!-- Connection -->
-    <string name="connection_unreachable">Server unreachable</string>
-    <string name="connection_loading">Loading. Please wait…</string>
-    <string name="connection_loading_courses">Your courses are being loaded…</string>
-    <string name="connection_loading_categories">Loading time categories…</string>
-    <string name="connection_loading_expenditures">Loading your expenditures…</string>
-    <string name="connection_saving_expenditures">Saving your expenditures…</string>
+    <string name="connection_unreachable">Server unreachable!</string>
+    <string name="connection_loading_user">Loading user. Please wait…</string>
+    <string name="connection_loading_courses">Loading courses. Please wait…</string>
+    <string name="connection_loading_modules">Loading modules. Please wait…</string>
+    <string name="connection_loading_statistics">Loading statistics. Please wait…</string>
+    <string name="connection_loading_categories">Loading time categories. Please wait…</string>
+    <string name="connection_loading_expenditures">Loading your expenditures. Please wait…</string>
+    <string name="connection_saving_expenditures">Saving your expenditure. Please wait…</string>
+    <string name="connection_join_course">Joining course. Please wait…</string>
+    
 </resources>

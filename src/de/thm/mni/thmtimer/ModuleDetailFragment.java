@@ -1,6 +1,7 @@
 package de.thm.mni.thmtimer;
 
 import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Module;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class ModuleDetailFragment extends Fragment {
@@ -19,7 +19,7 @@ public class ModuleDetailFragment extends Fragment {
 			mDescription, mExpenditure, mRequirement, mTestingMethod, mSWS,
 			mFrequency, mPrereq;
 	private Button mBtnEnter;
-	private Long mModuleID;
+	private Long mCourseID;
 	
 	
 	@Override
@@ -27,7 +27,7 @@ public class ModuleDetailFragment extends Fragment {
 			                 ViewGroup container,
 			                 Bundle savedInstanceState) {
 		
-		mModuleID = getArguments().getLong("id", -1);
+		mCourseID = getArguments().getLong("id", -1);
 		
 		
 		// Inflate the layout for this fragment
@@ -53,19 +53,20 @@ public class ModuleDetailFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				
-				// TODO
-				Toast.makeText(getActivity(),
-						       "TODO: Liste mit allen Kursen zu diesem Modul wo man sich dann wirklich einschreiben kann",
-						       Toast.LENGTH_LONG).show();
+				EnterModuleActivity activity = (EnterModuleActivity)getActivity();
+				
+				activity.onEnterCourse(mCourseID);
 			}
 		});
 		
 		
-		Module m = ModuleDAO.getModuleByID(mModuleID);
+		Course c = ModuleDAO.searchCourseByID(mCourseID);
+		Module m = c.getModule();
 		
 		mModuleName.setText(m.getName());
 		mModuleNumber.setText(m.getNumber());
 		mCreditPoints.setText(String.valueOf(m.getCreditPoints()));
+		mDescription.setText(c.getDescription());
 		
 		mExpenditure.setText(String.format("%d %s",
 				                           m.getCreditPoints() * 30,
@@ -73,8 +74,8 @@ public class ModuleDetailFragment extends Fragment {
 		
 		/*
 		 * Im Moment auskommentiert, da vom Server nicht vorgesehen / implementiert
-		 * 
-		mDescription.setText(c.getDescription()); 
+		 */
+		/*
 		mResponsible.setText(m.getResponsible());
 		mRequirement.setText(m.getRequirement());
 		mTestingMethod.setText(m.getTestingMethod());

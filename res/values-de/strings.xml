@@ -22,7 +22,8 @@
 
     <!-- StudentFragment -->
     <string name="action_add">Neu</string>
-
+    <string name="welcome_new_user">Willkommen neuer Nutzer. Um einem Kurs beizutreten wähle das + Symbol in deiner Aktionsleiste.</string>
+    
     <!-- ModuleDetailFragment -->
     <string name="module_details">Modul Detailansicht</string>
     <string name="enter">Beitreten</string>
@@ -48,23 +49,22 @@
     <!-- TrackTimeActivity -->
     <string name="action_stopwatch_start">Starte Stoppuhr</string>
     <string name="action_stopwatch_stop">Stoppe Stoppuhr</string>
-    <string name="enter_time_header">Zeit eingeben</string>
-    <string name="enter_time_usage_header">Aktivitäten</string>
-    <string name="enter_time_usage">Aktivität</string>
     <string name="enter_time">Eintragen</string>
-    <string name="enter_time_error_format">Zeit im HH:MM Format eingeben!</string>
-    <string name="enter_time_error_zerotime">Zeit größer als 00:00 eingeben!</string>
-    <string name="enter_time_format">HH:MM</string>
+    <string name="enter_time_duration_invalid">Dauer zwischen 0 und 24 Stunden im HH:mm Format eingeben!</string>
+    <string name="enter_time_starttime_invalid_format">Prüfe das Format des Startzeitpunkts!</string>
+    <string name="enter_time_starttime_invalid_consistency">Der Startzeitpunkt macht in Bezug zur Dauer keinen Sinn!</string>
+    <string name="enter_time_format">HH:mm</string>
     <string name="enter_time_choose">Wählen</string>
-    <string name="enter_time_choose_header">Zeit wählen</string>
-
-    <!-- TimeTracking Types -->
-    <string name="timetype_lecture">Vorlesung</string>
-    <string name="timetype_practice">Praktikum</string>
-    <string name="timetype_homework">Hausarbeit</string>
-    <string name="timetype_preparation">Vorbereitung</string>
-    <string name="timetype_other">Sonstiges</string>
-
+    <string name="enter_time_choose_landscape">Wähle Dauer</string>
+    <string name="enter_time_choose_header">Setze Dauer auf:</string>
+    <string name="enter_time_duration">Dauer:</string>
+    <string name="enter_time_category">Kategorie:</string>
+    <string name="enter_time_description">Beschreibung:</string>
+    <string name="enter_time_description_hint">Bitte eine Beschreibung eingeben…</string>
+    <string name="enter_time_starttime">Gestartet am/um:</string>
+    <string name="expenditure_enter_header">Zeit eintragen</string>
+    <string name="expenditure_list_header">Aufwandsliste</string>
+    
     <!-- TeacherCourseDetailActivity -->
     <string name="hours">Stunden</string>
     <string name="courselist">Kursliste</string>
@@ -74,8 +74,11 @@
     <string name="course_details">Kurs Details</string>
     <string name="history">Historie</string>
     <string name="timeframe">Zeitraum</string>
-    <string name="category_toggle">Kategorien ein/ausblenden</string>
-
+    <string name="showAverage">Durchschnitt anzeigen</string>
+    <string name="hideAverage">Durchschnitt verstecken</string>
+    <string name="average">Durchschnitt</string>
+    <string name="selectCategories">Kategorien wählen</string>
+    
     <!-- Stopwatch -->
     <string name="stopwatch_header">Stoppuhr</string>
     <string name="stopwatch_zerotime">00:00:00</string>
@@ -85,9 +88,10 @@
     <string name="stopwatch_action_resume">Fortsetzen</string>
     <string name="stopwatch_action_stop">Stopp</string>
     <string name="stopwatch_abort_header">Achtung</string>
-    <string name="stopwatch_abort_message">Möchten Sie die Zeiterfassung wirklich abbrechen?</string>
+    <string name="stopwatch_abort_message">Möchtest du die Zeiterfassung wirklich abbrechen?</string>
     <string name="stopwatch_abort_positive">Ja</string>
     <string name="stopwatch_abort_negative">Nein</string>
+    <string name="stopwatch_stopped_less_than_one_minute">Zeiten kleiner als eine Minute können nicht gespeichert werden. Möchtest du die Zeiterfassung abbrechen?</string>
 
     <!-- SettingsFragment -->
     <string name="settingUsername">Benutzername merken</string>
@@ -96,11 +100,15 @@
     <string name="colorAlert">GRÜN > GELB > ROT</string>
     <string name="confirm">Bestätigen</string>
 
-    <!-- Connection -->
-    <string name="connection_unreachable">Server nicht erreichbar</string>
-    <string name="connection_loading">Lade. Bitte warten...</string>
-	<string name="connection_loading_courses">Kurse werden geladen…</string>
-    <string name="connection_loading_categories">Lade Zeitkategorien…</string>
-    <string name="connection_loading_expenditures">Lade deine Aktivitätenliste…</string>
-    <string name="connection_saving_expenditures">Speichere deine Aktivitätenliste…</string>
+    <!-- Connection -->    
+    <string name="connection_unreachable">Server nicht erreichbar!</string>
+    <string name="connection_loading_user">Lade Benutzer. Bitte warten…</string>
+    <string name="connection_loading_courses">Lade Kurse. Bitte warten…</string>
+    <string name="connection_loading_modules">Lade Module. Bitte warten…</string>
+    <string name="connection_loading_statistics">Lade Statistiken. Bitte warten…</string>
+    <string name="connection_loading_categories">Lade Zeitkategorien. Bitte warten…</string>
+    <string name="connection_loading_expenditures">Lade deine Aufwandseinträge. Bitte warten…</string>
+    <string name="connection_saving_expenditures">Speichere deinen Aufwandseintrag. Bitte warten…</string>
+    <string name="connection_join_course">Trete dem Kurs bei. Bitte warten…</string>
+    
 </resources>

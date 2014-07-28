@@ -1,23 +1,50 @@
 package de.thm.mni.thmtimer;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.Category;
+import de.thm.thmtimer.entities.Expenditure;
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
 
 public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTimeSetListener {
 	
-	private EditText mTimeEntry;
-	private Spinner mUsageSpinner;
+	// Editiermodus
+	private boolean mEditMode;
+	private long mExpenditureID;
+	
+	// Dauer
+	private EditText mDuration;
+	private TimeData mDurationData;
+	
+	// Startzeit
+	private EditText mStartTime;
+	private Date mStartTimeData;
+	private SimpleDateFormat mStartTimeFormat;
+	
+	// Kategorie
+	private Spinner mCategory;
+	private CategoryAdapter mCategoryAdapter;
+	private List<Category> mCategorys;
+	
+	// Beschreibung
+	private EditText mDescription;
 	private Button mChooseButton;
+	
 	
 
 	@Override
@@ -28,73 +55,109 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		setContentView(R.layout.tracktimeactivity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		
 		Bundle extras = getIntent().getExtras();
 		
+		mCategorys = ModuleDAO.getTimeCategorys();
+		mDurationData = new TimeData();
 		
-		// Kategorie
-		mUsageSpinner = (Spinner) findViewById(R.id.usageSpinner);
-		mUsageSpinner.setAdapter(new ArrayAdapter<Category>(this,
-				                                            android.R.layout.simple_spinner_dropdown_item,
-				                                            ModuleDAO.getTimeCategorys()));
+		
+		mStartTimeFormat = (SimpleDateFormat)SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT,
+				                                                                  SimpleDateFormat.SHORT);
+		mStartTimeFormat.setLenient(true);
+		
 		
 		// Textfeld für den Zeiteintrag
-		mTimeEntry = (EditText) findViewById(R.id.timeEntry);
+		mDuration = (EditText)findViewById(R.id.durationEntry);
+		
+		// Startzeit
+		mStartTime = (EditText)findViewById(R.id.startTimeEntry);
+		mStartTime.setHint(mStartTimeFormat.toLocalizedPattern());
+		
+		// Kategorie
+		mCategory = (Spinner)findViewById(R.id.categoryEntry);
+		mCategoryAdapter = new CategoryAdapter(this,
+				                               R.layout.categorydropdownitem,
+				                               mCategorys);
+		mCategory.setAdapter(mCategoryAdapter);
+		
+		// Beschreibung
+		mDescription = (EditText)findViewById(R.id.descriptionEntry);
 
 		// Button zum Eintragen in die Liste
-		Button btnEnter = (Button) findViewById(R.id.enterTime);
+		Button btnEnter = (Button)findViewById(R.id.enterTime);
 		btnEnter.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
 				
-				TimeData time = new TimeData();
-
-				try {
+				if(!isDurationValid()) {
 					
-					time.parseString(mTimeEntry.getText().toString());
+					Toast.makeText(TrackTimeActivity.this,
+						           getString(R.string.enter_time_duration_invalid),
+						           Toast.LENGTH_LONG).show();
 					
-					if(time.getTimeInMinutes() > 0) {
-						
-						Category category = (Category) mUsageSpinner.getSelectedItem();
-						
-						Intent result = new Intent();
-						result.putExtra("category_id", category.getId());
-						result.putExtra("time", time.getTimeInMinutes());
-						
-						setResult(Activity.RESULT_OK, result);
-						finish();
-					}
-					else {
-						
-						Toast.makeText(getApplicationContext(),
-								       getString(R.string.enter_time_error_zerotime),
-								       Toast.LENGTH_LONG).show();
-					}
+					mDuration.requestFocus();
+					return;
 				}
-				catch(IllegalArgumentException e) {
+				
+				if(mStartTime.length() == 0)
+					generateStartTime();
+				
+				if(!isStartTimeValid()) {
 					
-					Toast.makeText(getApplicationContext(),
-							       getString(R.string.enter_time_error_format),
+					Toast.makeText(TrackTimeActivity.this,
+							       getString(R.string.enter_time_starttime_invalid_format),
 							       Toast.LENGTH_LONG).show();
+					
+					mStartTime.requestFocus();
+					return;
 				}
+				
+				if(!isStartTimeConsistent()) {
+					
+					Toast.makeText(TrackTimeActivity.this,
+						           getString(R.string.enter_time_starttime_invalid_consistency),
+						           Toast.LENGTH_LONG).show();
+					
+					mStartTime.requestFocus();
+					return;
+				}
+				
+				
+				Category category = (Category)mCategory.getSelectedItem();
+						
+				Intent result = new Intent();
+				result.putExtra("duration", mDurationData.getTimeInMinutes());
+				result.putExtra("start_time", mStartTimeData.getTime());
+				result.putExtra("category_id", category.getId());
+				result.putExtra("description", mDescription.getText().toString());
+				result.putExtra("expenditure_id", mEditMode ? mExpenditureID : 0);
+				
+				setResult(Activity.RESULT_OK, result);
+				finish();
 			}
 		});
 
 		// Button zum Wählen der Zeit
-		mChooseButton = (Button) findViewById(R.id.chooseTime);
+		mChooseButton = (Button) findViewById(R.id.chooseDuration);
 		mChooseButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-
-				TimeData time = new TimeData();
-				time.parseString(mTimeEntry.getText().toString());
-
+				
+				Integer hours = 0;
+				Integer minutes = 0;
+				
+				if(isDurationValid()) {
+					
+					hours   = Math.min(mDurationData.getTimeInMinutes() / 60, 23);
+					minutes = Math.min(mDurationData.getTimeInMinutes() - (hours * 60), 59);
+				}
+				
 				TimePickerDialog picker = new TimePickerDialog(TrackTimeActivity.this,
 						                                       TrackTimeActivity.this,
-						                                       Math.min(time.getTimeInHours(), 23),
-						                                       Math.min(time.getTimeInMinutes(), 59),
+						                                       hours,
+						                                       minutes,
 						                                       true);
 				
 				picker.setTitle(R.string.enter_time_choose_header);
@@ -103,14 +166,41 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		});
 
 		// Zeitdaten von der Stoppuhr
-		if(extras.containsKey("stopped_time")) {
+		if((extras != null) && extras.containsKey("stopped_time")) {
 			
 			TimeData t = new TimeData();
-			t.setTimeInMinutes(extras.getInt("stopped_time"));
-
-			mTimeEntry.setText(t.toString());
-			mTimeEntry.setEnabled(false);
-			mChooseButton.setEnabled(false);
+			t.setTimeInMinutes(extras.getInt("stopped_time") / 60);
+			
+			Date d = new Date(extras.getLong("start_time"));
+			mStartTime.setText(mStartTimeFormat.format(d));
+			
+			mDuration.setText(t.toString());
+			mDuration.setEnabled(false);
+			mStartTime.setEnabled(false);
+			mChooseButton.setVisibility(View.INVISIBLE);
+			
+			mDescription.requestFocus();
+		}
+		
+		// Editieren der Expenditure?
+		mEditMode = (extras != null) && extras.containsKey("expenditure_id");
+		
+		if(mEditMode) {
+			
+			mExpenditureID = extras.getLong("expenditure_id");
+			
+			
+			Expenditure e = ModuleDAO.getStudentExpenditureByID(mExpenditureID);
+			
+			TimeData t = new TimeData();
+			t.setTimeInMinutes((int)e.getDuration());
+			
+			mDuration.setText(t.toString());
+			mStartTime.setText(mStartTimeFormat.format(e.getStart()));
+			mCategory.setSelection(mCategoryAdapter.getPosition(e.getCategory()));
+			mDescription.setText(e.getDescription());
+			
+			mDuration.requestFocus();
 		}
 	}
 
@@ -134,6 +224,89 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		TimeData time = new TimeData();
 		time.setTimeInMinutes((hourOfDay * 60) + minute);
 		
-		mTimeEntry.setText(time.toString());
+		mDuration.setText(time.toString());
+	}
+	
+	
+	
+	private boolean isDurationValid() {
+		
+		try {
+		
+			mDurationData.parseString(mDuration.getText().toString());
+		}
+		catch(IllegalArgumentException e) {} 
+		
+		return mDurationData.getTimeInMinutes() > 0 &&
+			   mDurationData.getTimeInMinutes() < 24 * 60;
+	}
+	
+	private boolean isStartTimeValid() {
+		
+		try {
+			
+			mStartTimeData = mStartTimeFormat.parse(mStartTime.getText().toString());
+		}
+		catch(ParseException e) {}
+		
+		return mStartTimeData != null;
+	}
+	
+	private boolean isStartTimeConsistent() {
+		
+		Date now = new Date();
+		
+		// Der Server nimmt Expenditures nicht an, die dieses Kriterium nicht erfüllen!
+		return mStartTimeData.getTime() + (60000l * mDurationData.getTimeInMinutes()) <= now.getTime();
+	}
+	
+	private void generateStartTime() {
+		
+		Date t = new Date();
+		t.setTime(t.getTime() - (60000l * mDurationData.getTimeInMinutes()));
+		
+		mStartTime.setText(mStartTimeFormat.format(t));
+	}
+	
+	
+	
+	/**
+	 * 
+	 *
+	 */
+	private class CategoryAdapter extends ArrayAdapter<Category> {
+		
+		public CategoryAdapter(Context context,
+				               int resource,
+				               List<Category> objects) {
+			
+			super(context, resource, objects);
+		}
+		
+		
+		@Override
+		public View getDropDownView(int position, View convertView, ViewGroup parent) {
+			
+			return getView(position, convertView, parent);
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+		
+			if(convertView == null) {
+				
+				convertView = getLayoutInflater().inflate(R.layout.categorydropdownitem,
+						                                  parent,
+						                                  false);
+			}
+			
+			TextView category = (TextView)convertView.findViewById(R.id.categorySpinnerText);
+			
+			// Setze Kategorienamen
+			category.setText(getItem(position).getName());
+			
+			
+			return convertView;
+		}
 	}
 }
