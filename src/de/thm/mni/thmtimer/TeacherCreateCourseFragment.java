@@ -1,6 +1,7 @@
 package de.thm.mni.thmtimer;
 
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.Module;
@@ -12,18 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class TeacherCreateCourseFragment extends Fragment {
 
-	private TextView mName;
-	private EditText mCourseName, mDescription, mStartDate;
+	private EditText mCourseName, mDescription;
+	DatePicker mStartDate;
 	private Button mCreate;
-	private String courseName, description, sdate;
+	private String courseName, description;
 	private Long mModuleID;
-	private java.util.Date date;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -32,10 +32,9 @@ public class TeacherCreateCourseFragment extends Fragment {
 				container, false);
 
 		// get views
-		mName = (TextView) view.findViewById(R.id.name);
 		mCourseName = (EditText) view.findViewById(R.id.courseName);
 		mDescription = (EditText) view.findViewById(R.id.description);
-		mStartDate = (EditText) view.findViewById(R.id.startDate);
+		mStartDate = (DatePicker) view.findViewById(R.id.startDate);
 		mCreate = (Button) view.findViewById(R.id.crate);
 
 		mModuleID = getArguments().getLong("id", -1);
@@ -50,24 +49,26 @@ public class TeacherCreateCourseFragment extends Fragment {
 			public void onClick(View arg0) {
 				courseName = mCourseName.getText().toString();
 				description = mDescription.getText().toString();
-				sdate = mStartDate.getText().toString();
-				SimpleDateFormat sdfToDate = new SimpleDateFormat(
-						"dd.MM.yyyy");
-				try {
-					date = sdfToDate.parse(sdate);
-				} catch (java.text.ParseException e) {
-					e.printStackTrace();
+				if (courseName.isEmpty()) {
+					Toast.makeText(getActivity(),
+							"Kursname darf nicht leer sein.",
+							Toast.LENGTH_LONG).show();
+					return;
 				}
-				if(courseName.equals("")||courseName==null)
+				if (description.isEmpty()) {
+					// Leere Beschreibung sollte hoffentlich bald erlaubt sein:
+					// https://scm.thm.de/redmine/issues/11182
+					Toast.makeText(getActivity(),
+							"Kursbeschreibung darf nicht leer sein.",
+							Toast.LENGTH_LONG).show();
 					return;
-				if(description.equals("")||description==null)
-					return;
-				if(date==null)
-					return;
+				}
+				Calendar calendar = new GregorianCalendar(mStartDate.getYear(), 
+						mStartDate.getMonth(), mStartDate.getDayOfMonth());
+				
 				EnterModuleActivity activity = (EnterModuleActivity) getActivity();
-				ModuleDAO.getTermList().get(0).getId();
 				activity.onCreateCourse(ModuleDAO.getTermList().get(0).getId(),
-						mModuleID, courseName, date.getTime(), description);
+						mModuleID, courseName, calendar.getTimeInMillis(), description);
 			}
 		});
 
