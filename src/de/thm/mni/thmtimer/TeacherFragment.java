@@ -30,6 +30,7 @@ public class TeacherFragment extends Fragment implements ModuleDAOListener{
 	private final int REQUEST_CREATE_COURSE = 1;
 	private final int DAO_REQUEST_ADD_COURSE = 0;
 	private final int DAO_REQUEST_TEACHER_COURSELIST = 1;
+	private final int DAO_REQUEST_FULL_COURSELIST = 2;
 
 	private TeacherCourseListAdapter mAdapter;
 	private List<Course> mViewData;
@@ -120,8 +121,10 @@ public class TeacherFragment extends Fragment implements ModuleDAOListener{
 				ModuleDAO.beginJob();
 				ModuleDAO.addCourse(DAO_REQUEST_ADD_COURSE,
 						termID, moduleID, name, startDate, description);
-				ModuleDAO
-						.getTeacherCourseListFromServer(DAO_REQUEST_TEACHER_COURSELIST);
+				ModuleDAO.invalidateTeacherCourseList();
+				ModuleDAO.getTeacherCourseListFromServer(DAO_REQUEST_TEACHER_COURSELIST);
+				ModuleDAO.invalidateFullCourseList();
+				ModuleDAO.getFullCourseListFromServer(DAO_REQUEST_FULL_COURSELIST);
 				ModuleDAO.commitJob(getActivity(), this);
 			}
 		}
@@ -139,6 +142,7 @@ public class TeacherFragment extends Fragment implements ModuleDAOListener{
 			break;
 
 		case DAO_REQUEST_TEACHER_COURSELIST:
+		case DAO_REQUEST_FULL_COURSELIST:
 			Toast.makeText(getActivity(),
 					"Fehler beim Lesen der Kursliste: " + errorMessage,
 					Toast.LENGTH_LONG).show();
