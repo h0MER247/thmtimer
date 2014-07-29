@@ -80,10 +80,12 @@
     <string name="selectCategories">Select categories</string>
 	
 	<!-- TeacherCreateCourse -->
-	<string name="create">create</string>
+	<string name="create">Create</string>
 	<string name="courseName">Coursename</string>
 	<string name="teacher">Teacher</string>
 	<string name="startDate">Start date</string>
+	<string name="createcourse_no_name">Please enter a course name.</string>
+	<string name="createcourse_no_desc">Please enter a course description.</string>
 	
     <!-- Stopwatch -->
     <string name="stopwatch_header">Stopwatch</string>

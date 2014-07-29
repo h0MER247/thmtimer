@@ -79,6 +79,14 @@
     <string name="average">Durchschnitt</string>
     <string name="selectCategories">Kategorien wählen</string>
     
+    <!-- TeacherCreateCourse -->
+	<string name="create">Erstellen</string>
+	<string name="courseName">Kursname</string>
+	<string name="teacher">Dozent</string>
+	<string name="startDate">Beginn</string>
+	<string name="createcourse_no_name">Bitte geben Sie einen Kursnamen ein.</string>
+	<string name="createcourse_no_desc">Bitte geben Sie eine Kursbeschreibung ein.</string>
+    
     <!-- Stopwatch -->
     <string name="stopwatch_header">Stoppuhr</string>
     <string name="stopwatch_zerotime">00:00:00</string>

@@ -39,7 +39,6 @@ public class TeacherCreateCourseFragment extends Fragment {
 
 		mModuleID = getArguments().getLong("id", -1);
 		Module m = ModuleDAO.getModuleByID(mModuleID);
-		// Module module = StaticModuleData.findModule(id);
 
 		mCourseName.setText(m.getName());
 
@@ -51,7 +50,7 @@ public class TeacherCreateCourseFragment extends Fragment {
 				description = mDescription.getText().toString();
 				if (courseName.isEmpty()) {
 					Toast.makeText(getActivity(),
-							"Kursname darf nicht leer sein.",
+							R.string.createcourse_no_name,
 							Toast.LENGTH_LONG).show();
 					return;
 				}
@@ -59,7 +58,7 @@ public class TeacherCreateCourseFragment extends Fragment {
 					// Leere Beschreibung sollte hoffentlich bald erlaubt sein:
 					// https://scm.thm.de/redmine/issues/11182
 					Toast.makeText(getActivity(),
-							"Kursbeschreibung darf nicht leer sein.",
+							R.string.createcourse_no_desc,
 							Toast.LENGTH_LONG).show();
 					return;
 				}
