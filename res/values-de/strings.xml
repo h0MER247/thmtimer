@@ -79,6 +79,14 @@
     <string name="average">Durchschnitt</string>
     <string name="selectCategories">Kategorien wählen</string>
     
+    <!-- TeacherCreateCourse -->
+	<string name="create">Erstellen</string>
+	<string name="courseName">Kursname</string>
+	<string name="teacher">Dozent</string>
+	<string name="startDate">Beginn</string>
+	<string name="createcourse_no_name">Bitte geben Sie einen Kursnamen ein.</string>
+	<string name="createcourse_no_desc">Bitte geben Sie eine Kursbeschreibung ein.</string>
+    
     <!-- Stopwatch -->
     <string name="stopwatch_header">Stoppuhr</string>
     <string name="stopwatch_zerotime">00:00:00</string>
@@ -105,10 +113,12 @@
     <string name="connection_loading_user">Lade Benutzer. Bitte warten…</string>
     <string name="connection_loading_courses">Lade Kurse. Bitte warten…</string>
     <string name="connection_loading_modules">Lade Module. Bitte warten…</string>
+   <string name="connection_loading_terms">Lade Semesterzeiten. Bitte warten…</string>
     <string name="connection_loading_statistics">Lade Statistiken. Bitte warten…</string>
     <string name="connection_loading_categories">Lade Zeitkategorien. Bitte warten…</string>
     <string name="connection_loading_expenditures">Lade deine Aufwandseinträge. Bitte warten…</string>
     <string name="connection_saving_expenditures">Speichere deinen Aufwandseintrag. Bitte warten…</string>
     <string name="connection_join_course">Trete dem Kurs bei. Bitte warten…</string>
+        <string name="connection_create_course">Erstelle Kurs. Bitte warten…</string>
     
 </resources>

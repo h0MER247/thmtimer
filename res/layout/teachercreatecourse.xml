@@ -39,33 +39,33 @@
         </TableRow>
 
         <TableRow>
-
-            <TextView
-                android:padding="3dip"
-                android:text="@string/teacher"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/teacher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textFilter" />
-        </TableRow>
-
-        <TableRow>
-
+            
             <TextView
                 android:padding="3dip"
                 android:text="@string/startDate"
                 android:textStyle="bold" />
+            
+            <DatePicker
+                android:id="@+id/startDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:calendarViewShown="false" />
+        </TableRow>
+        
+        <TableRow>
+
+            <TextView
+                android:padding="3dip"
+                android:text="@string/description"
+                android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/startDate"
+                android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="date" />
+                android:lines="5"
+                android:inputType="textFilter" />
         </TableRow>
 
        

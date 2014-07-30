@@ -34,7 +34,8 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 	private final int DAO_REQUEST_TIMECATEGORYS = 3;
 	private final int DAO_REQUEST_EXPENDITURES = 4;
 	private final int DAO_REQUEST_MODULELIST = 5;
-	private final int DAO_REQUEST_FULL_COURSELIST = 6;
+	private final int DAO_REQUEST_TERMLIST = 6;
+	private final int DAO_REQUEST_FULL_COURSELIST = 7;
 	
 	private SharedPreferences mSharedPref;
 	
@@ -159,6 +160,11 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
     	                   String.format("Fehler beim Laden der Modulliste: %s", message),
     	                   Toast.LENGTH_LONG).show();
 			
+		case DAO_REQUEST_TERMLIST:
+			Toast.makeText(this,
+    	                   String.format("Fehler beim Laden der Termliste: %s", message),
+    	                   Toast.LENGTH_LONG).show();
+			
 		case DAO_REQUEST_FULL_COURSELIST:
 			Toast.makeText(this,
     	                   String.format("Fehler beim Laden der gesamten Kursliste: %s", message),
@@ -234,6 +240,7 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 			ModuleDAO.getStudentCourseListFromServer(DAO_REQUEST_STUDENTCOURSELIST);
 			ModuleDAO.getTeacherCourseListFromServer(DAO_REQUEST_TEACHERCOURSELIST);
 			ModuleDAO.getModuleListFromServer(DAO_REQUEST_MODULELIST);
+			ModuleDAO.getTermListFromServer(DAO_REQUEST_TERMLIST);
 			ModuleDAO.getStudentExpendituresFromServer(DAO_REQUEST_EXPENDITURES);
 			ModuleDAO.getTimeCategorysFromServer(DAO_REQUEST_TIMECATEGORYS);
 			ModuleDAO.commitJob(this, this);
