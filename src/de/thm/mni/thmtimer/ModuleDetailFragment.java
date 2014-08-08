@@ -17,7 +17,7 @@ public class ModuleDetailFragment extends Fragment {
 	
 	private TextView mModuleName, mModuleNumber, mCreditPoints, mResponsible,
 			mDescription, mExpenditure, mRequirement, mTestingMethod, mSWS,
-			mFrequency, mPrereq;
+			mFrequency;
 	private Button mBtnEnter;
 	private Long mCourseID;
 	
@@ -46,7 +46,6 @@ public class ModuleDetailFragment extends Fragment {
 		mTestingMethod = (TextView) view.findViewById(R.id.testingMethod);
 		mSWS = (TextView) view.findViewById(R.id.sws);
 		mFrequency = (TextView) view.findViewById(R.id.frequency);
-		mPrereq = (TextView) view.findViewById(R.id.prerequisites);
 		mBtnEnter = (Button) view.findViewById(R.id.enter);
 		mBtnEnter.setOnClickListener(new OnClickListener() {
 			
@@ -59,37 +58,21 @@ public class ModuleDetailFragment extends Fragment {
 			}
 		});
 		
-		
-		Course c = ModuleDAO.searchCourseByID(mCourseID);
-		Module m = c.getModule();
+		Module m = ModuleDAO.searchCourseByID(mCourseID).getModule();
 		
 		mModuleName.setText(m.getName());
 		mModuleNumber.setText(m.getNumber());
 		mCreditPoints.setText(String.valueOf(m.getCreditPoints()));
-		mDescription.setText(c.getDescription());
-		
+		mDescription.setText(m.getDescription());
+		mResponsible.setText(m.getResponsible());
 		mExpenditure.setText(String.format("%d %s",
 				                           m.getCreditPoints() * 30,
 				                           getString(R.string.hours)));
-		
-		/*
-		 * Im Moment auskommentiert, da vom Server nicht vorgesehen / implementiert
-		 */
-		/*
-		mResponsible.setText(m.getResponsible());
 		mRequirement.setText(m.getRequirement());
 		mTestingMethod.setText(m.getTestingMethod());
-		mSWS.setText(Integer.toString(m.getSWS()));
+		if (m.getSemesterHours() != null)
+			mSWS.setText(Integer.toString(m.getSemesterHours()));
 		mFrequency.setText(m.getFrequency());
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < m.getPrerequisites().size(); i++) {
-			sb.append("&#8226; " + m.getPrerequisites().get(i).getName());
-			if(i < m.getPrerequisites().size()-1) {
-				sb.append("<br />");
-			}
-		}
-		mPrereq.setText(Html.fromHtml(sb.toString()));
-		*/
 		
 		return view;
 	}

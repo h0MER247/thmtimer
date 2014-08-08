@@ -119,6 +119,6 @@
     <string name="connection_loading_expenditures">Loading your expenditures. Please wait…</string>
     <string name="connection_saving_expenditures">Saving your expenditure. Please wait…</string>
     <string name="connection_join_course">Joining course. Please wait…</string>
-        <string name="connection_create_course">Creating course. Please wait…</string>
+    <string name="connection_create_course">Creating course. Please wait…</string>
     
 </resources>
