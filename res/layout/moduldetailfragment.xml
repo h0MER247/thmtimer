@@ -165,7 +165,8 @@
 
                 <TextView
                     android:id="@+id/requirement"
-                    android:layout_marginLeft="5dp" />
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1" />
             </TableRow>
 
             <TableRow

@@ -127,7 +127,7 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 		
 		case DAO_REQUEST_USER:
 			Toast.makeText(this,
-					       String.format("Fehler beim Laden des Users: %s", message),
+					       String.format("Benutzer oder Passwort nicht korrekt!", message),
 					       Toast.LENGTH_LONG).show();
 			break;
 			
@@ -176,10 +176,7 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 	}
 	
 	@Override
-	public void onDAOFinished() {
-		
-		User user = ModuleDAO.getUser();
-		
+	public void onDAOFinished() {	
 		
 		CheckBox rememberMe = (CheckBox)findViewById(R.id.remember_me);
 		
@@ -192,13 +189,7 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 			editor.putString(SETTINGS_PASSWORD, Connection.getPassword());
 		
 		editor.commit();
-		
-		// Show greetings
-		Toast.makeText(this,
-				       String.format(getString(R.string.login_greeting),
-				    		                   user.getFirstName()),
-				       Toast.LENGTH_LONG).show();
-		
+			
 		// Open Modulelist
 		Intent intent = new Intent(LoginActivity.this,
 				                   ModuleListActivity.class);
