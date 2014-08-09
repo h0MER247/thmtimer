@@ -46,7 +46,7 @@ public class TeacherCourseDetailPiechartFragment extends Fragment {
 			
 			for(DurationPerCategory duration : durations) {
 				
-				totalMinutes += duration.value;
+				totalMinutes += duration.getDuration();
 			}
 			
 			//
@@ -54,18 +54,18 @@ public class TeacherCourseDetailPiechartFragment extends Fragment {
 			//
 			TimeData timeData = new TimeData();
 			
-			for(DurationPerCategory duration : durations) {
+			for(DurationPerCategory d : durations) {
 				
-				Integer value     = duration.value;
-				Category category = duration.key;
+				Integer  duration = d.getDuration();
+				Category category = d.getCategory();
 				
-				mPieChart.addValue(value.floatValue());
+				mPieChart.addValue(duration.floatValue());
 				
-				timeData.setTimeInMinutes(value);
+				timeData.setTimeInMinutes(duration);
 				mLegend.addLegendLabel(String.format("%s: %sh (%04.1f%%)",
 	                                                category.getName(),
 	                                                timeData.toString(),
-	                                                (100.0f / totalMinutes) * value));
+	                                                (100.0f / totalMinutes) * duration));
 			}
 		}
 	}
