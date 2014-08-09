@@ -8,13 +8,7 @@ public class DurationPerCategory {
 		
 	private Category mCategory;
 	private Integer mDuration;
-	
-	
-	@JsonProperty("key")
-	public Category getCategory() {
-		
-	    return mCategory;
-	}
+
 	
 	@JsonProperty("key")
 	public void setCategory(Category category) {
@@ -23,14 +17,19 @@ public class DurationPerCategory {
 	}
 	
 	@JsonProperty("value")
-	public Integer getDuration() {
-		
-		return mDuration;		
-	}
-	
-	@JsonProperty("value")
 	public void setDuration(Integer duration) {
 		
 		mDuration = duration;		
+	}
+	
+	
+	public Category getCategory() {
+		
+	    return mCategory;
+	}
+	
+	public Integer getDuration() {
+		
+		return mDuration;		
 	}
 }

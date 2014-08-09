@@ -1,21 +1,20 @@
 package de.thm.mni.thmtimer.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import de.thm.thmtimer.entities.Category;
 
 public class DurationPerWeek {
 	
-	public static class Durations {
+	public static class Duration {
 		
 		private Category mCategory;
 		private Integer mDuration;
 		
-		@JsonProperty("category")
-		public Category getCategory() {
-			
-			return mCategory;
-		}
 		
 		@JsonProperty("category")
 		public void setCategory(Category category) {
@@ -23,29 +22,27 @@ public class DurationPerWeek {
 			mCategory = category;
 		}
 		
-		
-		@JsonProperty("duration")
-		public Integer getDuration() {
-			
-			return mDuration;
-		}
-		
 		@JsonProperty("duration")
 		public void setDuration(Integer duration) {
 			
 			mDuration = duration;
 		}
+		
+		
+		public Category getCategory() {
+			
+			return mCategory;
+		}
+		
+		public Integer getDuration() {
+			
+			return mDuration;
+		}
 	}
 	
 	private Integer mCalendarWeek;
-	private Durations[] mDurations;
+	private List<Duration> mDurations;
 	
-	
-	@JsonProperty("calendarWeek")
-	public Integer getCalendarWeek() {
-		
-		return mCalendarWeek;
-	}
 	
 	@JsonProperty("calendarWeek")
 	public void setCalendarWeek(Integer calendarWeek) {
@@ -53,16 +50,25 @@ public class DurationPerWeek {
 		mCalendarWeek = calendarWeek;
 	}
 	
-	
 	@JsonProperty("entries")
-	public Durations[] getDurations() {
+	public void setDurations(Duration[] durations) {
 		
-		return mDurations;
+		mDurations = Arrays.asList(durations);
 	}
 	
-	@JsonProperty("entries")
-	public void setDurations(Durations[] durations) {
+	public void setDurations(List<Duration> durations) {
 		
-		mDurations = durations;
+		mDurations = new ArrayList<Duration>(durations);
+	}
+	
+	
+	public Integer getCalendarWeek() {
+		
+		return mCalendarWeek;
+	}	
+	
+	public List<Duration> getDurations() {
+		
+		return mDurations;
 	}
 }
