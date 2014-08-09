@@ -9,7 +9,6 @@
     <string name="password">Passwort</string>
     <string name="login">Anmelden</string>
     <string name="login_failed">Falsche Benutzerkennung oder Passwort.</string>
-    <string name="login_greeting">Hallo %s!</string>
     <string name="login_remember_me">Eingeloggt bleiben</string>
 
     <!-- ModuleListActivity -->
@@ -22,7 +21,7 @@
 
     <!-- StudentFragment -->
     <string name="action_add">Neu</string>
-    <string name="welcome_new_user">Willkommen neuer Nutzer. Um einem Kurs beizutreten wähle das + Symbol in deiner Aktionsleiste.</string>
+    <string name="welcome_new_user">Hallo %s!\nUm einem Kurs beizutreten, wähle das „+“-Symbol in deiner Aktionsleiste.</string>
     
     <!-- ModuleDetailFragment -->
     <string name="module_details">Modul Detailansicht</string>

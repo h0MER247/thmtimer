@@ -3,7 +3,6 @@ package de.thm.mni.thmtimer;
 import de.thm.mni.thmtimer.util.Connection;
 import de.thm.mni.thmtimer.util.ModuleDAOListener;
 import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.thmtimer.entities.User;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -21,8 +20,6 @@ import android.widget.Toast;
 
 
 public class LoginActivity extends Activity implements ModuleDAOListener {
-	
-	private final String TAG = LoginActivity.class.getSimpleName();
 	
 	private static final String SETTINGS_USERNAME = "lastUserName";
 	private static final String SETTINGS_PASSWORD = "lastPassword";
@@ -176,7 +173,7 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 	}
 	
 	@Override
-	public void onDAOFinished() {	
+	public void onDAOFinished() {
 		
 		CheckBox rememberMe = (CheckBox)findViewById(R.id.remember_me);
 		

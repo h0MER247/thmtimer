@@ -66,15 +66,9 @@ public class StudentFragment extends Fragment implements ModuleDAOListener {
 
 		// Show greetings
 		if(mViewData.size() == 0) {			
-			Toast.makeText(getActivity(),
-					((String.format(getString(R.string.login_greeting),
-							user.getFirstName()) +"\n" + getString(R.string.welcome_new_user))),
-							Toast.LENGTH_LONG).show();
-		}
-		else{
-			Toast.makeText(getActivity(),
-					String.format(getString(R.string.login_greeting),
-							user.getFirstName()),
+			Toast.makeText(getActivity(), 
+					String.format(getString(R.string.welcome_new_user),
+							user.getFirstName() ),
 							Toast.LENGTH_LONG).show();
 		}
 		ModuleDAO.setNewContext(getActivity(), this);

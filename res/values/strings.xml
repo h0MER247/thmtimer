@@ -9,7 +9,6 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="login_failed">Wrong username or password.</string>
-    <string name="login_greeting">Hi %s!</string>
     <string name="login_remember_me">Remember me</string>
 
     <!-- ModuleListActivity -->
@@ -22,7 +21,7 @@
 
     <!-- StudentFragment -->
     <string name="action_add">Add</string>
-    <string name="welcome_new_user">To join a course press the + symbol in your action bar.</string>
+    <string name="welcome_new_user">Hi %s!\nTo join a course press the \"+\" symbol in your action bar.</string>
 
     <!-- ModuleDetailFragment -->
     <string name="module_details">Course Detail View</string>
