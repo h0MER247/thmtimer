@@ -1,6 +1,8 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +16,7 @@ import de.thm.thmtimer.entities.Category;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,8 +121,8 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		Random rnd = new Random();
 		List<Category> categories = ModuleDAO.getTimeCategorys();
 
-		for(int kw = 1;
-				kw < 54;
+		for(int kw  = 32;
+				kw <= 32;
 				kw++) {
 			
 			DurationPerWeek data     = new DurationPerWeek();
@@ -176,12 +179,52 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		durationsPerWeek = mRandomData; // ModuleDAO.getDurationPerWeek();
 		categories       = new ArrayList<Category>(ModuleDAO.getTimeCategorys());
 		
-		final Category categoryTotal = new Category("TOT", "Total");
-		final Category categoryAvg   = new Category("AVG", "Average");
+		final Category categoryTotal = new Category(categories.size(),     "TOT", "Total");
+		final Category categoryAvg   = new Category(categories.size() + 1, "AVG", "Average");
 		
 		categories.add(categoryTotal);
-		categories.add(categoryAvg);		
+		categories.add(categoryAvg);
 		
+		
+		
+		// Zeitkategorien sortieren (wieso in aller Welt kommt das alles unsortiert vom Server?!)
+		Collections.sort(categories, new Comparator<Category>() {
+			
+			@Override
+			public int compare(Category lhs, Category rhs) {
+				
+				return (int)(lhs.getId() - rhs.getId());
+			}
+		});
+		
+		
+		// Keine Ahnung ob das hier auch unsortiert vom Server kommt, da die Statistikdatenabfrage
+		// bis heute nicht funktioniert, aber ich gehe mal davon aus....
+		
+		// Zeitstatistikeinträge nach Kalenderwoche sortieren
+		Collections.sort(durationsPerWeek, new Comparator<DurationPerWeek>() {
+
+			@Override
+			public int compare(DurationPerWeek lhs, DurationPerWeek rhs) {
+				
+				return lhs.getCalendarWeek() - rhs.getCalendarWeek();
+			}
+		});
+		
+		// Kategorien der Zeitstatistikeinträge sortieren
+		for(DurationPerWeek d : durationsPerWeek) {
+			
+			Collections.sort(d.getDurations(), new Comparator<Duration>() {
+
+				@Override
+				public int compare(Duration lhs, Duration rhs) {
+					
+					return (int)(lhs.getCategory().getId() - rhs.getCategory().getId());
+				}
+			});
+		}		
+		
+				
 		
 		//
 		// Legende mit Daten befüllen
@@ -232,6 +275,8 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 					mLineChart.addValueToSeries(index.intValue(),
 							                    hours,
 							                    duration);
+					
+					Log.d("LOG", "Category: " + duration.getCategory().getName() + " ID: " + duration.getCategory().getId() + " Value: " + hours.toString());
 				}
 				
 				weekTotal += duration.getDuration();
@@ -265,6 +310,8 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 				mLineChart.addValueToSeries(categories.size() - 2,
 						                    weekTotal.floatValue() / 60f,
 						                    durationTotal);
+				
+				Log.d("LOG", "Category: " + durationTotal.getCategory().getName() + " Value: " + (weekTotal.floatValue() / 60f));
 			}
 			
 			//
@@ -277,6 +324,8 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 			mLineChart.addValueToSeries(categories.size() - 1,
 					                    weekAvg.floatValue() / 60f,
 					                    durationAvg);
+			
+			Log.d("LOG", "Category: " + durationAvg.getCategory().getName() + " Value: " + (weekAvg.floatValue() / 60f));
 		}
 		
 		mLineChart.endChart();
