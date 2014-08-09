@@ -10,6 +10,13 @@
     <string name="login">Anmelden</string>
     <string name="login_failed">Falsche Benutzerkennung oder Passwort.</string>
     <string name="login_remember_me">Eingeloggt bleiben</string>
+    <string name="loadingerror_studentcourselist">Fehler beim Laden der Studentenkursliste: %s</string>
+    <string name="loadingerror_teachercourselist">Fehler beim Laden der Dozentenkursliste: %s</string>
+    <string name="loadingerror_timecategorys">Fehler beim Laden der Zeitkategorien: %s</string>
+    <string name="loadingerror_expenditures">Fehler beim Laden der AufwÃ¤nde: %s</string>    
+    <string name="loadingerror_modulelist">Fehler beim Laden der Modulliste: %s</string>
+    <string name="loadingerror_termlist">Fehler beim Laden der Termliste: %s</string>
+    <string name="loadingerror_courselist">Fehler beim Laden der Kursliste: %s</string>
 
     <!-- ModuleListActivity -->
     <string name="tab1">Student</string>

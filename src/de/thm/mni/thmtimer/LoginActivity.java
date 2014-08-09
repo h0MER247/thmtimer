@@ -124,47 +124,47 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 		
 		case DAO_REQUEST_USER:
 			Toast.makeText(this,
-					       String.format("Benutzer oder Passwort nicht korrekt!", message),
+					       String.format(getString(R.string.login_failed), message),
 					       Toast.LENGTH_LONG).show();
 			break;
 			
 		case DAO_REQUEST_STUDENTCOURSELIST:
 			Toast.makeText(this,
-				       	   String.format("Fehler beim Laden der Studentenkursliste: %s", message),
+				       	   String.format(getString(R.string.loadingerror_studentcourselist), message),
 				       	   Toast.LENGTH_LONG).show();
 			break;
 			
 		case DAO_REQUEST_TEACHERCOURSELIST:
 			Toast.makeText(this,
-			       	      String.format("Fehler beim Laden der Dozentenkursliste: %s", message),
+			       	      String.format(getString(R.string.loadingerror_teachercourselist), message),
 			       	      Toast.LENGTH_LONG).show();
 			break;
 			
 		case DAO_REQUEST_TIMECATEGORYS:
 			Toast.makeText(this,
-		       	           String.format("Fehler beim Laden der Zeitkategorien: %s", message),
+		       	           String.format(getString(R.string.loadingerror_timecategorys), message),
 		       	           Toast.LENGTH_LONG).show();
 			break;
 			
 		case DAO_REQUEST_EXPENDITURES:
 			Toast.makeText(this,
-	       	               String.format("Fehler beim Laden der Aufwände: %s", message),
+	       	               String.format(getString(R.string.loadingerror_expenditures), message),
 	       	               Toast.LENGTH_LONG).show();
 			break;
 			
 		case DAO_REQUEST_MODULELIST:
 			Toast.makeText(this,
-    	                   String.format("Fehler beim Laden der Modulliste: %s", message),
+    	                   String.format(getString(R.string.loadingerror_modulelist), message),
     	                   Toast.LENGTH_LONG).show();
 			
 		case DAO_REQUEST_TERMLIST:
 			Toast.makeText(this,
-    	                   String.format("Fehler beim Laden der Termliste: %s", message),
+    	                   String.format(getString(R.string.loadingerror_termlist), message),
     	                   Toast.LENGTH_LONG).show();
 			
 		case DAO_REQUEST_FULL_COURSELIST:
 			Toast.makeText(this,
-    	                   String.format("Fehler beim Laden der gesamten Kursliste: %s", message),
+    	                   String.format(getString(R.string.loadingerror_courselist), message),
     	                   Toast.LENGTH_LONG).show();
 			break;
 		}
