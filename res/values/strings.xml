@@ -73,10 +73,12 @@
 	<string name="course_details">Course details</string>
     <string name="history">History</string>
     <string name="timeframe">Timeframe</string>
-    <string name="showAverage">Show average</string>
-    <string name="hideAverage">Hide average</string>
     <string name="average">Average</string>
-    <string name="selectCategories">Select categories</string>
+    <string name="total">Total</string>
+    <string name="showCategories">Show categories</string>
+    <string name="hideCategories">Hide categories</string>
+    <string name="showTotal">Show total</string>
+    <string name="hideTotal">Hide total</string>
 	
 	<!-- TeacherCreateCourse -->
 	<string name="create">Create</string>

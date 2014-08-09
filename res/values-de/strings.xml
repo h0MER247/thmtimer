@@ -73,10 +73,12 @@
     <string name="course_details">Kurs Details</string>
     <string name="history">Historie</string>
     <string name="timeframe">Zeitraum</string>
-    <string name="showAverage">Durchschnitt anzeigen</string>
-    <string name="hideAverage">Durchschnitt verstecken</string>
     <string name="average">Durchschnitt</string>
-    <string name="selectCategories">Kategorien wählen</string>
+    <string name="total">Summe</string>
+    <string name="showCategories">Kategorien anzeigen</string>
+    <string name="hideCategories">Kategorien verstecken</string>
+    <string name="showTotal">Summe anzeigen</string>
+    <string name="hideTotal">Summe verstecken</string>
     
     <!-- TeacherCreateCourse -->
 	<string name="create">Erstellen</string>
