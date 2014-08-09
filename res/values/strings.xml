@@ -15,7 +15,7 @@
     <!-- ModuleListActivity -->
     <string name="tab1">Student</string>
     <string name="tab2">Teacher</string>
-    <string name="my_modules">My Courses</string>
+    <string name="my_courses">My Courses</string>
 
     <!-- TeacherFragment -->
     <string name="students">Students</string>
