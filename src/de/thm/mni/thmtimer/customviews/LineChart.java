@@ -78,10 +78,9 @@ public class LineChart extends View {
 	private Integer mTextColor;
 	
 	// Labels und Chartwerte
-	private String[] mLabelsY;
-	private String[] mLabelsX;
+	private ArrayList<String> mLabelsX;
+	private String mLabelsYFormat;
 	private ArrayList<ArrayList<DataPoint>> mChartData;
-	private ArrayList<DataPoint> mSeries;
 	
 	// Größen des sichtbaren Charts
 	private boolean mBoundsInvalidated;
@@ -137,6 +136,7 @@ public class LineChart extends View {
 				       DEFAULT_LINECHART_ORIENTATION_COLOR,
 				       DEFAULT_LINECHART_TEXT_COLOR);
 		
+		setLabelsY("%d");
 		setScaleXY(1, 1);
 	}
 	
@@ -188,60 +188,60 @@ public class LineChart extends View {
 	//
 	// Setzen der Achsenbeschriftungen
 	//
-	public void setLabels(String[] labelsX,
-			              String[] labelsY) {
+	public void setLabelsX(ArrayList<String> labelsX) {
 		
 		mLabelsX = labelsX;
-		mLabelsY = labelsY;
 		
 		mBoundsInvalidated = true;
 		invalidate();
 	}
 	
+	public void setLabelsY(String formatString) {
+		
+		mLabelsYFormat = formatString;		
+	}
+	
 	private String getLabelX(int x) {
 		
-		return (x < mLabelsX.length) ? mLabelsX[x] : "";
+		return (x < mLabelsX.size()) ? mLabelsX.get(x) : "";
 	}
 	
 	private String getLabelY(int y) {
-
-		return (y < mLabelsY.length) ? mLabelsY[y] : "";
+		
+		return String.format(mLabelsYFormat, y);
 	}
 
 	
 	//
 	// Chartdaten
 	//
-	public void beginSeries() {
+	public void beginChart(int numberOfSeries) {
 		
-		mSeries = new ArrayList<DataPoint>();
-	}
-	
-	public void addValueToSeries(Float value, Object data) {
+		mChartData = new ArrayList<ArrayList<DataPoint>>();
 		
-		if(mSeries == null)
-			throw new IllegalArgumentException("You have to start a chart series first with beginChartSeries()");
-				
-		mSeries.add(new DataPoint(value, data));
-	}
-	
-	public void endSeries() {
-		
-		if(mSeries == null)
-			throw new IllegalArgumentException("You have to start a chart series first with beginChartSeries()");
-		
-		if(mSeries.size() > 0) {
+		for(int i = 0;
+				i < numberOfSeries;
+				i++) {
 			
-			mChartData.add(mSeries);
+			mChartData.add(new ArrayList<DataPoint>());
 		}
 		
-		invalidate();
+		mLastClickedDataPoint = null;
 	}
 	
-	public void clearData() {
+	public void addValueToSeries(int seriesIndex, float value, Object data) {
 		
-		mChartData.clear();
-		mLastClickedDataPoint = null;
+		if(mChartData == null)
+			throw new IllegalArgumentException("Start a chart with beginChart() first");
+		
+		if(mChartData.size() < seriesIndex)
+			throw new IllegalArgumentException("Series index out of bounds");
+		
+		
+		mChartData.get(seriesIndex).add(new DataPoint(value, data));
+	}
+	
+	public void endChart() {
 		
 		invalidate();
 	}
@@ -520,16 +520,17 @@ public class LineChart extends View {
 		int maxHeightXAxis = 0;
 		
 		for(int i = 0;
-				i < mLabelsY.length;
-				i++) {
+				i < mTotalOnY;
+				i += mScaleY) {
 			
 			mPaint.getTextBounds(getLabelY(i), 0, getLabelY(i).length(), mTextBounds);
 			
 			if(mTextBounds.width() > maxWidthYAxis)
 				maxWidthYAxis = mTextBounds.width();
 		}
+		
 		for(int i = 0;
-				i < mLabelsX.length;
+				i < mLabelsX.size();
 				i++) {
 			
 			mPaint.getTextBounds(getLabelX(i), 0, getLabelX(i).length(), mTextBounds);
