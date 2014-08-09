@@ -24,7 +24,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 	private final String TAG = TeacherCourseDetailActivity.class.getSimpleName();
 	
 	private final int DAO_REQUEST_DURATION_PER_CATEGORY = 0;
-	//private final int DAO_REQUEST_DURATIONS_PER_WEEK = 1; // TODO
+	private final int DAO_REQUEST_DURATIONS_PER_WEEK = 1;
 	
 	private Fragment mLineChart;
 	private Fragment mPieChart;
@@ -64,9 +64,6 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 		
 		mCourseID = getIntent().getExtras().getLong("course_id");
 		mCourse   = ModuleDAO.getTeacherCourseByID(mCourseID);
-		
-		// Zufallsdaten für den Linechart erzeugen
-		((TeacherCourseDetailLinechartFragment)mLineChart).createRandomData();
 		
 		// Kursname setzen
 		TextView courseName = (TextView)findViewById(R.id.teachercoursedetail_txtCourseName);
@@ -177,7 +174,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 		
 		ModuleDAO.beginJob();
 		ModuleDAO.getDurationPerCategoryFromServer(DAO_REQUEST_DURATION_PER_CATEGORY, mCourseID);
-		// TODO: Statistikdaten holen
+		//ModuleDAO.getDurationPerWeekFromServer(DAO_REQUEST_DURATIONS_PER_WEEK, mCourseID);
 		ModuleDAO.commitJob(this, this);
 	}
 	
@@ -215,7 +212,10 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 		
 		switch(requestID) {
 		case DAO_REQUEST_DURATION_PER_CATEGORY:
-			Toast.makeText(this, "Hat net geklappt: " + message, Toast.LENGTH_LONG).show();
+		case DAO_REQUEST_DURATIONS_PER_WEEK:
+			Toast.makeText(this,
+					       "Fehler beim Laden der Statistikdaten: " + message,
+					       Toast.LENGTH_LONG).show();
 			break;
 		}
 	}
