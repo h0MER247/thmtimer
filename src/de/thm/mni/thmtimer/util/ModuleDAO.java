@@ -5,9 +5,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.http.HttpMethod;
 
 import android.app.ProgressDialog;
@@ -15,7 +12,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Expenditure;
-import de.thm.thmtimer.entities.Faculty;
 import de.thm.thmtimer.entities.Module;
 import de.thm.thmtimer.entities.Term;
 import de.thm.thmtimer.entities.User;
