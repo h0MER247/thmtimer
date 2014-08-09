@@ -2,6 +2,7 @@ package de.thm.mni.thmtimer.customviews;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -10,7 +11,6 @@ import android.graphics.Region;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -593,6 +593,7 @@ public class LineChart extends View {
 	//
 	// Funktionen zum Scrollen des Charts
 	//
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		
