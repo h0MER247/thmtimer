@@ -10,14 +10,16 @@ import org.springframework.http.HttpMethod;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+import de.thm.mni.thmtimer.R;
+import de.thm.mni.thmtimer.model.DurationPerCategory;
+import de.thm.mni.thmtimer.model.DurationPerWeek;
+import de.thm.thmtimer.entities.Category;
 import de.thm.thmtimer.entities.Course;
 import de.thm.thmtimer.entities.Expenditure;
 import de.thm.thmtimer.entities.Module;
 import de.thm.thmtimer.entities.Term;
 import de.thm.thmtimer.entities.User;
-import de.thm.mni.thmtimer.R;
-import de.thm.mni.thmtimer.model.DurationPerCategory;
-import de.thm.thmtimer.entities.Category;
 
 public class ModuleDAO {
 
@@ -30,23 +32,30 @@ public class ModuleDAO {
 	private static List<Module> mModules = null;
 	private static List<Term> mTerms = null;
 	private static List<DurationPerCategory> mDurationPerCategory = null;
+	private static List<DurationPerWeek> mDurationPerWeek = null;
 	
 	
 	//
 	// --------- ZEIT JE KATEGORIE PRO WOCHE
 	//
-	/*
-	public static void getDurationPerCategoryPerWeekFromServer(int requestID, Long courseID) {
+	public static void getDurationPerWeekFromServer(int requestID, Long courseID) {
 		
-		ServerOperation op = GET_DURATION_PER_CATEGORY_PER_WEEK(requestID);
+		ServerOperation op = new GET_DURATION_PER_WEEK(requestID);
 		op.setParameter(courseID);
 		
 		addJob(op);
 	}
-	*/
 	
+	public static List<DurationPerWeek> getDurationPerWeek() {
+		
+		return mDurationPerWeek;
+	}
 	
-
+	public static void invalidateDurationPerWeek() {
+		
+		mDurationPerWeek = null;
+	}
+	
 	//
 	// --------- ZEIT JE KATEGORIE
 	//
@@ -962,6 +971,53 @@ public class ModuleDAO {
 			return R.string.connection_loading_statistics;
 		}
 	};
+	
+	
+	//
+	// Zeiten je Kategorie pro Woche anfordern
+	
+	private static class GET_DURATION_PER_WEEK extends ServerOperation {
+
+		private Long mCourseID;
+		
+		public GET_DURATION_PER_WEEK(int requestID) {
+			
+			super(requestID);
+		}
+		
+		
+		@Override
+		public boolean runIf() {
+
+			return mDurationPerWeek == null;
+		}
+
+		@Override
+		public void run() {
+			
+			DurationPerWeek[] durations = Connection.request("/statistics/week/" + mCourseID.toString(),
+					                                         HttpMethod.GET,
+					                                         DurationPerWeek[].class);
+			
+			mDurationPerWeek = Arrays.asList(durations);
+		}
+		
+		@Override
+		public void setParameter(Object... parameter) {
+
+			mCourseID = (Long)parameter[0];
+		}
+
+		@Override
+		public int getDialogMessage() {
+			
+			return R.string.connection_loading_statistics;
+		}
+	};
+	
+	
+	
+	
 
 	// TODO: Mehr ServerOperations unterstützen
 
