@@ -30,6 +30,22 @@ public class ModuleDAO {
 	private static List<Module> mModules = null;
 	private static List<Term> mTerms = null;
 	private static List<DurationPerCategory> mDurationPerCategory = null;
+	
+	
+	//
+	// --------- ZEIT JE KATEGORIE PRO WOCHE
+	//
+	/*
+	public static void getDurationPerCategoryPerWeekFromServer(int requestID, Long courseID) {
+		
+		ServerOperation op = GET_DURATION_PER_CATEGORY_PER_WEEK(requestID);
+		op.setParameter(courseID);
+		
+		addJob(op);
+	}
+	*/
+	
+	
 
 	//
 	// --------- ZEIT JE KATEGORIE
@@ -481,14 +497,11 @@ public class ModuleDAO {
 
 		@Override
 		public void run() {
-			/*
-			 * Course[] Courses = Connection.request("/courses/lecture/" +
-			 * Connection.getUsername(), HttpMethod.GET, Course[].class);
-			 */
-			Course[] Courses = Connection.request(
-					"/courses/user/" + Connection.getUsername(),
-					HttpMethod.GET, Course[].class);
-
+			
+			Course[] Courses = Connection.request("/courses/lecturer/" + Connection.getUsername(),
+					                              HttpMethod.GET,
+					                              Course[].class);
+			
 			mTeacherCourses = Arrays.asList(Courses);
 		}
 
