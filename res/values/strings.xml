@@ -10,6 +10,13 @@
     <string name="login">Login</string>
     <string name="login_failed">Wrong username or password.</string>
     <string name="login_remember_me">Remember me</string>
+    <string name="loadingerror_studentcourselist">Loading error - Studentcourselist: %s</string>
+    <string name="loadingerror_teachercourselist">Loading error - Teachercourselist: %s</string>
+    <string name="loadingerror_timecategorys">Loading error - Timecategorys: %s</string>
+    <string name="loadingerror_expenditures">Loading error - Expenditures: %s</string>
+    <string name="loadingerror_modulelist">Loading error - Modulelist: %s</string>
+    <string name="loadingerror_termlist">Loading error - Termlist: %s</string>
+    <string name="loadingerror_courselist">Loading error - Courselist: %s</string>
 
     <!-- ModuleListActivity -->
     <string name="tab1">Student</string>
