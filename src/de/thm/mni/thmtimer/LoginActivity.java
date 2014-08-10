@@ -211,6 +211,7 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 			Connection.setPassword(password);
 			
 			ModuleDAO.invalidateDurationPerCategory();
+			ModuleDAO.invalidateDurationPerWeek();
 			ModuleDAO.invalidateFullCourseList();
 			ModuleDAO.invalidateModules();
 			ModuleDAO.invalidateStudentCourseList();
