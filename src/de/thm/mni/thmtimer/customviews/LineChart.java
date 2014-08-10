@@ -225,8 +225,6 @@ public class LineChart extends View {
 			
 			mChartData.add(new ArrayList<DataPoint>());
 		}
-		
-		mLastClickedDataPoint = null;
 	}
 	
 	public void addValueToSeries(int seriesIndex, float value, Object data) {
@@ -242,6 +240,9 @@ public class LineChart extends View {
 	}
 	
 	public void endChart() {
+		
+		mClickableDataPoints.clear();
+		mLastClickedDataPoint = null;
 		
 		invalidate();
 	}
