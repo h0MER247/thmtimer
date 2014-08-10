@@ -21,7 +21,10 @@ public class PieChart extends View {
 		                                                      0xFF9933CC,
 		                                                      0xFF669900,
 		                                                      0xFFFF8800,
-		                                                      0xFFCC0000 };
+		                                                      0xFFCC0000,
+		                                                      0xFF3366CC,
+		                                                      0xFFFFCC00,
+		                                                      0xFF404040};
 	
 	public final static Integer DEFAULT_PIECHART_TEXT_COLOR = 0xFF000000;
 
