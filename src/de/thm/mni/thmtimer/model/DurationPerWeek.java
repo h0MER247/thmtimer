@@ -71,4 +71,24 @@ public class DurationPerWeek {
 		
 		return mDurations;
 	}
+	
+	public Integer getTotalDuration() {
+		
+		Integer ret = 0;
+		
+		for(Duration d : mDurations) {
+			
+			ret += d.getDuration();
+		}
+		
+		return ret;
+	}
+	
+	public Integer getAverageDuration() {
+		
+		if(mDurations.size() == 0)
+			return 0;
+		
+		return getTotalDuration() / mDurations.size();
+	}
 }
