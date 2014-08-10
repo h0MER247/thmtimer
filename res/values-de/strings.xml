@@ -52,6 +52,15 @@
     <string name="action_search">Modulsuche</string>
     <string name="search_hint">Modul suchen…</string>
 
+    <!-- TimeTrackingActivity -->
+	<string name="timetracking_action_choose">Aktion wählen:</string>
+    <string name="timetracking_action_edit">Aufwand editieren</string>
+    <string name="timetracking_action_delete">Aufwand löschen</string>
+    <string name="timetracking_action_cancel">Abbrechen</string>
+    <string name="timetracking_error_save">Fehler beim Speichern des Aufwands: %s</string>
+    <string name="timetracking_error_edit">Fehler beim Editieren des Aufwands: %s</string>
+    <string name="timetracking_error_delete">Fehler beim Löschen des Aufwands: %s</string>
+        
     <!-- TrackTimeActivity -->
     <string name="action_stopwatch_start">Starte Stoppuhr</string>
     <string name="action_stopwatch_stop">Stoppe Stoppuhr</string>
@@ -118,12 +127,13 @@
     <string name="connection_loading_user">Lade Benutzer. Bitte warten…</string>
     <string name="connection_loading_courses">Lade Kurse. Bitte warten…</string>
     <string name="connection_loading_modules">Lade Module. Bitte warten…</string>
-   <string name="connection_loading_terms">Lade Semesterzeiten. Bitte warten…</string>
+    <string name="connection_loading_terms">Lade Semesterzeiten. Bitte warten…</string>
     <string name="connection_loading_statistics">Lade Statistiken. Bitte warten…</string>
     <string name="connection_loading_categories">Lade Zeitkategorien. Bitte warten…</string>
     <string name="connection_loading_expenditures">Lade deine Aufwandseinträge. Bitte warten…</string>
     <string name="connection_saving_expenditures">Speichere deinen Aufwandseintrag. Bitte warten…</string>
+    <string name="connection_deleting_expenditure">Lösche deinen Aufwandseintrag. Bitte warten…</string>
     <string name="connection_join_course">Trete dem Kurs bei. Bitte warten…</string>
-        <string name="connection_create_course">Erstelle Kurs. Bitte warten…</string>
+    <string name="connection_create_course">Erstelle Kurs. Bitte warten…</string>
     
 </resources>

@@ -306,7 +306,7 @@ public class ModuleDAO {
 	}
 
 	//
-	// --------- AUFWÄNDE ABRUFEN / ABSPEICHERN
+	// --------- AUFWÄNDE ABRUFEN / ABSPEICHERN / LÖSCHEN
 	//
 
 	public static void getStudentExpendituresFromServer(int requestID) {
@@ -329,6 +329,14 @@ public class ModuleDAO {
 		ServerOperation op = new PUT_EXPENDITURE(requestID);
 		op.setParameter(expenditure);
 
+		addJob(op);
+	}
+	
+	public static void deleteStudentExpenditureFromServer(int requestID, Long expenditureID) {
+		
+		ServerOperation op = new DELETE_EXPENDITURE(requestID);
+		op.setParameter(expenditureID);
+		
 		addJob(op);
 	}
 
@@ -655,6 +663,60 @@ public class ModuleDAO {
 			return R.string.connection_saving_expenditures;
 		}
 	}
+	
+	//
+	// Aufwandseintrag löschen
+	//
+	private static class DELETE_EXPENDITURE extends ServerOperation {
+
+		private Long mExpenditureID;
+		
+		public DELETE_EXPENDITURE(int requestID) {
+			
+			super(requestID);
+		}
+		
+		@Override
+		public boolean runIf() {
+			
+			return true;
+		}
+
+		@Override
+		public void run() {
+			
+			Connection.request("/expenditures/" + mExpenditureID.toString(),
+					           HttpMethod.DELETE,
+					           null);
+			
+			// Dieses Expenditure aus der lokalen Liste löschen
+			for(int i = 0;
+					i < mStudentExpenditures.size();
+					i++) {
+				
+				Expenditure e = mStudentExpenditures.get(i);
+				
+				if(e.getId() == mExpenditureID) {
+					
+					mStudentExpenditures.remove(i);
+					break;
+				}
+			}
+		}
+
+		@Override
+		public void setParameter(Object... parameter) {
+			
+			mExpenditureID = (Long)parameter[0];
+		}
+
+		@Override
+		public int getDialogMessage() {
+			
+			return R.string.connection_deleting_expenditure;
+		}
+	}
+	
 
 	//
 	// Liste mit Aufwänden vom Server holen

@@ -6,7 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -34,6 +36,7 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 	
 	private final int DAO_POST_EXPENDITURE = 0;
 	private final int DAO_PUT_EXPENDITURE = 1;
+	private final int DAO_DELETE_EXPENDITURE = 2;
 	
 	private ArrayAdapter<Expenditure> mAdapter;
 	private List<Expenditure> mTimeTrackingList;
@@ -80,7 +83,59 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 				startActivityForResult(intent, REQUEST_EDIT_TIMETRACKING);
 			}
 		});
-		
+		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent,
+					                       View view,
+					                       final int position,
+					                       long id) {
+				
+				AlertDialog.Builder b;
+				
+				b = new AlertDialog.Builder(TimeTrackingActivity.this);
+				
+				b.setTitle(getString(R.string.timetracking_action_choose));
+				b.setItems(new String[] { getString(R.string.timetracking_action_edit),
+						                  getString(R.string.timetracking_action_delete),
+						                  getString(R.string.timetracking_action_cancel) },
+						   new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						final Expenditure e = mAdapter.getItem(position);
+						
+						switch(which) {
+						
+						// Edit
+						case 0:
+							Intent intent = new Intent(TimeTrackingActivity.this,
+									                   TrackTimeActivity.class);
+							intent.putExtra("expenditure_id", e.getId());
+							startActivityForResult(intent, REQUEST_EDIT_TIMETRACKING);
+							break;
+						
+						// Delete
+						case 1:
+							ModuleDAO.beginJob();
+							ModuleDAO.deleteStudentExpenditureFromServer(DAO_DELETE_EXPENDITURE, e.getId());
+							ModuleDAO.commitJob(TimeTrackingActivity.this,
+									            TimeTrackingActivity.this);
+							break;
+							
+						// Cancel:
+						case 2:
+							break;
+						}
+					}
+				});
+				
+				b.create().show();
+				
+				return true;
+			}
+		});		
 		
 		mCourse = ModuleDAO.getStudentCourseByID(mCourseID);
 		
@@ -185,14 +240,20 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 			
 		case DAO_POST_EXPENDITURE:
 			Toast.makeText(this,
-			               String.format("Fehler beim Speichern der Aktivität: %s", message),
+			               String.format(getString(R.string.timetracking_error_save), message),
 			               Toast.LENGTH_LONG).show();
 			break;
 			
 		case DAO_PUT_EXPENDITURE:
 			Toast.makeText(this,
-			               String.format("Fehler beim Editieren der Aktivität: %s", message),
+					       String.format(getString(R.string.timetracking_error_edit), message),
 			               Toast.LENGTH_LONG).show();
+			break;
+			
+		case DAO_DELETE_EXPENDITURE:
+			Toast.makeText(this,
+					       String.format(getString(R.string.timetracking_error_delete), message),
+					       Toast.LENGTH_LONG).show();
 			break;
 		}
 		

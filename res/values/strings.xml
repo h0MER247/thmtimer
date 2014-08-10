@@ -52,6 +52,15 @@
     <string name="action_search">Search Courses</string>
     <string name="search_hint">Search…</string>
 
+    <!-- TimeTrackingActivity -->
+    <string name="timetracking_action_choose">Choose action:</string>
+    <string name="timetracking_action_edit">Edit expenditure</string>
+    <string name="timetracking_action_delete">Delete expenditure</string>
+    <string name="timetracking_action_cancel">Cancel</string>
+    <string name="timetracking_error_save">Error while saving your expenditure: %s</string>
+    <string name="timetracking_error_edit">Error while editing your expenditure: %s</string>
+    <string name="timetracking_error_delete">Error while deleting your expenditure: %s</string>
+    
     <!-- TrackTimeActivity -->
     <string name="action_stopwatch_start">Start Stopwatch</string>
     <string name="action_stopwatch_stop">Stop Stopwatch</string>
@@ -123,6 +132,7 @@
     <string name="connection_loading_categories">Loading time categories. Please wait…</string>
     <string name="connection_loading_expenditures">Loading your expenditures. Please wait…</string>
     <string name="connection_saving_expenditures">Saving your expenditure. Please wait…</string>
+    <string name="connection_deleting_expenditure">Deleting your expenditure. Please wait…</string>
     <string name="connection_join_course">Joining course. Please wait…</string>
     <string name="connection_create_course">Creating course. Please wait…</string>
     
