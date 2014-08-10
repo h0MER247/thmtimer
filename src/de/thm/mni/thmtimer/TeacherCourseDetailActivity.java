@@ -169,6 +169,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 		
 		// Alle Statistikdaten frisch anfordern
 		ModuleDAO.invalidateDurationPerCategory();
+		ModuleDAO.invalidateDurationPerWeek();
 		
 		ModuleDAO.beginJob();
 		ModuleDAO.getDurationPerCategoryFromServer(DAO_REQUEST_DURATION_PER_CATEGORY, mCourseID);
