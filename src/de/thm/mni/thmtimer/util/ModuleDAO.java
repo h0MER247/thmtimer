@@ -10,7 +10,6 @@ import org.springframework.http.HttpMethod;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import de.thm.mni.thmtimer.R;
 import de.thm.mni.thmtimer.model.DurationPerCategory;
 import de.thm.mni.thmtimer.model.DurationPerWeek;
