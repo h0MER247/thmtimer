@@ -2,6 +2,7 @@ package de.thm.mni.thmtimer.customviews;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -114,10 +115,11 @@ public class PieChart extends View {
 	}
 	
 	
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		
-		return false;
+		return true;
 	}
 	
 	@Override
