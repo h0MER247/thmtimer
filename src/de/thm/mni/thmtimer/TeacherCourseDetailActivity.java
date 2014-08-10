@@ -211,10 +211,12 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 	public void onDAOError(int requestID, String message) {
 		
 		switch(requestID) {
+		
 		case DAO_REQUEST_DURATION_PER_CATEGORY:
 		case DAO_REQUEST_DURATIONS_PER_WEEK:
 			Toast.makeText(this,
-					       "Fehler beim Laden der Statistikdaten: " + message,
+					       String.format(getString(R.string.loadingerror_statisticsdata),
+					    		         message),
 					       Toast.LENGTH_LONG).show();
 			break;
 		}

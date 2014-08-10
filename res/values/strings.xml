@@ -76,16 +76,13 @@
     <string name="courselist">Course list</string>
     <string name="piechart">Pie Chart</string>
     <string name="inscribedstudents">Enrolled Students</string>
-	<string name="timedistribution">Time distribution</string>
 	<string name="course_details">Course details</string>
     <string name="history">History</string>
-    <string name="timeframe">Timeframe</string>
-    <string name="average">Average</string>
-    <string name="total">Total</string>
     <string name="showCategories">Show categories</string>
     <string name="hideCategories">Hide categories</string>
     <string name="showTotal">Show total</string>
     <string name="hideTotal">Hide total</string>
+    <string name="loadingerror_statisticsdata">Error while loading statisticsdata: %s</string>
 	
 	<!-- TeacherCreateCourse -->
 	<string name="create">Create</string>
@@ -121,7 +118,7 @@
     <string name="connection_loading_user">Loading user. Please wait…</string>
     <string name="connection_loading_courses">Loading courses. Please wait…</string>
     <string name="connection_loading_modules">Loading modules. Please wait…</string>
-<string name="connection_loading_terms">Loading terms. Please wait…</string>
+	<string name="connection_loading_terms">Loading terms. Please wait…</string>
     <string name="connection_loading_statistics">Loading statistics. Please wait…</string>
     <string name="connection_loading_categories">Loading time categories. Please wait…</string>
     <string name="connection_loading_expenditures">Loading your expenditures. Please wait…</string>

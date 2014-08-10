@@ -76,16 +76,13 @@
     <string name="courselist">Kursliste</string>
     <string name="piechart">Tortendiagramm</string>
     <string name="inscribedstudents">Eingeschriebene Studenten</string>
-    <string name="timedistribution">Zeitverteilung</string>
     <string name="course_details">Kurs Details</string>
     <string name="history">Historie</string>
-    <string name="timeframe">Zeitraum</string>
-    <string name="average">Durchschnitt</string>
-    <string name="total">Summe</string>
     <string name="showCategories">Kategorien anzeigen</string>
     <string name="hideCategories">Kategorien verstecken</string>
-    <string name="showTotal">Summe anzeigen</string>
-    <string name="hideTotal">Summe verstecken</string>
+    <string name="showTotal">Gesamtzeit anzeigen</string>
+    <string name="hideTotal">Gesamtzeit verstecken</string>
+    <string name="loadingerror_statisticsdata">Fehler beim Laden der Statistikdaten: %s</string>
     
     <!-- TeacherCreateCourse -->
 	<string name="create">Erstellen</string>
