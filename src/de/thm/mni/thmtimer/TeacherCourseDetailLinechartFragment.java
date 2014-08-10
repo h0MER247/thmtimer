@@ -29,7 +29,7 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 	private Legend mLegend;
 	private Boolean mShowCategories;
 	private Boolean mShowTotal;
-	private List<DurationPerWeek> mRandomData;
+	//private List<DurationPerWeek> mRandomData;
 	
 	
 	@Override
@@ -40,8 +40,8 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		mShowCategories = true;
 		mShowTotal      = false;
 		
-		if(mRandomData == null)
-			createRandomData(3);
+		//if(mRandomData == null)
+		//	createRandomData(3);
 	}
 	
 	@Override
@@ -110,7 +110,7 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 	}
 	
 	
-	
+	/*
 	private void createRandomData(Integer students) {
 		
 		//
@@ -145,7 +145,7 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 			mRandomData.add(data);
 		}
 	}
-	
+	*/
 	
 	
 	public void setGrabTouch(boolean enableGrab) {
@@ -163,6 +163,7 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		//
 		// Statistikdaten lesen
 		//
+		/*
 		if(ModuleDAO.getDurationPerWeek() == null) {
 			
 			//
@@ -173,9 +174,9 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 			durationsPerWeek = mRandomData;
 		}
 		else {
-			
+		*/
 			durationsPerWeek = ModuleDAO.getDurationPerWeek();
-		}
+		//}
 		
 		if(durationsPerWeek.size() == 0)
 			return;
@@ -194,7 +195,9 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		
 		
 		
-		// Zeitkategorien sortieren (wieso in aller Welt kommt das alles unsortiert vom Server?!)
+		// Daten sortieren, da es (wieso auch immer) unsortiert vom Server kommt...
+		
+		// Zeitkategorien sortieren
 		Collections.sort(categories, new Comparator<Category>() {
 			
 			@Override
@@ -203,10 +206,6 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 				return (int)(lhs.getId() - rhs.getId());
 			}
 		});
-		
-		
-		// Keine Ahnung ob das hier auch unsortiert vom Server kommt, da die Statistikdatenabfrage
-		// bis heute nicht funktioniert, aber ich gehe mal davon aus....
 		
 		// Zeitstatistikeinträge nach Kalenderwoche sortieren
 		Collections.sort(durationsPerWeek, new Comparator<DurationPerWeek>() {
