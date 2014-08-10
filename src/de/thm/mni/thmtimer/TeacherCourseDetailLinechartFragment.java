@@ -111,7 +111,7 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 	
 	public List<DurationPerWeek> createRandomData() {
 		
-		final int STUDENT_COUNT = 35;
+		final int STUDENT_COUNT = 3;
 		
 		//
 		// Zufallsdaten generieren, bis Server die Daten liefern kann
@@ -121,8 +121,8 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		Random rnd = new Random();
 		List<Category> categories = ModuleDAO.getTimeCategorys();
 
-		for(int kw  = 32;
-				kw <= 32;
+		for(int kw  = 1;
+				kw <= 52;
 				kw++) {
 			
 			DurationPerWeek data     = new DurationPerWeek();
