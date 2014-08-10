@@ -21,8 +21,6 @@ import android.widget.Toast;
 
 public class TeacherCourseDetailActivity extends FragmentActivity implements ModuleDAOListener {
 	
-	private final String TAG = TeacherCourseDetailActivity.class.getSimpleName();
-	
 	private final int DAO_REQUEST_DURATION_PER_CATEGORY = 0;
 	private final int DAO_REQUEST_DURATIONS_PER_WEEK = 1;
 	
@@ -174,7 +172,7 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 		
 		ModuleDAO.beginJob();
 		ModuleDAO.getDurationPerCategoryFromServer(DAO_REQUEST_DURATION_PER_CATEGORY, mCourseID);
-		//ModuleDAO.getDurationPerWeekFromServer(DAO_REQUEST_DURATIONS_PER_WEEK, mCourseID);
+		ModuleDAO.getDurationPerWeekFromServer(DAO_REQUEST_DURATIONS_PER_WEEK, mCourseID);
 		ModuleDAO.commitJob(this, this);
 	}
 	
@@ -220,10 +218,17 @@ public class TeacherCourseDetailActivity extends FragmentActivity implements Mod
 					       Toast.LENGTH_LONG).show();
 			break;
 		}
+		
+		updateCharts();
 	}
 	
 	@Override
 	public void onDAOFinished() {
+		
+		updateCharts();
+	}
+	
+	private void updateCharts() {
 		
 		((TeacherCourseDetailPiechartFragment)mPieChart).updateChart();
 		((TeacherCourseDetailLinechartFragment)mLineChart).updateChart();

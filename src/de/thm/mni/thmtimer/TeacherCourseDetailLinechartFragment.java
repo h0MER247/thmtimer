@@ -40,7 +40,8 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		mShowCategories = true;
 		mShowTotal      = false;
 		
-		mRandomData = createRandomData();
+		if(mRandomData == null)
+			createRandomData(3);
 	}
 	
 	@Override
@@ -102,26 +103,26 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		
 		// Toastnachricht anzeigen
 		Toast.makeText(getActivity(),
-				       String.format("Invested time in '%s':\n%s h", category, invested.toString()),
+				       String.format("Invested time in '%s':\n%s h",
+				    		         category,
+				    		         invested.toString()),
 				       Toast.LENGTH_LONG).show();
 	}
 	
 	
 	
-	public List<DurationPerWeek> createRandomData() {
-		
-		final int STUDENT_COUNT = 3;
+	private void createRandomData(Integer students) {
 		
 		//
 		// Zufallsdaten generieren, bis Server die Daten liefern kann
 		//
-		List<DurationPerWeek> randomData = new ArrayList<DurationPerWeek>();
+		mRandomData = new ArrayList<DurationPerWeek>();
 		
 		Random rnd = new Random();
 		List<Category> categories = ModuleDAO.getTimeCategorys();
 
-		for(int kw  = 1;
-				kw <= 52;
+		for(int kw  = 14;
+				kw <= 34;
 				kw++) {
 			
 			DurationPerWeek data     = new DurationPerWeek();
@@ -132,7 +133,7 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 				
 				Duration d = new Duration();
 				d.setCategory(c);
-				d.setDuration(rnd.nextInt(7 * 12 * STUDENT_COUNT * 60));
+				d.setDuration(rnd.nextInt(6 * 8 * 60 * students));
 				
 				durations.add(d);
 			}
@@ -141,10 +142,8 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 			data.setDurations(durations);
 			
 			
-			randomData.add(data);
+			mRandomData.add(data);
 		}
-		
-		return randomData;
 	}
 	
 	
@@ -154,29 +153,38 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		mLineChart.setGrabTouch(enableGrab);
 	}
 	
-	
 	public void updateChart() {
 		
 		final int Y_VISIBLE_HOURS = 8;
-		
-		if(ModuleDAO.getTimeCategorys() == null)
-			return;
-		if(ModuleDAO.getTimeCategorys().size() == 0)
-			return;
-		//if(ModuleDAO.getDurationPerWeek() == null)
-		//	return;
-		//if(ModuleDAO.getDurationPerWeek().size() == 0)
-		//	return;
-		
-		
-		//
-		// Daten vom DAO holen
-		//
 		final List<DurationPerWeek> durationsPerWeek;
 		final List<Category> categories;
-
-		durationsPerWeek = mRandomData; // ModuleDAO.getDurationPerWeek();
-		categories       = new ArrayList<Category>(ModuleDAO.getTimeCategorys());
+		
+			
+		//
+		// Statistikdaten lesen
+		//
+		if(ModuleDAO.getDurationPerWeek() == null) {
+			
+			//
+			// Falls das Severteam es nicht schafft das bis Montag zu fixen,
+			// werden halt Zufallsdaten angezeigt, damit wir was zum 
+			// vorzeigen haben
+			//
+			durationsPerWeek = mRandomData;
+		}
+		else {
+			
+			durationsPerWeek = ModuleDAO.getDurationPerWeek();
+		}
+		
+		if(durationsPerWeek.size() == 0)
+			return;
+		
+		
+		//
+		// Kategorien lesen
+		//
+		categories = new ArrayList<Category>(ModuleDAO.getTimeCategorys());
 		
 		final Category categoryTotal = new Category(categories.size(),     "TOT", "Total");
 		final Category categoryAvg   = new Category(categories.size() + 1, "AVG", "Average");
@@ -244,26 +252,19 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 		// Chart mit Daten befüllen
 		//
 		Integer maxTime   = Integer.MIN_VALUE;
-		Integer weekStart = Integer.MAX_VALUE;
-		Integer weekEnd   = Integer.MIN_VALUE;
+		Integer weekStart = durationsPerWeek.get(0).getCalendarWeek();
+		Integer weekEnd   = durationsPerWeek.get(durationsPerWeek.size() - 1).getCalendarWeek();
 		Integer weekTotal;
 		Integer weekAvg;
+		
 		
 		mLineChart.beginChart(categories.size());
 		
 		for(DurationPerWeek week : durationsPerWeek) {
 			
-			if(weekStart > week.getCalendarWeek())
-				weekStart = week.getCalendarWeek();
-			
-			if(weekEnd < week.getCalendarWeek())
-				weekEnd = week.getCalendarWeek();
-			
 			//
 			// Kategorien hinzufügen
 			//
-			weekTotal = 0;
-			
 			for(Duration duration : week.getDurations()) {
 				
 				if(mShowCategories) {
@@ -276,8 +277,6 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 							                    duration);
 				}
 				
-				weekTotal += duration.getDuration();
-				
 				if(!mShowTotal) {
 					
 					if(maxTime < duration.getDuration())
@@ -287,13 +286,12 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 			
 			if(mShowTotal) {
 				
-				if(maxTime < weekTotal)
-					maxTime = weekTotal;
-				
-				
+				if(maxTime < week.getTotalDuration())
+					maxTime = week.getTotalDuration();
 			}
 			
-			weekAvg = weekTotal / (categories.size() - (mShowTotal ? 2 : 1));
+			weekTotal = week.getTotalDuration();
+			weekAvg   = week.getAverageDuration();
 			
 			//
 			// Gesamtzeit hinzufügen
