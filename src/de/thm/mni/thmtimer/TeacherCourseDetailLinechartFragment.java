@@ -16,7 +16,6 @@ import de.thm.thmtimer.entities.Category;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -275,8 +274,6 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 					mLineChart.addValueToSeries(index.intValue(),
 							                    hours,
 							                    duration);
-					
-					Log.d("LOG", "Category: " + duration.getCategory().getName() + " ID: " + duration.getCategory().getId() + " Value: " + hours.toString());
 				}
 				
 				weekTotal += duration.getDuration();
@@ -310,8 +307,6 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 				mLineChart.addValueToSeries(categories.size() - 2,
 						                    weekTotal.floatValue() / 60f,
 						                    durationTotal);
-				
-				Log.d("LOG", "Category: " + durationTotal.getCategory().getName() + " Value: " + (weekTotal.floatValue() / 60f));
 			}
 			
 			//
@@ -324,8 +319,6 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 			mLineChart.addValueToSeries(categories.size() - 1,
 					                    weekAvg.floatValue() / 60f,
 					                    durationAvg);
-			
-			Log.d("LOG", "Category: " + durationAvg.getCategory().getName() + " Value: " + (weekAvg.floatValue() / 60f));
 		}
 		
 		mLineChart.endChart();
