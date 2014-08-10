@@ -500,7 +500,7 @@ public class ModuleDAO {
 		@Override
 		public boolean runIf() {
 
-			return mTeacherCourses == null;
+			return (mTeacherCourses == null) && ((mUser != null) && mUser.isLecteur());
 		}
 
 		@Override
