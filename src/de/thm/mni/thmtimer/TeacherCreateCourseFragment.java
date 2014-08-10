@@ -5,7 +5,6 @@ import java.util.GregorianCalendar;
 
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.Module;
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,60 +16,81 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 public class TeacherCreateCourseFragment extends Fragment {
 
-	private EditText mCourseName, mDescription;
-	DatePicker mStartDate;
+	private EditText mCourseName;
+	private EditText mDescription;
+	private DatePicker mStartDate;
 	private Button mCreate;
-	private String courseName, description;
 	private Long mModuleID;
-
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View view = (View) inflater.inflate(R.layout.teachercreatecourse,
-				container, false);
-
-		// get views
-		mCourseName = (EditText) view.findViewById(R.id.courseName);
-		mDescription = (EditText) view.findViewById(R.id.description);
-		mStartDate = (DatePicker) view.findViewById(R.id.startDate);
-		mCreate = (Button) view.findViewById(R.id.crate);
-
+	
+	
+	public View onCreateView(LayoutInflater inflater,
+			                 ViewGroup container,
+			                 Bundle savedInstanceState) {
+		
+		View view = inflater.inflate(R.layout.teachercreatecourse,
+				                     container,
+				                     false);
+		
 		mModuleID = getArguments().getLong("id", -1);
-		Module m = ModuleDAO.getModuleByID(mModuleID);
-
-		mCourseName.setText(m.getName());
-
+		
+		
+		// Get views
+		mCourseName  = (EditText)view.findViewById(R.id.courseName);
+		mDescription = (EditText)view.findViewById(R.id.description);
+		mStartDate   = (DatePicker)view.findViewById(R.id.startDate);
+		mCreate      = (Button)view.findViewById(R.id.create);
+		
+		mCourseName.setText(ModuleDAO.getModuleByID(mModuleID).getName());
+		
 		mCreate.setOnClickListener(new OnClickListener() {
-			@SuppressLint("SimpleDateFormat")
+			
 			@Override
 			public void onClick(View arg0) {
-				courseName = mCourseName.getText().toString();
-				description = mDescription.getText().toString();
-				if (courseName.isEmpty()) {
+				
+				String courseName = mCourseName.getText().toString();
+				String description = mDescription.getText().toString();
+				
+				if(courseName.isEmpty()) {
+					
 					Toast.makeText(getActivity(),
-							R.string.createcourse_no_name,
-							Toast.LENGTH_LONG).show();
-					return;
+							       R.string.createcourse_no_name,
+							       Toast.LENGTH_LONG).show();
 				}
-				if (description.isEmpty()) {
+				else if(description.isEmpty()) {
+					
 					// Leere Beschreibung sollte hoffentlich bald erlaubt sein:
 					// https://scm.thm.de/redmine/issues/11182
 					Toast.makeText(getActivity(),
-							R.string.createcourse_no_desc,
-							Toast.LENGTH_LONG).show();
-					return;
+							       R.string.createcourse_no_desc,
+							       Toast.LENGTH_LONG).show();
 				}
-				Calendar calendar = new GregorianCalendar(mStartDate.getYear(), 
-						mStartDate.getMonth(), mStartDate.getDayOfMonth());
+				else {
 				
-				EnterModuleActivity activity = (EnterModuleActivity) getActivity();
-				activity.onCreateCourse(ModuleDAO.getTermList().get(0).getId(),
-						mModuleID, courseName, calendar.getTimeInMillis(), description);
+					Calendar calendar = new GregorianCalendar(mStartDate.getYear(),
+							                                  mStartDate.getMonth(),
+							                                  mStartDate.getDayOfMonth());
+					
+					EnterModuleActivity activity = (EnterModuleActivity)getActivity();
+					
+					activity.onCreateCourse(ModuleDAO.getTermList().get(0).getId(),
+							                mModuleID,
+							                courseName,
+							                calendar.getTimeInMillis(),
+							                description);
+				}
 			}
 		});
-
+		
 		return view;
+	}
+	
+	// Hack für Fehler #11167
+	public void setModuleID(long id) {
+		
+		mModuleID = id;
+		mCourseName.setText(ModuleDAO.getModuleByID(mModuleID).getName());
 	}
 }

@@ -3,24 +3,12 @@
     android:id="@+id/fragmentmoduledetail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-    <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
-            android:textSize="25sp" />
+    android:orientation="vertical"
+    android:padding="10dp" >
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:stretchColumns="1" >
 
         <TableRow>
@@ -34,13 +22,15 @@
                 android:id="@+id/courseName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10" 
-                android:inputType="textMultiLine" />
+                android:ems="10"
+                android:inputType="text" />
+
         </TableRow>
 
         <TableRow>
             
             <TextView
+                android:layout_marginTop="10dp"
                 android:padding="3dip"
                 android:text="@string/startDate"
                 android:textStyle="bold" />
@@ -48,13 +38,16 @@
             <DatePicker
                 android:id="@+id/startDate"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:calendarViewShown="false" />
+
         </TableRow>
         
         <TableRow>
 
             <TextView
+                android:layout_marginTop="10dp"
                 android:padding="3dip"
                 android:text="@string/description"
                 android:textStyle="bold" />
@@ -63,20 +56,22 @@
                 android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:ems="10"
-                android:lines="5"
-                android:inputType="textFilter" />
+                android:inputType="textFilter"
+                android:lines="5" />
+
         </TableRow>
 
        
     </TableLayout>
 
     <Button
-        android:id="@+id/crate"
+        android:id="@+id/create"
         style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/create" />
 
 </LinearLayout>

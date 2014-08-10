@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.MenuItem;
 
 public class EnterModuleActivity extends FragmentActivity {
@@ -141,28 +140,37 @@ public class EnterModuleActivity extends FragmentActivity {
 
 	public void closeSearch(long id) {
 
-		if(mSourceFragment.equals("teacher")){
-			Log.d("LOG", "OPEN");
-			mTeacherCreateCourse = new TeacherCreateCourseFragment();
-			Bundle b = new Bundle();
-			b.putLong("id", id); // id ist jetzt ne kursid!!!
-			mTeacherCreateCourse.setArguments(b);
-			mPagerAdapter.notifyDataSetChanged();
-
-			mPager.setCurrentItem(1);
-	
-		} 
-		if(mSourceFragment.equals("student")){
+		if(mSourceFragment.equals("teacher")) {
 			
-			mModuleDetail = new ModuleDetailFragment();
-			Bundle b = new Bundle();
-			b.putLong("id", id); // id ist jetzt ne kursid!!!
-			mModuleDetail.setArguments(b);
-			mPagerAdapter.notifyDataSetChanged();
+			/* Hack für Fehler #11167 */
+			if(mTeacherCreateCourse == null) {
+				
+				mTeacherCreateCourse = new TeacherCreateCourseFragment();
 
+				Bundle b = new Bundle();
+				b.putLong("id", id);
+				mTeacherCreateCourse.setArguments(b);
+				
+				mPagerAdapter.notifyDataSetChanged();
+			}
+			else {
+				
+				mTeacherCreateCourse.setModuleID(id);
+			}
+			
 			mPager.setCurrentItem(1);
 		}
-		
+		else {
+			
+			mModuleDetail = new ModuleDetailFragment();
+			
+			Bundle b = new Bundle();
+			b.putLong("id", id);
+			mModuleDetail.setArguments(b);
+			
+			mPagerAdapter.notifyDataSetChanged();
+			mPager.setCurrentItem(1);
+		}
 	}
 
 	@Override
