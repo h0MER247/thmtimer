@@ -2,14 +2,13 @@ package de.thm.mni.thmtimer.junit;
 
 import org.junit.Before;
 
-import de.thm.mni.thmtimer.R;
-import de.thm.mni.thmtimer.TrackTimeActivity;
-import de.thm.mni.thmtimer.model.TimeData;
-
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 import android.widget.Button;
 import android.widget.Spinner;
+import de.thm.mni.thmtimer.R;
+import de.thm.mni.thmtimer.TrackTimeActivity;
+import de.thm.mni.thmtimer.model.TimeData;
 
 public class TrackTimeActivityTest extends ActivityUnitTestCase<TrackTimeActivity> {
 	
@@ -24,6 +23,7 @@ public class TrackTimeActivityTest extends ActivityUnitTestCase<TrackTimeActivit
 		super(TrackTimeActivity.class);
 	}
 
+	@Override
 	@Before
 	public void setUp() throws Exception {	
 		super.setUp();

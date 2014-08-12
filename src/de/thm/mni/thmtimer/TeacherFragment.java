@@ -3,10 +3,6 @@ package de.thm.mni.thmtimer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.thm.mni.thmtimer.R;
-import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.ModuleDAOListener;
-import de.thm.thmtimer.entities.Course;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +18,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
+import de.thm.thmtimer.entities.Course;
 
 public class TeacherFragment extends Fragment implements ModuleDAOListener{
 

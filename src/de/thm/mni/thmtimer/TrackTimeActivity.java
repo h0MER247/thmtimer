@@ -1,14 +1,11 @@
 package de.thm.mni.thmtimer;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import de.thm.mni.thmtimer.model.TimeData;
-import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.thmtimer.entities.Category;
-import de.thm.thmtimer.entities.Expenditure;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -16,9 +13,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.*;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+import de.thm.mni.thmtimer.model.TimeData;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.thmtimer.entities.Category;
+import de.thm.thmtimer.entities.Expenditure;
 
 
 public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTimeSetListener {
@@ -61,8 +68,8 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 		mDurationData = new TimeData();
 		
 		
-		mStartTimeFormat = (SimpleDateFormat)SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT,
-				                                                                  SimpleDateFormat.SHORT);
+		mStartTimeFormat = (SimpleDateFormat)DateFormat.getDateTimeInstance(DateFormat.SHORT,
+				                                                                  DateFormat.SHORT);
 		mStartTimeFormat.setLenient(true);
 		
 		
@@ -193,7 +200,7 @@ public class TrackTimeActivity extends Activity implements TimePickerDialog.OnTi
 			Expenditure e = ModuleDAO.getStudentExpenditureByID(mExpenditureID);
 			
 			TimeData t = new TimeData();
-			t.setTimeInMinutes((int)e.getDuration());
+			t.setTimeInMinutes(e.getDuration());
 			
 			mDuration.setText(t.toString());
 			mStartTime.setText(mStartTimeFormat.format(e.getStart()));

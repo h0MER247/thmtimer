@@ -2,17 +2,17 @@ package de.thm.mni.thmtimer;
 
 import java.util.List;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import de.thm.mni.thmtimer.customviews.Legend;
 import de.thm.mni.thmtimer.customviews.PieChart;
 import de.thm.mni.thmtimer.model.DurationPerCategory;
 import de.thm.mni.thmtimer.model.TimeData;
 import de.thm.mni.thmtimer.util.ModuleDAO;
 import de.thm.thmtimer.entities.Category;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 
 public class TeacherCourseDetailPiechartFragment extends Fragment {
@@ -24,12 +24,12 @@ public class TeacherCourseDetailPiechartFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
-		View view = (View)inflater.inflate(R.layout.teachercoursedetailpiechartfragment,
+		View view = inflater.inflate(R.layout.teachercoursedetailpiechartfragment,
 				                           container,
 				                           false);
 		
 		mPieChart = (PieChart)view.findViewById(R.id.teachercoursedetail_pieChart);
-		mLegend = (Legend)(Legend)view.findViewById(R.id.teachercoursedetail_pieChartLegend);
+		mLegend = (Legend)view.findViewById(R.id.teachercoursedetail_pieChartLegend);
 		
 		return view;
 	}

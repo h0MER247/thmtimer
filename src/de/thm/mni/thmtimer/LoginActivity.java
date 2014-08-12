@@ -1,8 +1,5 @@
 package de.thm.mni.thmtimer;
 
-import de.thm.mni.thmtimer.util.Connection;
-import de.thm.mni.thmtimer.util.ModuleDAOListener;
-import de.thm.mni.thmtimer.util.ModuleDAO;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -16,6 +13,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+import de.thm.mni.thmtimer.util.Connection;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
 
 
 
@@ -41,6 +41,7 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		Connection.mContext = getApplicationContext();
 		ModuleDAO.setNewContext(this, this);
 		
 		this.setContentView(R.layout.loginactivity);

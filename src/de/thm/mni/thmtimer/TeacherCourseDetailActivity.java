@@ -2,11 +2,6 @@ package de.thm.mni.thmtimer;
 
 import java.lang.reflect.Field;
 
-import de.thm.mni.thmtimer.util.DepthPageTransformer;
-import de.thm.mni.thmtimer.util.FixedSpeedScroller;
-import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.mni.thmtimer.util.ModuleDAOListener;
-import de.thm.thmtimer.entities.Course;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -17,6 +12,11 @@ import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.thm.mni.thmtimer.util.DepthPageTransformer;
+import de.thm.mni.thmtimer.util.FixedSpeedScroller;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.mni.thmtimer.util.ModuleDAOListener;
+import de.thm.thmtimer.entities.Course;
 
 
 public class TeacherCourseDetailActivity extends FragmentActivity implements ModuleDAOListener {

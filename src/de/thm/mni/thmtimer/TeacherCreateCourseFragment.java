@@ -3,18 +3,17 @@ package de.thm.mni.thmtimer;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.thmtimer.entities.Module;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
+import de.thm.mni.thmtimer.util.ModuleDAO;
 
 
 public class TeacherCreateCourseFragment extends Fragment {
@@ -26,6 +25,7 @@ public class TeacherCreateCourseFragment extends Fragment {
 	private Long mModuleID;
 	
 	
+	@Override
 	public View onCreateView(LayoutInflater inflater,
 			                 ViewGroup container,
 			                 Bundle savedInstanceState) {

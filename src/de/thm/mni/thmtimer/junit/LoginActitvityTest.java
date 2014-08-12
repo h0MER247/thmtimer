@@ -1,11 +1,11 @@
 package de.thm.mni.thmtimer.junit;
 
-import de.thm.mni.thmtimer.LoginActivity;
-import de.thm.mni.thmtimer.R;
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 import android.widget.Button;
 import android.widget.EditText;
+import de.thm.mni.thmtimer.LoginActivity;
+import de.thm.mni.thmtimer.R;
 
 public class LoginActitvityTest extends ActivityUnitTestCase<LoginActivity> {
 
@@ -18,6 +18,7 @@ public class LoginActitvityTest extends ActivityUnitTestCase<LoginActivity> {
 	}
 	
 	
+	@Override
 	protected void setUp() throws Exception {
         super.setUp();
         mLaunchIntent = new Intent(getInstrumentation()

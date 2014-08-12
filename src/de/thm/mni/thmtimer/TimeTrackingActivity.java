@@ -1,6 +1,6 @@
 package de.thm.mni.thmtimer;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -306,8 +306,8 @@ public class TimeTrackingActivity extends Activity implements StopwatchListener,
 			TextView durationView  = (TextView)convertView.findViewById(R.id.expenditureDuration);
 			
 			String category  = expenditure.getCategory().getName();
-			String startDate = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT,
-					                                                SimpleDateFormat.SHORT).format(expenditure.getStart());
+			String startDate = DateFormat.getDateTimeInstance(DateFormat.SHORT,
+					                                                DateFormat.SHORT).format(expenditure.getStart());
 			String duration  = t.toString();
 			
 			categoryView.setText(category);

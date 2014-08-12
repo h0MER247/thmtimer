@@ -4,15 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
-import de.thm.mni.thmtimer.customviews.Legend;
-import de.thm.mni.thmtimer.customviews.LineChart;
-import de.thm.mni.thmtimer.model.DurationPerWeek;
-import de.thm.mni.thmtimer.model.DurationPerWeek.Duration;
-import de.thm.mni.thmtimer.model.TimeData;
-import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.thmtimer.entities.Category;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+import de.thm.mni.thmtimer.customviews.Legend;
+import de.thm.mni.thmtimer.customviews.LineChart;
+import de.thm.mni.thmtimer.model.DurationPerWeek;
+import de.thm.mni.thmtimer.model.DurationPerWeek.Duration;
+import de.thm.mni.thmtimer.model.TimeData;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.thmtimer.entities.Category;
 
 
 public class TeacherCourseDetailLinechartFragment extends Fragment implements LineChart.DataPointOnClickListener {
@@ -47,7 +46,7 @@ public class TeacherCourseDetailLinechartFragment extends Fragment implements Li
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		
-		View view = (View)inflater.inflate(R.layout.teachercoursedetaillinechartfragment,
+		View view = inflater.inflate(R.layout.teachercoursedetaillinechartfragment,
 				                           container,
 				                           false);
 		

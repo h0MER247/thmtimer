@@ -1286,6 +1286,7 @@ public class ModuleDAO {
 			}
 		}
 
+		@Override
 		protected void onPostExecute(Boolean result) {
 
 			mJobs = null;

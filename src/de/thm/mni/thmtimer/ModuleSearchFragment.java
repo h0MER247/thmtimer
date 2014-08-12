@@ -1,11 +1,8 @@
 package de.thm.mni.thmtimer;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.thmtimer.entities.Module;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,8 +16,10 @@ import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.SearchView.OnQueryTextListener;
+import android.widget.TextView;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.thmtimer.entities.Module;
 
 public class ModuleSearchFragment extends Fragment {
 

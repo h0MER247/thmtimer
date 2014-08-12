@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import de.thm.mni.thmtimer.util.ModuleDAO;
-import de.thm.thmtimer.entities.Course;
-import de.thm.thmtimer.entities.User;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,8 +17,11 @@ import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.SearchView.OnQueryTextListener;
+import android.widget.TextView;
+import de.thm.mni.thmtimer.util.ModuleDAO;
+import de.thm.thmtimer.entities.Course;
+import de.thm.thmtimer.entities.User;
 
 
 public class CourseSearchFragment extends Fragment {

@@ -8,6 +8,7 @@ public class ZoomPageTransformer implements PageTransformer {
 	private static final float MIN_SCALE = 0.85f;
 	private static final float MIN_ALPHA = 0.5f;
 
+	@Override
 	public void transformPage(View view, float position) {
 		int pageWidth = view.getWidth();
 		int pageHeight = view.getHeight();
