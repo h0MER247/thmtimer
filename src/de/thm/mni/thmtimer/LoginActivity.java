@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -125,8 +126,9 @@ public class LoginActivity extends Activity implements ModuleDAOListener {
 		
 		case DAO_REQUEST_USER:
 			Toast.makeText(this,
-					       String.format(getString(R.string.login_failed), message),
+					       getString(R.string.login_failed),
 					       Toast.LENGTH_LONG).show();
+			Log.d("LoginActivity", message);
 			break;
 			
 		case DAO_REQUEST_STUDENTCOURSELIST:
